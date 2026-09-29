@@ -1,0 +1,35 @@
+services:
+  trellis2:
+    build:
+      context: ./source
+      dockerfile: ../Dockerfile.runtime-fix
+    image: beyond-canvas/trellis2:75fbf018-exr1
+    container_name: beyond-canvas-trellis2
+    gpus: all
+    environment:
+      ATTN_BACKEND: flash_attn
+      SPARSE_ATTN_BACKEND: flash_attn
+      GRADIO_SERVER_NAME: 0.0.0.0
+      GRADIO_SERVER_PORT: "7860"
+      HF_HOME: /models/huggingface
+      HF_HUB_OFFLINE: "1"
+      HF_HUB_DISABLE_TELEMETRY: "1"
+      TRELLIS2_MODEL_PATH: /models/runtime/trellis2
+    volumes:
+      - ./models:/models
+      - ./trellis_bridge.py:/app/trellis_bridge.py:ro
+      - ./entrypoint.sh:/app/entrypoint.sh:ro
+      - ../media-extra/runner:/runner:ro
+      - type: bind
+        source: ../gpu.lock
+        target: /worker/gpu.lock
+        bind:
+          create_host_path: false
+      # Upstream PR #156 compatibility patch for Transformers >= 5. Keeping
+      # this as a narrow bind mount avoids rebuilding the valid CUDA layers.
+      - ./source/trellis2/modules/image_feature_extractor.py:/app/trellis2/modules/image_feature_extractor.py:ro
+    ports:
+      - "127.0.0.1:7040:7860"
+    shm_size: 16gb
+    restart: unless-stopped
+    command: ["bash", "/app/entrypoint.sh"]

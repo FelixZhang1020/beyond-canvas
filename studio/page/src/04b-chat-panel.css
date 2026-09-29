@@ -1,0 +1,132 @@
+/* The conversation panel beside the drawing: a plain chat (operator). The
+   companion's turns on one side, the child's on the other, and the child's words go in
+   through one row: record, type, send. The question to ask ends the companion's own turn;
+   it has no card of its own. Only the thread scrolls. */
+.buddy{overflow:hidden;gap:12px}
+.buddy-head,.buddy>.classroom-voice,.buddy>.actions{flex-shrink:0}
+/* The fade keeps a message scrolled under the header from ending in a cut line. */
+.buddy-dialogue{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-gutter:stable;
+  padding-top:10px;-webkit-mask-image:linear-gradient(#0000,#000 14px);mask-image:linear-gradient(#0000,#000 14px)}
+.buddy-dialogue .course-history{margin:0;padding:0;border:0}
+.buddy>#buddy-actions{margin:0;padding-top:12px;border-top:1px solid var(--line)}
+.buddy #btn-primary{width:100%;justify-content:center}
+.buddy .classroom-voice:has(audio[hidden]):has(#voice-stop[hidden]):has(#voice-status:empty){display:none}
+/* While a line is spoken, the status lies over the partner's name instead of
+   pushing the thread and answer row down. The face now lives beside the top navigation. */
+#buddy>.classroom-voice{position:absolute;z-index:3;top:20px;left:24px;right:72px;min-height:62px;margin:0;
+  padding:4px 8px;box-sizing:border-box;align-content:center;background:rgba(255,254,251,.97);border-radius:14px}
+/* No player bar in the conversation (operator): every line has its own speaker to hear it
+   again. While a line is read, only its status and Stop reading show, and they go when it ends. When the
+   browser will not play on its own, the bar and its Play come back, the one way to hear the line. */
+#buddy>.classroom-voice:not(.voice-manual) audio{display:none}
+#buddy>.classroom-voice:not(.voice-manual):has(#voice-stop[hidden]){display:none}
+/* Two rows at most, so it never reaches the conversation's own row of buttons below the name:
+   the status and Stop reading side by side, the player (when there is one) under them. */
+#buddy>.classroom-voice #voice-status{flex:1 1 auto;min-width:0}
+#buddy>.classroom-voice #voice-stop{order:1;min-height:24px;padding:0 6px}
+/* The name underneath still showed through the bar on the live page, so while the bar
+   shows, the name and its subtitle step aside instead of being painted over. */
+#buddy:is(:has(#voice-stop:not([hidden])),:has(.classroom-voice.voice-manual)) .buddy-name{visibility:hidden}
+#buddy-dialogue{flex:1 1 auto}
+#buddy:has(.heard:not([hidden])) #buddy-actions{display:flex}
+#buddy #buddy-actions:not(:has(>button:not([hidden]):not(#btn-next))){display:none}
+#buddy .buddy-head{grid-template-columns:minmax(0,1fr) 40px}
+#buddy .buddy-head:has(#btn-say[hidden]){grid-template-columns:minmax(0,1fr)}
+#buddy #btn-say{grid-column:auto;width:40px;height:40px;min-height:40px;padding:0;border:1px solid var(--line);border-radius:50%;background:#fff;justify-content:center}
+#buddy #btn-say span{display:none}
+#buddy .conversation-caption{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--ink-3);margin-bottom:10px}
+/* Take back the last answer, clear the conversation: small, beside the count, never competing with Send.
+   The row stays pinned while the conversation scrolls, or a long one carries the buttons out of sight
+   (found driving the page on the Spark). */
+#buddy .conversation-caption:has(.chat-edit:not([hidden])){position:sticky;top:0;z-index:2;padding:4px 0;background:#FFFEFB}
+/* Once that row is pinned, messages scroll under it, not under the partner's name, so the fade's band above
+   it only let an older message peek out between the name and the row (operator). */
+#buddy .buddy-dialogue:has(.chat-edit:not([hidden])){padding-top:0;-webkit-mask-image:none;mask-image:none}
+#buddy .chat-edit{display:flex;gap:4px;margin-left:auto}
+#buddy .chat-edit .btn{min-height:30px;padding:4px 10px;font-size:12px;font-weight:500}
+#buddy #history-sample{font-size:11px;margin:4px 0 12px}
+@media(max-width:760px){.buddy-dialogue{max-height:380px}}
+
+/* The thread. Splat's face marks the partner's turns and the side marks the
+   child's, so the speaker's name is kept for screen readers only. */
+#buddy .history-messages{display:flex;flex-direction:column;gap:12px;max-height:none;overflow:visible}
+#buddy .course-message{position:relative;align-self:flex-start;max-width:calc(100% - 66px);margin:0 0 0 34px;padding:10px 14px;
+  border:0;border-radius:18px 18px 18px 6px;background:var(--chat-partner)}
+#buddy .course-message::before{content:"";position:absolute;left:-34px;bottom:0;width:26px;height:26px;transform:rotate(-7deg);
+  border-radius:46% 54% 52% 48%/54% 46% 54% 46%;
+  background:radial-gradient(circle at 34% 47%,var(--ink) 0 1.6px,#0000 2.1px),radial-gradient(circle at 65% 47%,var(--ink) 0 1.6px,#0000 2.1px),
+    radial-gradient(3.4px 4px at 32% 44%,#fff 96%,#0000),radial-gradient(3.4px 4px at 63% 44%,#fff 96%,#0000),
+    radial-gradient(circle at 30% 25%,#ffc4a3,#e98d72 70%)}
+#buddy .course-message.child-words{align-self:flex-end;margin:0 0 0 66px;max-width:calc(100% - 98px);background:var(--chat-child);border-radius:18px 18px 6px 18px}
+#buddy .course-message.child-words::before{content:none}
+#buddy .course-message h3{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0}
+#buddy .course-message p{margin:0;font-size:14px;font-weight:400;line-height:1.7;color:var(--ink)}
+#buddy .course-message .course-question{margin-top:6px;font-weight:600}
+#buddy .course-message .turn-play{position:absolute;bottom:0;right:-32px;width:28px;height:28px;min-height:28px;padding:0;border:0;border-radius:50%;
+  background:none;font-size:0;color:var(--ink-3)}
+#buddy .course-message.child-words .turn-play{right:auto;left:-32px}
+#buddy .turn-play::before{content:"";display:block;width:16px;height:16px;margin:auto;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9h4l5-4v14l-5-4H4z'/%3E%3Cpath d='M17 9a4 4 0 0 1 0 6'/%3E%3C/svg%3E") center/16px no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9h4l5-4v14l-5-4H4z'/%3E%3Cpath d='M17 9a4 4 0 0 1 0 6'/%3E%3C/svg%3E") center/16px no-repeat}
+#buddy .turn-play:hover{background:#f5eddf;color:var(--ink)}
+#buddy .said-unanswered{background:#FFF3EC;outline:1px dashed #E3A493;outline-offset:-1px}
+#buddy .said-note{align-self:flex-end;max-width:80%;margin:-6px 0 0;font-size:12px;line-height:1.6;text-align:right;color:#A33A2B}
+/* While the partner thinks: three dots where its next turn will appear. After the child's words
+   they follow the quick line in its own turn instead, so there is one typing bubble, not two. */
+#app[data-mode="feedback"]:has(#splat.thinking) #buddy .history-messages:not(:has(.bridge))::after{content:"";align-self:flex-start;margin-left:34px;
+  width:69px;height:38px;box-sizing:border-box;padding:0 12px;border-radius:18px 18px 18px 6px;
+  background:radial-gradient(circle,#B7A696 3.5px,#0000 4px) 0 50%/15px 100% repeat-x content-box,#F4F0E8;animation:chat-wait 1.2s ease-in-out infinite}
+@keyframes chat-wait{50%{opacity:.5}}
+#buddy .course-message.bridge.typing p::after{content:"";display:inline-block;width:27px;height:8px;margin-left:6px;vertical-align:middle;
+  background:radial-gradient(circle,#B7A696 3px,#0000 3.5px) 0 50%/9px 100% repeat-x;animation:chat-wait 1.2s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){#buddy .history-messages::after,#buddy .course-message.bridge.typing p::after{animation:none}}
+
+/* The smaller question, when the child has nothing yet, and the row for the child's words. */
+#buddy #answer,#buddy #btn-next,#buddy #btn-heard-back,#buddy #btn-said-file{display:none!important}
+#buddy #ask{flex-shrink:0;display:flex;flex-direction:column;gap:10px;margin:0;padding-top:12px;border-top:1px solid var(--line);max-height:none;overflow:visible}
+#buddy #ask[hidden]{display:none}
+/* Nothing has been asked yet while the button that starts the conversation shows when the companion
+   is idle (04-components.css). While it thinks the chip stays, dimmed below: hiding it would move the
+   row under it, Record included, every time Send is pressed. */
+#app:not(:has(#splat.thinking)) #buddy:has(#btn-primary:not([hidden])) .chat-chips{display:none}
+#buddy .chat-chips{display:flex;flex-wrap:wrap;gap:8px}
+#buddy #btn-silent{min-height:36px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:12px;color:var(--ink)}
+#app:has(#splat.thinking) #buddy .chat-chips{opacity:.45;pointer-events:none}
+/* Stop lives in the thread, under the dots, while the partner thinks. It used to be
+   the big button below the answer row, which appeared the moment Send was pressed exactly where
+   Record had been and pushed the row up: a teacher reaching for Record to catch the next words
+   stopped the reply instead. So the big button stays out of a conversation while it thinks, and
+   the row does not move. */
+#buddy .chat-stop{align-self:flex-start;margin:6px 0 0 34px;min-height:30px;padding:4px 12px;gap:6px;border:1px solid var(--line);
+  border-radius:999px;background:#fff;font-size:12px;color:var(--ink)}
+#buddy .chat-stop svg{width:12px;height:12px}
+#buddy:has(#chat-stop:not([hidden])) #buddy-actions{display:none}
+/* "Let the studio ask first" is for a drawing with no opening, not for one that is being answered. */
+#app:has(#splat.thinking) #buddy .heard-gate{display:none}
+
+/* One row for the child's words: record, type, send. */
+#buddy .heard{margin:0;gap:8px}
+#buddy .heard>label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#buddy .heard-row{display:flex;flex-wrap:nowrap;align-items:flex-end;gap:8px}
+#buddy .heard-row textarea{flex:1 1 auto;min-width:0;height:48px;min-height:48px;max-height:120px;box-sizing:border-box;padding:12px 16px;
+  border:1px solid var(--line);border-radius:24px;background:#fff;font-size:14px;line-height:22px;resize:none;overflow-y:auto;scrollbar-width:thin}
+#buddy #btn-listen{flex:none;height:48px;min-height:48px;padding:0 16px;gap:6px;border:0;border-radius:24px;background:var(--action);
+  color:#fff;font-size:13px;font-weight:600}
+#buddy #btn-listen svg{width:18px;height:18px}
+#buddy .heard [type=submit]{flex:none;width:48px;height:48px;min-height:48px;padding:0;border-radius:50%;justify-content:center}
+#buddy .heard [type=submit] span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#buddy .heard:has(#heard-text:placeholder-shown) [type=submit]{background:#EFE6DB;color:#9C8D80;box-shadow:none;pointer-events:none}
+#buddy .rec-bar{display:none}
+#buddy .heard-row:has(#btn-listen.on) textarea,#buddy .heard-row:has(#btn-listen.on) [type=submit]{display:none}
+#buddy .heard-row:has(#btn-listen.on) .rec-bar{flex:1 1 auto;min-width:0;height:48px;box-sizing:border-box;display:flex;align-items:center;gap:8px;
+  padding:0 14px;border-radius:24px;background:#FFF0EE;font-size:13px;color:var(--ink-2);white-space:nowrap;overflow:hidden}
+#buddy .rec-bar i{flex:none;width:10px;height:10px;border-radius:50%;background:var(--critical);animation:breathe 1.2s ease-in-out infinite}
+#buddy .rec-bar #rec-time{color:var(--ink);font-variant-numeric:tabular-nums}
+#buddy .rec-bar span:last-child{overflow:hidden;text-overflow:ellipsis}
+#buddy .heard-row:has(#btn-listen.on) #btn-listen{order:2}
+/* Once words are in the field, or the panel is narrow, the field needs the width:
+   the record button keeps only its icon, and its name stays for screen readers. */
+#buddy .heard-row:has(#heard-text:not(:placeholder-shown)) #btn-listen:not(.on){width:48px;padding:0;justify-content:center}
+#buddy .heard-row:has(#heard-text:not(:placeholder-shown)) #btn-listen:not(.on) span{position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:1100px){#buddy #btn-listen:not(.on){width:48px;padding:0;justify-content:center}
+  #buddy #btn-listen:not(.on) span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}

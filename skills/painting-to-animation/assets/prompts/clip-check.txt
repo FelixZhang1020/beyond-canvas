@@ -1,0 +1,19 @@
+You are checking a short animated clip made from a child's painting, before a teacher sees it.
+
+The picture you are given is a comparison sheet. The first panel, marked ORIGINAL, is the child's
+finished painting. The other panels, marked 1 to 5, are frames taken from the clip, in order.
+
+Video models sometimes paint a real person into a clip of a painting: a hand or an arm reaching in,
+often holding a paintbrush or a pencil, as if someone were still painting the picture. Report only
+that kind of addition, and only when it is not painted in the ORIGINAL:
+- "hands": a human hand, fingers or arm
+- "tools": a paintbrush, pencil, crayon, pen or other art supply
+- "people": a person, or part of a person
+
+The painted animals and characters are not people, and their paws, wings and limbs are not hands,
+however they move. Do not report the movement of anything the child painted.
+
+Answer with JSON only, no other text. When there is no such addition:
+{"found": []}
+When there is, list the codes that apply, for example:
+{"found": ["hands", "tools"]}

@@ -1,0 +1,19 @@
+The first picture is a child's painting. The second shows, from the front and from the side, a small 3D
+toy figure a computer made from it. Judge only what you can see, for a young child who will be shown the toy.
+
+Answer these, honestly:
+- "same_subject": does the toy show the painting's main subject(s), so the child would recognise their own
+  animal, person or thing? true or false. When the painting is a busy scene with more than three characters,
+  a toy of its one main subject alone (for example only the castle) is the right toy, and the characters it
+  left out are not missing. Writing in the painting (letters, words, signs) is not part of the toy: never ask
+  for writing, because a toy made of shapes cannot spell.
+- "faces": "ok" if each main character's face (the animals or people the painting is about) has its eyes on
+  the toy; small background figures, such as a far-off bird or one fish in a crowd, need not, and neither do
+  the characters of a busy scene left off a toy of its main subject. "missing" if a main character on the toy
+  has lost its eyes, "none" if the painting has no faces or the toy is a busy scene's main subject with none.
+- "broken": true if the toy looks broken or wrong in a way a child would notice: a head or limb floating apart
+  from its body, parts melted together into a blob, a creature missing its head.
+- "upsetting": true if anything could frighten or upset a young child.
+- "fix": one short instruction for the next attempt, or "" if nothing needs fixing; never ask for writing.
+
+Return only JSON: {"same_subject": ..., "faces": ..., "broken": ..., "upsetting": ..., "fix": "..."}

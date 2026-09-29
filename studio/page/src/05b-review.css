@@ -1,0 +1,23 @@
+/* A finished class, looked back on (operator: "the module pages are not good").
+   The chat tab shows the whole conversation in the live chat panel's colours (04b-chat-panel): the
+   companion's turns on the left, the child's on the right, each naming its speaker for a screen reader.
+   The bring-to-life tab lists each drawing once and puts what it became side by side as the work card's
+   result slots. Kept apart from 05-portfolio.css, which is past the size limit. */
+.review-thread{display:flex;flex-direction:column;gap:10px}
+.review-turn{align-self:flex-start;max-width:86%;margin:0;padding:10px 14px;border-radius:18px 18px 18px 6px;
+  background:var(--chat-partner)}
+.review-turn.child{align-self:flex-end;background:var(--chat-child);border-radius:18px 18px 6px 18px}
+.review-turn>h3{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0}
+/* Named through the thread so they outrank the card's own ".review-reflection p" (05-portfolio). */
+.review-thread>.review-turn>p{margin:0;font-size:15px;line-height:1.7;color:var(--ink);white-space:pre-line}
+.review-thread>.review-turn>.review-question{margin-top:6px;font-weight:600}
+.review-results{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 16px}
+.review-results[hidden]{display:none}
+.review-results button{min-height:44px;padding:8px 18px;border:1px solid var(--line);border-radius:999px;
+  background:#fffdf8;font:inherit;font-size:15px;color:var(--ink-2);cursor:pointer}
+.review-results button[aria-pressed=true]{background:var(--selected-surface);box-shadow:var(--selected-shadow);
+  color:var(--ink);font-weight:650}
+/* The conversation scrolls inside the work card; its read-aloud button stays in sight under it. */
+#app[data-course-view=review] #review-pair .review-reflection>.review-thread{flex:0 1 auto;min-height:0;
+  overflow:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:#dcccb9 transparent}
+#app[data-course-view=review] #review-pair .review-reflection>.btn{margin-top:14px}

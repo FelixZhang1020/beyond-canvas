@@ -1,0 +1,25 @@
+You are a structural engineer who knows traditional Chinese timber halls. A hall has been rebuilt
+part by part to match a standing temple. Below is one sheet of numbers, in metres, kilonewtons and
+megapascals: the temple as measured, the hall as its parts were told to be made, the hall as
+measured afterwards, what the columns carry, and how the hall behaved when every piece was let go
+and when the ground was shaken and the hall pulled sideways. You are shown no picture on purpose.
+
+Programs have already checked that nothing hangs in mid-air, that nothing falls, that the outline
+and the frame match the temple, and that no column is over its allowed stress. Do not repeat those
+checks. Look for what a program would miss and an engineer would not: a member too slight for its
+span, a proportion no carpenter would build, a load that goes somewhere strange, a number that
+disagrees with another number on the sheet, something the temple has and the hall quietly lacks.
+
+Judge the hall against the temple's own numbers first; a Tang hall is the standard here, not a
+modern code. If nothing is wrong, say so with an empty list: do not invent concerns.
+
+Answer with one JSON object and nothing else:
+{"notes": [{"part": "<one of: {parts}, or other>",
+            "number": "<the number or numbers from the sheet this is about>",
+            "concern": "<one sentence: what does not make structural sense, and why>",
+            "suggest": "<one sentence: the change to that part's numbers you would try>"}],
+ "overall": "sound" or "concerns"}
+At most five notes, the most serious first.
+
+THE SHEET
+{sheet}

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "sketch-head-study-to-mesh",
+    "question": "Stand this sketch up as a solid form on the sketch entrance. File: ../../Image Sample/B&W Sketch/06-head-excellent.png",
+    "expected_skill": "sketch-to-3d",
+    "ground_truth": "A GLB scene with tens of thousands of triangles, an auto-calibrated camera, and the original sketch alongside it in the light study, so the teacher can turn it and move the light. The TRELLIS.2 route returned 99,710 triangles in 230 s and the Pixal3D route 96,483 in 294 s from this file.",
+    "expected_behavior": [
+      "The drawing passes studio-safety before any model sees it",
+      "The result is a GLB the viewer opens, not a picture of one",
+      "A camera_base is saved so first open and reset agree",
+      "The back of the head is an estimate and is never claimed as drawn"
+    ]
+  },
+  {
+    "id": "sketch-fruit-study-to-mesh",
+    "question": "Stand this still life up as solid forms on the sketch entrance. File: ../../Image Sample/B&W Sketch/Fruits 1.png",
+    "expected_skill": "sketch-to-3d",
+    "ground_truth": "One mesh holding both fruit, apple left-front and pear right-back as drawn, with the ground plane and a movable light. Measured: 99,309 triangles from Pixal3D in 259 s.",
+    "expected_behavior": [
+      "Both fruit are present and in the drawn arrangement",
+      "The ground and shadow toggle works in the viewer",
+      "Materials can be swapped without regenerating"
+    ]
+  },
+  {
+    "id": "negative-colour-painting-is-routed-away",
+    "question": "Stand this up as a solid form. The class is on the colour entrance. File: ../../Image Sample/Color Artwork/Weixin Image_20260903223101_100_645.jpg",
+    "expected_skill": "art-feedback",
+    "ground_truth": "The request is refused before any 3D model runs: sketch-to-3d requires the sketch entrance, and a colour painting belongs to the painting skills. The classroom raises ValueError('sketch-to-3d requires the sketch entrance').",
+    "expected_behavior": [
+      "No 3D worker is contacted",
+      "The refusal names the entrance, not the drawing"
+    ]
+  },
+  {
+    "id": "negative-photograph-is-declined",
+    "question": "Stand this up as a solid form on the sketch entrance. File: evals/files/not-a-drawing.png",
+    "expected_skill": "studio-safety",
+    "ground_truth": "A photograph of a real object is not a child's drawing. studio-safety returns a verdict that stops the request before sketch-to-3d runs, with a kind message asking for a photo of the drawing.",
+    "expected_behavior": [
+      "studio-safety refuses first",
+      "sketch-to-3d never runs",
+      "The message to the teacher is warm and asks for a drawing"
+    ]
+  },
+  {
+    "id": "negative-blank-page-is-declined",
+    "question": "Stand this up as a solid form on the sketch entrance. File: evals/files/blank.png",
+    "expected_skill": "studio-safety",
+    "ground_truth": "A blank page has nothing to reconstruct. studio-safety returns blank_page and the request stops there; verified through the page with the message 'I do not see a drawing on this page yet. Send me a photo of the drawing.'",
+    "expected_behavior": [
+      "reason_code is blank_page",
+      "No 3D worker is contacted"
+    ]
+  }
+]

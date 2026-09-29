@@ -1,0 +1,28 @@
+[
+  {
+    "id": "figure-of-a-dog-and-its-house",
+    "question": "Make a 3D toy figure inspired by this colour painting. File: ../art-feedback/evals/files/dog-sun.png",
+    "expected_skill": "painting-to-figure",
+    "expected_script": "../../studio/figure.py",
+    "ground_truth": "JSON parts only: three to 140 parts, each one of six shapes with a centre, a size, a turn and a #rrggbb colour. The main subject is recognisable, its painted face keeps its eyes, and after settling nothing floats above the base.",
+    "expected_behavior": [
+      "Returns JSON parts only, no code and no prose",
+      "Every painted face keeps its eyes",
+      "Colours are taken from the painting",
+      "The main subject is the biggest thing on the base",
+      "Sky, ground and water are not built as rings or slabs"
+    ]
+  },
+  {
+    "id": "figure-that-fails-its-look-is-held-back",
+    "question": "The first toy lost the painted face's eyes. Check it and try once more. File: ../art-feedback/evals/files/dog-sun.png",
+    "expected_skill": "painting-to-figure",
+    "expected_script": "../../studio/figure.py",
+    "ground_truth": "The look check fails the first toy and gives one short fix. The next writing receives that fix, and a third writing the second one's. If the third toy also fails, nothing is shown and the reason code is figure_held_back.",
+    "expected_behavior": [
+      "Only a clear pass is shown",
+      "At most three writings",
+      "The child is never shown a toy that failed its check"
+    ]
+  }
+]

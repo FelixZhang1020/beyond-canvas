@@ -1,0 +1,14 @@
+{
+  "portrait/trellis2": "originals/portrait/trellis2/model_file.glb",
+  "portrait/pixal": "originals/portrait/pixal/model.glb",
+  "portrait/hunyuan21": "originals/portrait/hunyuan21/mesh.glb",
+  "portrait/triposg": "originals/portrait/triposg/model.obj",
+  "geometry/trellis2": "originals/geometry/trellis2/model_file.glb",
+  "geometry/pixal": "originals/geometry/pixal/model.glb",
+  "geometry/hunyuan21": "originals/geometry/hunyuan21/mesh.glb",
+  "geometry/triposg": "originals/geometry/triposg/model.obj",
+  "fruit/trellis2": "originals/fruit/trellis2/model_file.glb",
+  "fruit/pixal": "originals/fruit/pixal/model.glb",
+  "fruit/hunyuan21": "originals/fruit/hunyuan21/mesh.glb",
+  "fruit/triposg": "originals/fruit/triposg/model.obj"
+}

@@ -1,0 +1,7 @@
+FROM beyond-canvas/trellis2:75fbf018
+
+# The base image's OpenCV wheel was built without OpenEXR support. Keep the
+# expensive CUDA layers intact and add only the small, pinned HDR reader plus
+# the compatible upstream app entrypoint.
+RUN python -m pip install OpenEXR==3.4.15
+COPY app.py /app/app.py

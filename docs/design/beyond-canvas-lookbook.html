@@ -1,0 +1,853 @@
+<meta charset="utf-8">
+<title>Beyond Canvas Lookbook</title>
+<style>
+:root{
+  --ivory:#F1EEE7;--slate:#2A3038;--clay:#B5613F;--olive:#6B7A45;--rust:#A63A26;
+  --bg:var(--ivory);--ink:var(--slate);--muted:#6E6A62;--rule:rgba(42,48,56,.16);--panel:#FAF8F3;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:"Avenir Next","Helvetica Neue",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --round:ui-rounded,"SF Pro Rounded","Arial Rounded MT Bold","Nunito","Avenir Next",sans-serif;
+  --spring:linear(0,.35 12%,.8 24%,1.06 38%,1.02 52%,.99 66%,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17191D;--ink:#E6E1D6;--muted:#9A9488;--rule:rgba(230,225,214,.14);--panel:#1E2126;
+  --clay:#D08059;--olive:#9AA86E;--rust:#D0664F;}}
+:root[data-theme="dark"]{
+  --bg:#17191D;--ink:#E6E1D6;--muted:#9A9488;--rule:rgba(230,225,214,.14);--panel:#1E2126;
+  --clay:#D08059;--olive:#9AA86E;--rust:#D0664F;}
+*{box-sizing:border-box}
+html,body{overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+.page{max-width:960px;margin:0 auto;padding:56px 24px 96px}
+h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(40px,6vw,60px);line-height:1.02}
+h2{font-size:30px;line-height:1.15;margin:72px 0 14px}
+h3{font-size:17px;font-weight:600;margin:0 0 6px}
+p{max-width:66ch;margin:0 0 14px}
+.lede{font-size:19px;line-height:1.5;max-width:60ch;margin:18px 0 8px}
+a{color:inherit;text-decoration-color:var(--clay);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--clay);outline-offset:3px}
+.muted{color:var(--muted)}
+.mono,code{font-family:var(--mono);font-size:.88em}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle;margin-right:7px}
+.dot.low{background:var(--olive)}.dot.med{background:var(--clay)}.dot.high{background:var(--rust)}
+.tag{display:inline-block;font:11px/1.6 var(--mono);border:1px solid var(--rule);border-radius:4px;padding:0 6px;color:var(--muted)}
+.btn{font:14px var(--sans);color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:999px;
+  padding:8px 16px;cursor:pointer}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-top:12px;font-size:14px}
+.controls label{display:flex;align-items:center;gap:10px}
+.controls input[type=range]{width:180px;accent-color:var(--clay)}
+.caption{font-size:14px;color:var(--muted);max-width:72ch;margin:12px 0 0}
+.decode-row{display:grid;grid-template-columns:200px minmax(0,1fr);gap:20px;padding:16px 0;border-top:1px solid var(--rule)}
+.decode-row:last-child{border-bottom:1px solid var(--rule)}
+.decode-row>span:first-child{font-weight:600}
+.decode-row .how{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+.spec{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:24px;margin:36px 0 56px}
+.spec figure{margin:0;min-width:0}
+.spec aside{font-size:14.5px;line-height:1.5}
+.spec aside p{margin:0 0 10px}
+.spec aside b{font-weight:600}
+.inv{border-top:1px solid var(--rule);margin-top:8px}
+.inv-row{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,1fr);gap:18px;padding:12px 0;border-bottom:1px solid var(--rule)}
+.inv-row.head>span{font-size:12px;letter-spacing:.04em;color:var(--muted)}
+.inv-row .name{font-family:var(--mono);font-size:13.5px}
+.inv-row .why{display:block;color:var(--muted);font-size:13.5px;margin-top:3px}
+.inv-row .empty{color:var(--muted);font-style:italic}
+.steps{padding-left:22px;max-width:70ch}
+.steps li{margin:0 0 10px}
+.anom{padding-left:22px;max-width:72ch}
+.anom li{margin:0 0 10px}
+footer{margin-top:72px;padding-top:18px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--muted);max-width:76ch}
+@media (max-width:760px){
+  .decode-row,.spec,.inv-row{grid-template-columns:minmax(0,1fr)}
+  .inv-row.head{display:none}
+  .page{padding:36px 16px 72px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+/* Glass material, Apple-style: translucency, blur, rim light, specular. .lens adds edge refraction in Chromium. */
+.glass-scope{--ga:.11;--gb:8px;--gink:#26224A}
+.glass{position:relative;border-radius:var(--r,28px);background:rgba(255,255,255,var(--ga,.11));color:var(--gink,#26224A);
+  -webkit-backdrop-filter:blur(var(--gb,8px)) saturate(1.9);backdrop-filter:blur(var(--gb,8px)) saturate(1.9);
+  text-shadow:0 0 9px rgba(255,255,255,.7);
+  box-shadow:0 18px 40px -18px rgba(60,40,120,.32),inset 0 0 0 1px rgba(255,255,255,.7),inset 0 2px 0 rgba(255,255,255,.95),
+  inset 2px 0 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.3),inset -1px 0 0 rgba(255,255,255,.25),
+  inset 0 0 26px rgba(255,255,255,.28)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(170px 110px at var(--sx,30%) var(--sy,-20%),rgba(255,255,255,.7),rgba(255,255,255,0) 70%),
+  linear-gradient(115deg,rgba(255,255,255,0) 42%,rgba(255,255,255,.22) 49%,rgba(255,255,255,0) 56%);
+  background-size:100% 100%,260% 100%;animation:sheen 9s linear infinite}
+@keyframes sheen{from{background-position:0 0,120% 0}to{background-position:0 0,-120% 0}}
+.glass.lens::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  -webkit-backdrop-filter:url(#lens);backdrop-filter:url(#lens)}
+.glass>*{position:relative;z-index:1}
+.clear .scrim{background:rgba(255,255,255,.5)}
+.scrim{border-radius:16px;padding:10px 12px;background:rgba(255,255,255,.3);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+/* Studio hero */
+.hero-wrap{perspective:1800px;margin:26px 0 6px}
+#hero{transition:transform .9s cubic-bezier(.2,.7,.2,1),box-shadow .9s,border .9s;transform-origin:50% 50%}
+#hero.roadshow{transform:rotateY(-17deg) rotateX(7deg) scale(.85);border:12px solid #F3F2F6;border-radius:26px;
+  box-shadow:0 70px 90px -40px rgba(40,30,80,.45),inset 0 0 0 1px rgba(0,0,0,.06)}
+.studio{height:600px;position:relative;overflow:hidden;border-radius:24px;font-family:var(--round);color:#26224A;
+  box-shadow:0 30px 60px -34px rgba(60,40,120,.35)}
+.art-stage{position:absolute;inset:0;--split:55%}
+.art-stage.solo{position:relative;height:400px}
+.gt p{margin:0}
+.pf-card .seg{margin-left:0;align-self:flex-start}
+.art{position:absolute;inset:0;width:100%;height:100%}
+.art.crayon{clip-path:inset(0 calc(100% - var(--split)) 0 0)}
+.reveal-handle{position:absolute;top:50%;left:var(--split);transform:translate(-50%,-50%);width:58px;height:58px;--r:50%;
+  cursor:ew-resize;display:grid;place-items:center;font-size:20px;font-weight:700;z-index:3;touch-action:none}
+.reveal-handle::before{content:"";position:absolute;left:50%;top:-200vh;bottom:-200vh;width:2px;background:rgba(255,255,255,.85);
+  transform:translateX(-50%);z-index:0}
+.s-top{position:absolute;left:16px;right:16px;top:14px;height:60px;display:flex;align-items:center;gap:16px;padding:0 10px 0 18px;
+  --r:30px;z-index:4}
+.s-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+.s-brand i{width:22px;height:22px;border-radius:40% 60% 55% 45%/55% 45% 55% 45%;background:linear-gradient(135deg,#FF6F61,#FFC93C);
+  display:inline-block}
+.seg{position:relative;display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(255,255,255,.18);margin-left:auto;--l:4px;--w:0px}
+.seg .pill{position:absolute;top:4px;bottom:4px;left:var(--l);width:var(--w);border-radius:999px;background:rgba(255,255,255,.82);
+  box-shadow:0 6px 16px -6px rgba(60,40,120,.5),0 0 0 1px rgba(38,34,74,.1),inset 0 1px 0 rgba(255,255,255,.95);transition:left .55s var(--spring),width .55s var(--spring);z-index:0}
+.seg button{position:relative;z-index:1;font:600 15px/1 var(--round);color:#3A3560;background:none;border:0;padding:12px 18px;
+  border-radius:999px;cursor:pointer;min-height:44px}
+.seg button.on{color:#1E1A40;text-shadow:none}
+.s-kid{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px}
+.s-kid .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#9B7BFF,#4FB3FF);color:#fff;display:grid;
+  place-items:center;font-weight:700}
+.s-rail{position:absolute;left:16px;top:96px;width:68px;padding:8px;display:flex;flex-direction:column;gap:6px;--r:34px;z-index:4}
+.tool{width:52px;height:52px;border-radius:50%;border:0;background:rgba(255,255,255,.22);display:grid;place-items:center;cursor:pointer;
+  color:#26224A;transition:transform .5s var(--spring),background .2s}
+.tool:hover{background:rgba(255,255,255,.7)}.tool:active{transform:scale(.88)}
+.tool.on{background:#fff;box-shadow:0 4px 12px -4px rgba(60,40,120,.4)}
+.tool svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.s-buddy{position:absolute;right:16px;top:96px;width:300px;padding:16px;--r:28px;z-index:4;display:flex;flex-direction:column;gap:12px}
+.buddy{display:flex;gap:12px;align-items:flex-start}
+.bubble{font-size:15px;line-height:1.4;font-weight:500;background:rgba(255,255,255,.4);box-shadow:inset 0 0 0 1px rgba(255,255,255,.4);border-radius:18px 18px 18px 6px;padding:10px 12px;
+  flex:1;min-width:0}
+.s-actions{display:flex;gap:8px}
+.btn-glass{flex:1;min-height:48px;border:0;border-radius:999px;background:rgba(255,255,255,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 1px rgba(255,255,255,.4);font:600 14px var(--round);color:#26224A;
+  cursor:pointer;transition:transform .5s var(--spring),background .2s}
+.btn-glass:active{transform:scale(.94)}
+.btn-glass.tinted{background:linear-gradient(135deg,#FF6F61,#FF9F43);color:#fff;box-shadow:0 8px 20px -8px rgba(255,111,97,.7)}
+.s-did{display:flex;flex-direction:column;gap:5px;font-size:12.5px}
+.s-did .did-h{font-weight:700;color:#3A3560;margin-bottom:2px}
+.s-did .did{display:flex;align-items:center;gap:8px;color:#3A3560}
+.s-did .did::before{content:"✓";width:18px;height:18px;border-radius:50%;background:#5ED6A6;color:#fff;font-size:11px;display:grid;
+  place-items:center;font-weight:700;flex:0 0 18px}
+.s-did .did.run::before{content:"";background:#FFC93C;animation:breathe 1.2s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(.6);opacity:.5}}
+.s-dock{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:14px;
+  padding:10px 12px 10px 16px;--r:999px;z-index:4}
+.swatches{display:flex;gap:8px}
+.sw{width:36px;height:36px;border-radius:50%;border:3px solid rgba(255,255,255,.9);box-shadow:0 3px 8px -3px rgba(0,0,0,.3);cursor:pointer;
+  transition:transform .5s var(--spring);padding:0}
+.sw:hover{transform:scale(1.15)}.sw.on{transform:scale(1.2);outline:3px solid #26224A;outline-offset:2px}
+.magic{min-height:52px;padding:0 22px;border:0;border-radius:999px;background:linear-gradient(135deg,#9B7BFF,#4FB3FF);color:#fff;
+  font:700 16px var(--round);cursor:pointer;box-shadow:0 10px 24px -8px rgba(120,90,255,.7);transition:transform .5s var(--spring);white-space:nowrap}
+.magic:active{transform:scale(.94)}
+/* Splat */
+.splat{position:relative;width:56px;height:56px;flex:0 0 56px;background:linear-gradient(135deg,#FF6F61,#FF9F43);
+  border-radius:46% 54% 52% 48%/54% 46% 54% 46%;animation:wobble 6s ease-in-out infinite;box-shadow:0 8px 16px -6px rgba(255,111,97,.6)}
+.splat .eye{position:absolute;top:20px;width:14px;height:16px;border-radius:50%;background:#fff;animation:blink 5s infinite}
+.splat .eye.l{left:13px}.splat .eye.r{left:31px}
+.splat .pupil{position:absolute;left:4px;top:5px;width:7px;height:8px;border-radius:50%;background:#26224A;transition:transform .12s}
+.splat.large{width:96px;height:96px;flex-basis:96px}
+.splat.large .eye{top:34px;width:22px;height:26px}.splat.large .eye.l{left:22px}.splat.large .eye.r{left:54px}
+.splat.large .pupil{left:6px;top:8px;width:11px;height:13px}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes wobble{0%,100%{border-radius:46% 54% 52% 48%/54% 46% 54% 46%}50%{border-radius:54% 46% 48% 52%/46% 54% 46% 54%;transform:translateY(-2px)}}
+@media (prefers-reduced-motion:reduce){.glass::before{animation:none}}
+@media (max-width:760px){
+  .studio{height:680px}.s-rail{display:none}.s-top nav,.seg{display:none}
+  .s-buddy{width:calc(100% - 32px);top:auto;bottom:92px}
+  .s-dock{left:16px;right:16px;transform:none;justify-content:space-between;padding:8px 10px}
+  .swatches{gap:6px}.sw{width:30px;height:30px}.sw:nth-child(n+6){display:none}
+  .magic{padding:0 14px;font-size:13px;min-height:44px}
+}
+.frame{position:relative;border-radius:22px;overflow:hidden;font-family:var(--round);color:#26224A;
+  box-shadow:0 30px 60px -34px rgba(60,40,120,.35)}
+/* Paint field with glass over it */
+.paint-field{position:relative;height:400px;background:#FFF7EA;overflow:hidden}
+.pb{position:absolute;width:55%;aspect-ratio:1;border-radius:50%;filter:blur(30px);opacity:.85;animation:drift 14s ease-in-out infinite alternate}
+.pb.a{background:#FF6F61;left:-12%;top:-20%}.pb.b{background:#FFC93C;right:-10%;top:-5%;animation-delay:-4s}
+.pb.c{background:#4FB3FF;left:25%;bottom:-35%;animation-delay:-8s}.pb.d{background:#9B7BFF;right:5%;bottom:-25%;width:40%;animation-delay:-11s}
+@keyframes drift{to{transform:translate(10%,8%) scale(1.12)}}
+.pf-card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(360px,88%);padding:16px;display:flex;flex-direction:column;gap:12px}
+.pf-card h4{margin:0;font-size:18px;font-weight:700}
+.pf-row{display:flex;gap:8px}
+.pf-tool{flex:1;min-height:56px;border:0;border-radius:18px;background:rgba(255,255,255,.26);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 1px rgba(255,255,255,.35);font:600 13px var(--round);color:#26224A;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:transform .5s var(--spring)}
+.pf-tool:active{transform:scale(.92)}
+.pf-tool i{width:18px;height:18px;border-radius:50%;display:block}
+/* Mixing */
+.mix{height:400px;background:linear-gradient(#FFF9F0,#FFF0DA);display:grid;grid-template-rows:auto minmax(0,1fr) auto;justify-items:center;
+  align-items:center;padding:22px;gap:10px}
+.paints{display:flex;gap:12px}
+.paints button{width:56px;height:56px;border-radius:50%;border:4px solid #fff;box-shadow:0 8px 18px -8px rgba(0,0,0,.35);cursor:pointer;
+  transition:transform .5s var(--spring);padding:0}
+.paints button.on{transform:scale(1.18);outline:3px solid #26224A;outline-offset:3px}
+.bowl{width:170px;height:170px;border-radius:50%;background:#EDE7DE;box-shadow:inset 0 12px 30px rgba(0,0,0,.14),0 24px 40px -22px rgba(0,0,0,.35);
+  transition:background .6s,transform .6s var(--spring);display:grid;place-items:center;font-size:14px;color:#8A8399;font-weight:600}
+.bowl.full{transform:scale(1.06);color:transparent}
+.mix-name{font-size:20px;font-weight:700;text-align:center;min-height:1.4em}
+/* Springs */
+.spring-stage{height:360px;background:radial-gradient(70% 90% at 50% 60%,#FFF5DF,#EAF6FF);display:flex;gap:14px;align-items:center;justify-content:center;
+  position:relative;flex-wrap:wrap;padding:20px}
+.big{min-width:150px;min-height:72px;border-radius:999px;border:0;font:700 22px var(--round);color:#fff;cursor:pointer;padding:0 26px;
+  transition:transform .6s var(--spring);box-shadow:0 14px 28px -12px rgba(60,40,120,.45)}
+.big:active{transform:scale(.9)}
+.big.coral{background:linear-gradient(135deg,#FF6F61,#FF9F43)}.big.sky{background:linear-gradient(135deg,#4FB3FF,#9B7BFF)}
+.big.leaf{background:linear-gradient(135deg,#5ED6A6,#BDF27A);color:#0F3D2C}
+.sticker{position:absolute;top:24%;left:50%;transform:translate(-50%,-50%) rotate(var(--rot,-6deg)) scale(0);background:#FFC93C;color:#26224A;
+  font:800 26px var(--round);padding:14px 28px;border-radius:999px;box-shadow:0 14px 30px -12px rgba(0,0,0,.35);opacity:0;pointer-events:none}
+.sticker.pop{animation:pop .7s var(--spring) forwards}
+@keyframes pop{to{transform:translate(-50%,-50%) rotate(var(--rot,-6deg)) scale(1);opacity:1}}
+/* Buddy */
+.buddy-stage{height:380px;background:linear-gradient(135deg,#FFF3E0,#E8F4FF);display:grid;place-items:center;padding:20px;position:relative;overflow:hidden}
+.buddy-stage .buddy-card{z-index:2}
+.buddy-card{width:min(420px,100%);padding:20px;display:flex;flex-direction:column;gap:14px}
+.buddy-card .bubble{font-size:17px}
+.say{align-self:flex-start;min-height:44px;padding:0 18px;border:0;border-radius:999px;background:#26224A;color:#fff;font:600 14px var(--round);cursor:pointer}
+/* Gallery wall */
+.wall{height:400px;position:relative;perspective:1200px;--px:0;--py:0;overflow:hidden;
+  background:#FFF7EA radial-gradient(rgba(38,34,74,.08) 1px,transparent 1px) 0 0/22px 22px}
+.frame-art{position:absolute;padding:8px 8px 24px;background:#fff;border-radius:6px;box-shadow:0 24px 44px -20px rgba(60,40,120,.45);
+  transform:translate3d(calc(var(--px)*var(--d)*-1px),calc(var(--py)*var(--d)*-1px),0) rotateY(calc(var(--px)*10deg)) rotateX(calc(var(--py)*-10deg));
+  transition:transform .25s ease-out;z-index:calc(var(--d))}
+.frame-art canvas{width:160px;height:120px;display:block;border-radius:3px}
+.frame-art span{position:absolute;bottom:5px;left:8px;font-size:11px;font-weight:600;color:#5A557A}
+.award{position:absolute;top:-12px;left:-12px;width:38px;height:38px;border-radius:50%;background:#FFC93C;display:grid;place-items:center;font-size:18px;
+  box-shadow:0 6px 14px -6px rgba(0,0,0,.4)}
+/* Grown-ups' room */
+.grown{padding:14px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:112px;gap:10px;background:linear-gradient(135deg,#FFF6EA,#EAF6FF)}
+.gt{background:rgba(255,255,255,.78);border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.gt.trail-tile{justify-content:flex-start;gap:12px}
+.gt.w3{grid-column:span 3}.gt.w2{grid-column:span 2}.gt.w4{grid-column:span 4}.gt.h2{grid-row:span 2}
+.gn{font-size:44px;font-weight:700;line-height:1;color:#26224A}
+.gn small{font-size:16px;color:#5A557A;margin-left:4px;font-weight:600}
+.gl{font-size:13px;color:#5A557A;font-weight:600}
+.trail{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#3A3560}
+.trail span{display:flex;gap:8px;align-items:center}
+.trail span::before{content:"";width:8px;height:8px;border-radius:50%;background:#5ED6A6;flex:0 0 8px}
+.priv{display:inline-flex;align-items:center;gap:8px;background:#5ED6A6;color:#0F3D2C;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;
+  align-self:flex-start}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:#EEF0FF;color:#3A3560;border-radius:999px;padding:4px 10px;font-size:12.5px;font-weight:600}
+@media (max-width:760px){.grown{grid-template-columns:repeat(2,minmax(0,1fr))}.gt.w3,.gt.w2,.gt.w4{grid-column:span 2}}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feImage id="lensmap" preserveAspectRatio="none" result="m"/>
+    <feDisplacementMap in="SourceGraphic" in2="m" scale="84" xChannelSelector="R" yChannelSelector="G" result="dr"/>
+    <feDisplacementMap in="SourceGraphic" in2="m" scale="72" xChannelSelector="R" yChannelSelector="G" result="dg"/>
+    <feDisplacementMap in="SourceGraphic" in2="m" scale="60" xChannelSelector="R" yChannelSelector="G" result="db"/>
+    <feColorMatrix in="dr" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="r"/>
+    <feColorMatrix in="dg" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="g"/>
+    <feColorMatrix in="db" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="b"/>
+    <feBlend in="r" in2="g" mode="screen" result="rg"/>
+    <feBlend in="rg" in2="b" mode="screen"/>
+  </filter>
+</svg>
+<div class="page">
+<header>
+  <h1>Beyond Canvas Lookbook</h1>
+  <p class="lede">画里画外 Beyond Canvas: a studio where a child draws and a companion on the box paints back. The material is Apple's
+    Liquid Glass, kept faithful and pushed clearer. The colour comes from the paint, never from the interface.</p>
+  <p>The studio comes first. Drag the handle across Mia's drawing to see it painted, move the pointer to watch the
+    glass catch the light, and press Roadshow view to see it the way the judges will. Everything below explains
+    the material and shows six more directions.</p>
+</header>
+<section aria-label="Recommended direction">
+<div class="hero-wrap"><div id="hero" class="frame studio glass-scope">
+  <div id="hero-art" class="art-stage"></div>
+  <div class="s-top glass lens">
+    <span class="s-brand"><i></i><span>Beyond Canvas</span></span>
+    <div class="seg" id="seg"><i class="pill"></i><button type="button" class="on">Draw</button><button type="button">Paint</button>
+      <button type="button">Move</button><button type="button">Story</button></div>
+    <span class="s-kid"><span class="av">M</span><span>Mia, 7</span></span>
+  </div>
+  <div class="s-rail glass lens tools">
+    <button class="tool on" type="button" aria-label="Crayon"><svg viewBox="0 0 24 24"><path d="M4 20l3-1 11-11-2-2L5 17l-1 3z"/><path d="M14 6l2 2"/></svg></button>
+    <button class="tool" type="button" aria-label="Brush"><svg viewBox="0 0 24 24"><path d="M19 4l-8 8"/><path d="M11 12c-2 0-4 1-4 4 0 1-1 2-3 3 3 1 7 0 8-3 0-2-.5-3-1-4z"/></svg></button>
+    <button class="tool" type="button" aria-label="Spray"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="1"/><circle cx="13" cy="6" r="1"/><circle cx="16" cy="11" r="1"/><circle cx="10" cy="13" r="1"/><circle cx="6" cy="16" r="1"/><circle cx="14" cy="17" r="1"/></svg></button>
+    <button class="tool" type="button" aria-label="Eraser"><svg viewBox="0 0 24 24"><path d="M4 16l8-8 6 6-5 5H8z"/><path d="M8 19h11"/></svg></button>
+    <button class="tool" type="button" aria-label="Magic"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M5 18l1 2 1-2 2-1-2-1-1-2-1 2-2 1z"/></svg></button>
+  </div>
+  <div class="s-buddy glass lens">
+    <div class="buddy"><div class="splat" aria-hidden="true"><i class="eye l"><i class="pupil"></i></i><i class="eye r"><i class="pupil"></i></i></div>
+      <div class="bubble">I love your purple sky, Mia! Want me to paint it the way Van Gogh would?</div></div>
+    <div class="s-actions"><button class="btn-glass tinted" type="button">Yes, paint it</button><button class="btn-glass" type="button">Show me how</button></div>
+    <div class="s-did scrim"><span class="did-h">What Splat did</span><span class="did">Looked at your drawing</span>
+      <span class="did">Found a sun, a house and a tree</span><span class="did">Mixed six colours</span><span class="did run">Painting the sky</span></div>
+  </div>
+  <div class="s-dock glass lens">
+    <div class="swatches">
+      <button class="sw" type="button" aria-label="Coral" style="background:#FF6F61"></button><button class="sw" type="button" aria-label="Tangerine" style="background:#FF9F43"></button>
+      <button class="sw" type="button" aria-label="Sunflower" style="background:#FFC93C"></button><button class="sw" type="button" aria-label="Leaf" style="background:#5ED6A6"></button>
+      <button class="sw" type="button" aria-label="Sky" style="background:#4FB3FF"></button><button class="sw on" type="button" aria-label="Violet" style="background:#9B7BFF"></button>
+      <button class="sw" type="button" aria-label="Rose" style="background:#FFB3C7"></button><button class="sw" type="button" aria-label="Ink" style="background:#26224A"></button>
+    </div>
+    <button class="magic" type="button">✦ Make magic</button>
+  </div>
+</div></div>
+<p class="caption">The studio in the recommended direction. The child's picture fills the screen; every control floats on
+  glass above it. Left, the tools. Right, Splat the companion, what it said, and what it did. Bottom, the paints and the
+  one big button. The handle in the middle reveals the painted version.</p>
+<p><button id="roadshow" class="btn" type="button" aria-pressed="false">Roadshow view</button></p>
+</section>
+<section aria-labelledby="h-decode">
+<h2 id="h-decode">What Apple's glass does, and how to build each piece on the web</h2>
+<p>Your reference screenshots use this material over a dark map. Apple's own rules for it, from its design
+  guidelines and the "Meet Liquid Glass" session, are what the studio follows. Nine behaviours make it read as glass
+  rather than as a blurred rectangle.</p>
+<div class="decode">
+  <div class="decode-row"><span>Lensing</span><span>Light bends at the rim, so what sits behind the edge looks pulled in
+    and slightly magnified. This is the one trait a blur cannot fake.<span class="how">An SVG displacement map inside
+    backdrop-filter, as on this page, with the red, green and blue channels bent by slightly different amounts so the
+    rim shows a faint colour fringe, the way real glass does. Chromium only; WebKit's fix was still unshipped when this page was made.</span></span></div>
+  <div class="decode-row"><span>Specular highlight</span><span>A bright glint moves across the surface as the device or
+    the pointer moves, which is what makes the glass feel solid.<span class="how">A radial gradient on a pseudo-element
+    whose centre follows the pointer. One listener per screen, updated once per frame.</span></span></div>
+  <div class="decode-row"><span>Regular and Clear</span><span>Two materials. Regular adapts and stays legible anywhere.
+    Clear is permanently more transparent, meant for media-rich backgrounds, and Apple says it needs a dimming layer
+    under it. Never mix the two in one context.<span class="how">Two token sets; the first specimen switches between
+    them. Text on Clear glass always sits on a scrim.</span></span></div>
+  <div class="decode-row"><span>Adaptive colour</span><span>The glass takes on the colour of what is behind it, and its
+    text flips between dark and light as the background changes.<span class="how">High saturation in the backdrop
+    filter lets the paint bleed through. Over a bright painting the ink stays dark, so no flip is needed.</span></span></div>
+  <div class="decode-row"><span>Concentric shapes</span><span>Corners of nested elements share one centre, so a button
+    inside a bar looks cut from the same sheet.<span class="how">Inner radius equals outer radius minus padding, written
+    once as a calculation.</span></span></div>
+  <div class="decode-row"><span>Morphing controls</span><span>The selected pill in a segmented control slides and
+    stretches to its new place instead of jumping; controls merge and split.<span class="how">One shared pill element
+    and a spring-shaped easing curve. Try the Draw, Paint, Move, Story control above.</span></span></div>
+  <div class="decode-row"><span>Fluid response</span><span>Things squash slightly under the finger and spring back. For
+    children this is half the fun.<span class="how">The CSS linear() easing function draws a spring; Motion's real
+    springs for anything the child drags.</span></span></div>
+  <div class="decode-row"><span>Floating layer</span><span>Controls live in a layer above content, with a soft shadow,
+    and shrink out of the way while the content is being used.<span class="how">Absolute positioning over the painting;
+    a scroll-driven animation to shrink the bar during drawing.</span></span></div>
+  <div class="decode-row"><span>No glass on glass</span><span>Apple's guidance is to avoid stacking glass. One layer of
+    glass, content beneath it.<span class="how">The segmented control inside the top bar is a translucent track, not a
+    second pane. Three glass panels on screen at most.</span></span></div>
+</div>
+</section>
+<section aria-labelledby="h-spec">
+<h2 id="h-spec">Seven directions for the studio</h2>
+<p>Each one is live. Drag, press, pick two paints. The risk dot is for a ten-day build by a small team shipping to one
+  demo machine, with the roadshow screen at 4K.</p>
+
+<div class="spec">
+  <figure>
+    <div id="pf" class="frame paint-field glass-scope">
+      <div class="pb a"></div><div class="pb b"></div><div class="pb c"></div><div class="pb d"></div>
+      <div class="pf-card glass lens">
+        <h4>Paint tools</h4>
+        <div class="pf-row"><button class="pf-tool" type="button"><i style="background:#FF6F61"></i><span>Crayon</span></button>
+          <button class="pf-tool" type="button"><i style="background:#4FB3FF"></i><span>Brush</span></button>
+          <button class="pf-tool" type="button"><i style="background:#FFC93C"></i><span>Spray</span></button></div>
+        <div class="scrim"><span>Words on glass sit on a soft scrim, so they stay readable over any painting.</span></div>
+        <div class="seg"><i class="pill"></i><button type="button" class="on">Draw</button><button type="button">Paint</button><button type="button">Story</button></div>
+      </div>
+    </div>
+    <div class="controls">
+      <label><span>Glass thickness</span><input type="range" min="6" max="100" value="26" data-thickness="pf" data-out="pf-out"><output id="pf-out">26%</output></label>
+      <button class="btn" type="button" data-variant="pf" aria-pressed="false">Regular glass. Switch to Clear</button>
+    </div>
+  </figure>
+  <aside>
+    <h3>Glass, the Apple way</h3>
+    <p>The material from your reference, done to Apple's recipe: lensing at the rim, a glint that follows the pointer,
+      paint colour bleeding through. The slider sets how thin the glass gets; Clear is Apple's preset for sitting over
+      pictures.</p>
+    <p><b>Build with</b> CSS backdrop blur and saturation, inset rim lights, and an SVG displacement map for the edge.
+      The displacement renders in Chromium only; elsewhere the glass is frosted, not lensed.</p>
+    <p><b>Offline</b> yes, pure CSS.</p>
+    <p><span class="dot med"></span><b>Ten-day risk</b> medium. Each pane costs frame time at 4K; three on screen is
+      the ceiling. Pin the demo box to Chrome.</p>
+    <p><b>Where it fits</b> every floating control in the studio.</p>
+  </aside>
+</div>
+
+<div class="spec">
+  <figure><div id="spec-art" class="frame art-stage solo"></div></figure>
+  <aside>
+    <h3>The picture is the room</h3>
+    <p>Nothing is more inspiring to a child than their own drawing filling the screen. The interface never covers it,
+      only floats on it, and the companion's painting arrives as a reveal the child controls.</p>
+    <p><b>Build with</b> a canvas for the drawing and an image layer for the painting, split by a clip the handle
+      moves. The generated painting streams in blurred and sharpens as it arrives.</p>
+    <p><b>Offline</b> yes. The painting comes from the model on the box.</p>
+    <p><span class="dot med"></span><b>Ten-day risk</b> medium. The reveal is a day; the model's speed decides
+      whether the child waits. Splat's step list covers the wait.</p>
+    <p><b>Where it fits</b> the centre of everything.</p>
+  </aside>
+</div>
+
+<div class="spec">
+  <figure><div class="frame mix">
+    <div id="mix-paints" class="paints">
+      <button type="button" data-paint="coral" style="background:#FF6F61" aria-label="Coral"></button>
+      <button type="button" data-paint="sunflower" style="background:#FFC93C" aria-label="Sunflower"></button>
+      <button type="button" data-paint="sky" style="background:#4FB3FF" aria-label="Sky"></button>
+      <button type="button" data-paint="leaf" style="background:#5ED6A6" aria-label="Leaf"></button>
+      <button type="button" data-paint="violet" style="background:#9B7BFF" aria-label="Violet"></button>
+      <button type="button" data-paint="tangerine" style="background:#FF9F43" aria-label="Tangerine"></button>
+    </div>
+    <div id="mix-bowl" class="bowl"><span>Pick two paints</span></div>
+    <div id="mix-name" class="mix-name"></div>
+  </div></figure>
+  <aside>
+    <h3>Colours that teach</h3>
+    <p>Six paints with names a child can say, and a bowl that shows what real paint does when two meet. Yellow and
+      blue make green here, because that is what happens on paper.</p>
+    <p><b>Build with</b> a fixed table of pairs and results, not a formula. Screen colour mixing gives grey where paint
+      gives green; the table keeps the lesson true.</p>
+    <p><b>Offline</b> yes.</p>
+    <p><span class="dot low"></span><b>Ten-day risk</b> low.</p>
+    <p><b>Where it fits</b> the paint dock, and a skill of its own: "mix me a colour".</p>
+  </aside>
+</div>
+
+<div class="spec">
+  <figure><div id="spring-stage" class="frame spring-stage">
+    <button class="big coral" type="button">Paint it</button><button class="big sky" type="button">Make it move</button>
+    <button class="big leaf" type="button">Tell a story</button>
+    <div class="sticker">Well done!</div>
+  </div></figure>
+  <aside>
+    <h3>Round type, springy touch</h3>
+    <p>Rounded letters, big targets, and buttons that squash and spring back. Praise arrives as a sticker, the way it
+      does in a classroom.</p>
+    <p><b>Build with</b> a rounded family bundled locally, since Safari's system rounded face is not available to
+      Chrome. Targets at two centimetres, which research on young children's motor skills asks for, roughly three
+      times the adult minimum.</p>
+    <p><b>Offline</b> yes.</p>
+    <p><span class="dot low"></span><b>Ten-day risk</b> low.</p>
+    <p><b>Where it fits</b> every button a child presses.</p>
+  </aside>
+</div>
+
+<div class="spec">
+  <figure><div class="frame buddy-stage glass-scope">
+    <div class="pb a"></div><div class="pb b"></div><div class="pb d"></div>
+    <div class="buddy-card glass lens">
+      <div class="buddy"><div class="splat large" aria-hidden="true"><i class="eye l"><i class="pupil"></i></i><i class="eye r"><i class="pupil"></i></i></div>
+        <div class="bubble"><span id="buddy-text" data-text="Your tree has the happiest leaves I have ever seen. Shall we make them dance in the wind?"></span></div></div>
+      <button id="buddy-say" class="say" type="button">Say it out loud</button>
+    </div>
+  </div></figure>
+  <aside>
+    <h3>Splat, the companion</h3>
+    <p>The agent is a character, not a chat box. Its eyes follow the pointer, it speaks at reading pace, and it can
+      say every line aloud, so a child who cannot read yet is never stuck.</p>
+    <p><b>Build with</b> a CSS blob for the body, the system voice for speech (it works offline when the voice is
+      installed locally), and the model's words streamed word by word.</p>
+    <p><b>Offline</b> yes for speaking. Listening needs a model on the box; browsers' built-in recognition is
+      cloud-based or experimental.</p>
+    <p><span class="dot low"></span><b>Ten-day risk</b> low for the character, medium for two-way voice.</p>
+    <p><b>Where it fits</b> beside the picture, always.</p>
+  </aside>
+</div>
+
+<div class="spec">
+  <figure><div id="wall" class="frame wall">
+    <div class="frame-art" style="left:4%;top:6%;--d:30"><canvas></canvas><span>Mia · The purple sky</span></div>
+    <div class="frame-art" style="left:33%;top:40%;--d:60"><canvas></canvas><span>Leo · Rocket cat</span><i class="award">★</i></div>
+    <div class="frame-art" style="left:58%;top:5%;--d:45"><canvas></canvas><span>Ana · Rainy day</span></div>
+    <div class="frame-art" style="left:70%;top:48%;--d:80"><canvas></canvas><span>Sam · My dog</span></div>
+    <div class="frame-art" style="left:8%;top:55%;--d:50"><canvas></canvas><span>Mia · Splat's house</span></div>
+  </div></figure>
+  <aside>
+    <h3>The gallery wall</h3>
+    <p>Finished pictures hang on a wall with real depth; they lean as the pointer moves. A star marks the one Splat
+      chose this week. Children come back for the wall.</p>
+    <p><b>Build with</b> CSS perspective and a pointer listener. Pictures stay on the box as files; nothing uploads.</p>
+    <p><b>Offline</b> yes.</p>
+    <p><span class="dot low"></span><b>Ten-day risk</b> low.</p>
+    <p><b>Where it fits</b> the home screen, and the roadshow's closing shot.</p>
+  </aside>
+</div>
+
+<div class="spec">
+  <figure><div class="frame grown">
+    <div class="gt w3 h2"><span class="gl">Minutes making art this week</span><p class="gn">96<small>min</small></p><span class="gl">Up from 54 last week</span></div>
+    <div class="gt w3"><span class="gl">Colours Mia mixed</span><div class="chips"><span class="chip">Tangerine</span><span class="chip">Spring green</span><span class="chip">Plum</span><span class="chip">Periwinkle</span></div></div>
+    <div class="gt w3"><span class="gl">Where the pictures go</span><span class="priv">Everything stays on this box</span></div>
+    <div class="gt w2"><span class="gl">Skills tried</span><p class="gn">5</p></div>
+    <div class="gt w2"><span class="gl">Stories told</span><p class="gn">3</p></div>
+    <div class="gt w2"><span class="gl">Favourite paint</span><span class="sw" style="background:#9B7BFF;width:44px;height:44px" aria-label="Violet"></span></div>
+    <div class="gt w4 h2 trail-tile"><span class="gl">What Splat did with today's drawing</span><div class="trail"><span>Looked at the drawing through the camera</span>
+      <span>Found a sun, a house and a tree</span><span>Painted it, then made the leaves dance</span><span>Read the story back to Mia</span></div></div>
+    <div class="gt w2 h2"><span class="gl">Next time</span><span class="gl">Try a night sky. Splat has a trick with stars.</span></div>
+  </div></figure>
+  <aside>
+    <h3>The grown-ups' room</h3>
+    <p>Parents and teachers get a calm view: a few numbers, the colours learned, and a plain statement that nothing
+      leaves the box. Same palette, no glass, no charts.</p>
+    <p><b>Build with</b> plain tiles. The trail of what the companion did is the same data judges will want to see.</p>
+    <p><b>Offline</b> yes.</p>
+    <p><span class="dot low"></span><b>Ten-day risk</b> low.</p>
+    <p><b>Where it fits</b> behind a grown-up gesture, never in the child's way.</p>
+  </aside>
+</div>
+</section>
+<section aria-labelledby="h-stack">
+<h2 id="h-stack">The stack this look needs</h2>
+<p>Every piece named, with what it costs. Two rows are deliberately empty and say why.</p>
+<div class="inv">
+  <div class="inv-row head"><span>Piece</span><span>Choice</span><span>Why, and the cost</span></div>
+  <div class="inv-row"><span class="name">app shell</span><span>Vite, React 19, Tailwind 4<span class="why">Bundles to a folder the box can serve with no internet.</span></span><span><span class="dot low"></span>Low.</span></div>
+  <div class="inv-row"><span class="name">type</span><span>One rounded family bundled locally, plus the system face for small text<span class="why">Safari's rounded system face is not reachable from Chrome, so bundle an open-licence rounded family.</span></span><span><span class="dot low"></span>Low.</span></div>
+  <div class="inv-row"><span class="name">glass system</span><span>CSS tokens for Regular and Clear; edge refraction by SVG displacement<span class="why">Refraction is Chromium only. Three panes on screen at most; blur under 22px.</span></span><span><span class="dot med"></span>Medium. Measure on the demo box at 4K.</span></div>
+  <div class="inv-row"><span class="name">motion</span><span>Motion 12 springs for anything dragged; CSS spring curves for presses; GSAP for the one entrance<span class="why">The spring easing function is in Chrome 113, Safari 17.2 and Firefox 112. GSAP is free.</span></span><span><span class="dot low"></span>Low.</span></div>
+  <div class="inv-row"><span class="name">drawing surface</span><span>Canvas with perfect-freehand 1.2.3 for crayon strokes<span class="why">MIT; shapes strokes by pressure and speed so a finger looks like a crayon.</span></span><span><span class="dot low"></span>Low.</span></div>
+  <div class="inv-row"><span class="name">camera in</span><span>The browser camera for paper drawings, read by Step 3.7 Flash<span class="why">The model has native vision, so a photo of paper is enough input.</span></span><span><span class="dot low"></span>Low for the interface.</span></div>
+  <div class="inv-row"><span class="name">painting reveal</span><span>Generated image streamed in, blurred, then sharpened under the handle<span class="why">Turns model latency into a moment instead of a wait.</span></span><span><span class="dot med"></span>Medium. Depends on how fast the box paints.</span></div>
+  <div class="inv-row"><span class="name">voice out</span><span>The system speech voice, local only<span class="why">Works offline when the chosen voice is installed on the machine.</span></span><span><span class="dot low"></span>Low.</span></div>
+  <div class="inv-row"><span class="name">voice in</span><span>A speech model on the box<span class="why">Chrome's on-device recognition is experimental and needs a language pack; Safari and Firefox have none.</span></span><span><span class="dot med"></span>Medium.</span></div>
+  <div class="inv-row"><span class="name">gallery</span><span>CSS perspective; pictures as files on the box<span class="why">No engine, no upload.</span></span><span><span class="dot low"></span>Low.</span></div>
+  <div class="inv-row"><span class="name">targets and reading</span><span>Two-centimetre targets; every control has an icon and can be spoken<span class="why">Research on young children asks for about four times the adult target. Nothing requires reading.</span></span><span><span class="dot low"></span>Low, and not negotiable.</span></div>
+  <div class="inv-row"><span class="name">charts</span><span class="empty">Empty on purpose. Children do not read charts, and parents get four numbers.</span><span><span class="why">uPlot if a weekly line is ever wanted.</span></span></div>
+  <div class="inv-row"><span class="name">3D engine</span><span class="empty">Empty on purpose. CSS perspective covers the wall and the roadshow frame.</span><span><span class="why">React Three Fiber only if a real scene is ever added.</span></span></div>
+</div>
+
+<h2>Ten days, safest first</h2>
+<ol class="steps">
+  <li>Days one to three: the shell, the paint ground, the glass system with Regular and Clear, the tool rail and the
+    dock. The studio already looks like itself.</li>
+  <li>Days four to six: Splat, the painting reveal wired to the model, and voice out. This is the demo's heart, so it
+    gets the middle of the window.</li>
+  <li>Days seven and eight: the gallery wall, the grown-ups' room, the camera for paper drawings.</li>
+  <li>Days nine and ten: edge refraction, the roadshow frame, one orchestrated entrance. Measure on the box at 4K
+    and cut refraction first if frames drop.</li>
+</ol>
+
+<h2>Where the evidence cuts against the page</h2>
+<ul class="anom">
+  <li>Apple's rule is no glass on glass. Your reference screenshots stack glass cards over a glass bar; the studio does
+    not, which is why the segmented control is a translucent track and not a second pane.</li>
+  <li>Edge refraction renders only in Chromium; WebKit's fix was still unshipped when this page was made. On Safari the glass is
+    frosted, not lensed. Pin the demo browser.</li>
+  <li>Bright paint under Clear glass fights text. Apple's own answer is a dimming layer, so every text block here sits
+    on a scrim, and the glass is never quite as clear as the slider allows.</li>
+  <li>Offline listening is not a browser feature yet. It is a model on the box, and it belongs in the schedule.</li>
+  <li>The dark palette of the reference is gone entirely, at your request. Only its material survived.</li>
+</ul>
+
+<footer>Reworked from the four reference screenshots (a RON Design concept, shared on rednote by
+  subvecta), your brief for a children's art studio, and two web research passes. Apple's guidance from the Human
+  Interface Guidelines "Materials" page and the WWDC25 session "Meet Liquid Glass"; browser support from caniuse and
+  the WebKit bug tracker; child target sizes from Nielsen Norman Group. Everything on this page is self-contained: no
+  fonts, scripts or images load from the network.</footer>
+</section>
+</div>
+<script>
+// Procedural artwork: a child's crayon drawing and the same scene painted. A reveal handle sits between them.
+window.LB = window.LB || {};
+LB.mountArt = function (host) {
+  const P = { sky: '#9B7BFF', sun: '#FFC93C', wall: '#FF6F61', roof: '#FF9F43', door: '#4FB3FF', trunk: '#9C6B3F',
+    leaf: '#5ED6A6', grass: '#7ED957' };
+  const painted = document.createElement('canvas'), crayon = document.createElement('canvas');
+  painted.className = 'art painted'; crayon.className = 'art crayon';
+  const handle = document.createElement('div'); handle.className = 'reveal-handle glass';
+  handle.setAttribute('role', 'slider'); handle.setAttribute('aria-label', 'Reveal the painted version');
+  handle.tabIndex = 0; handle.innerHTML = '<span aria-hidden="true">‹ ›</span>';
+  host.append(painted, crayon, handle);
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  let seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+  function J(v, a) { return v + (rnd() - .5) * a; }
+  function crayonPath(ctx, pts, color, w, close) {
+    ctx.strokeStyle = color; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (let k = 0; k < 3; k++) {
+      ctx.globalAlpha = .5; ctx.lineWidth = w * (1 - k * .18); ctx.beginPath();
+      pts.forEach(function (p, i) { const x = J(p[0], 2.5), y = J(p[1], 2.5); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+      if (close) ctx.closePath();
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+  function scribble(ctx, cx, cy, rx, ry, color, w) {
+    const pts = [];
+    for (let y = -ry; y <= ry; y += w * 1.4) {
+      const hw = rx * Math.sqrt(Math.max(0, 1 - (y / ry) * (y / ry)));
+      pts.push([cx - hw, cy + y], [cx + hw, cy + y + w * .7]);
+    }
+    crayonPath(ctx, pts, color, w);
+  }
+  function drawCrayon(ctx, W, H) {
+    ctx.fillStyle = '#FFFDF8'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(0,0,0,.04)';
+    for (let i = 0; i < W * H / 900; i++) ctx.fillRect(rnd() * W, rnd() * H, 1.2, 1.2);
+    const u = W / 100, v = H / 100, w = .8 * u;
+    const sky = []; for (let x = 4; x <= 96; x += 6) sky.push([x * u, (x % 12 ? 7 : 18) * v]);
+    crayonPath(ctx, sky, P.sky, w * 1.3);
+    scribble(ctx, 60 * u, 16 * v, 8 * u, 8 * v, P.sun, w);
+    for (let a = 0; a < Math.PI * 2; a += Math.PI / 5) {
+      crayonPath(ctx, [[60 * u + Math.cos(a) * 10 * u, 16 * v + Math.sin(a) * 10 * v],
+        [60 * u + Math.cos(a) * 15 * u, 16 * v + Math.sin(a) * 15 * v]], P.sun, w);
+    }
+    scribble(ctx, 24 * u, 66 * v, 14 * u, 14 * v, P.wall, w);
+    crayonPath(ctx, [[10 * u, 52 * v], [38 * u, 52 * v], [38 * u, 80 * v], [10 * u, 80 * v]], P.wall, w, true);
+    crayonPath(ctx, [[7 * u, 52 * v], [24 * u, 34 * v], [41 * u, 52 * v]], P.roof, w * 1.2, true);
+    crayonPath(ctx, [[20 * u, 80 * v], [20 * u, 65 * v], [28 * u, 65 * v], [28 * u, 80 * v]], P.door, w);
+    crayonPath(ctx, [[13 * u, 58 * v], [18 * u, 58 * v], [18 * u, 63 * v], [13 * u, 63 * v]], P.door, w * .8, true);
+    crayonPath(ctx, [[48 * u, 80 * v], [48 * u, 60 * v], [52 * u, 60 * v], [52 * u, 80 * v]], P.trunk, w);
+    scribble(ctx, 50 * u, 50 * v, 12 * u, 12 * v, P.leaf, w);
+    for (let x = 3; x < 98; x += 4) crayonPath(ctx, [[x * u, 84 * v], [(x + 1.5) * u, 78 * v]], P.grass, w * .8);
+    crayonPath(ctx, [[0, 84 * v], [W, 85 * v]], P.grass, w);
+  }
+  function dab(ctx, x, y, r, color, a) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, color); g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.globalAlpha = a; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
+  }
+  function drawPainted(ctx, W, H) {
+    const u = W / 100, v = H / 100;
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, '#6F5BFF'); bg.addColorStop(.55, '#8FD3FF'); bg.addColorStop(1, '#BFF0D0');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    ctx.lineCap = 'round';
+    for (let i = 0; i < 260; i++) {
+      const x = rnd() * W, y = rnd() * 40 * v, r = (6 + rnd() * 14) * u, s = rnd() * 6;
+      ctx.strokeStyle = ['#FFFFFF', '#B9A6FF', '#7FC8FF', '#5B48E8'][i % 4]; ctx.globalAlpha = .35; ctx.lineWidth = .9 * u;
+      ctx.beginPath(); ctx.arc(x, y, r, s, s + 2.2); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    dab(ctx, 60 * u, 16 * v, 22 * u, '#FFF1A8', .9); dab(ctx, 60 * u, 16 * v, 10 * u, '#FFC93C', 1); dab(ctx, 60 * u, 16 * v, 6 * u, '#FFE27A', 1);
+    for (let i = 0; i < 400; i++) dab(ctx, rnd() * W, (78 + rnd() * 24) * v, (3 + rnd() * 5) * u, ['#7ED957', '#5ED6A6', '#BDF27A', '#3FB86E'][i % 4], .6);
+    ctx.fillStyle = '#FF7A6E'; ctx.fillRect(10 * u, 52 * v, 28 * u, 28 * v);
+    for (let i = 0; i < 90; i++) dab(ctx, (10 + rnd() * 28) * u, (52 + rnd() * 28) * v, 3 * u, ['#FF9A8E', '#FF5A4C', '#FFC2B8'][i % 3], .5);
+    ctx.fillStyle = '#FF9F43'; ctx.beginPath(); ctx.moveTo(7 * u, 52 * v); ctx.lineTo(24 * u, 34 * v); ctx.lineTo(41 * u, 52 * v); ctx.closePath(); ctx.fill();
+    for (let i = 0; i < 40; i++) dab(ctx, (10 + rnd() * 28) * u, (38 + rnd() * 13) * v, 2.5 * u, '#FFC07A', .5);
+    ctx.fillStyle = '#3F9BE8'; ctx.fillRect(20 * u, 65 * v, 8 * u, 15 * v);
+    ctx.fillStyle = '#FFF6C2'; ctx.fillRect(13 * u, 58 * v, 5 * u, 5 * v);
+    ctx.fillStyle = '#8A5A34'; ctx.fillRect(48 * u, 60 * v, 4 * u, 20 * v);
+    for (let i = 0; i < 160; i++) {
+      const a = rnd() * Math.PI * 2, r = rnd() * 12;
+      dab(ctx, (50 + Math.cos(a) * r) * u, (50 + Math.sin(a) * r) * v, (3 + rnd() * 3) * u, ['#5ED6A6', '#2FB37A', '#A6F0C5', '#7ED957'][i % 4], .55);
+    }
+    ctx.fillStyle = '#fff';
+    for (let i = 0; i < 18; i++) {
+      const x = rnd() * W, y = rnd() * H * .7, s = (.6 + rnd()) * u; ctx.globalAlpha = .9;
+      ctx.beginPath(); ctx.moveTo(x, y - s * 2); ctx.lineTo(x + s * .5, y); ctx.lineTo(x, y + s * 2); ctx.lineTo(x - s * .5, y); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(x - s * 2, y); ctx.lineTo(x, y + s * .5); ctx.lineTo(x + s * 2, y); ctx.lineTo(x, y - s * .5); ctx.closePath(); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+  function render() {
+    const W = Math.floor(host.clientWidth * dpr), H = Math.floor(host.clientHeight * dpr);
+    if (!W || !H) return;
+    [painted, crayon].forEach(function (c) { c.width = W; c.height = H; });
+    seed = 7; drawCrayon(crayon.getContext('2d'), W, H);
+    seed = 11; drawPainted(painted.getContext('2d'), W, H);
+  }
+  let split = .55, dragging = false;
+  function apply() { host.style.setProperty('--split', (split * 100).toFixed(2) + '%'); handle.setAttribute('aria-valuenow', Math.round(split * 100)); }
+  function fromEvent(e) { const b = host.getBoundingClientRect(); split = Math.min(.98, Math.max(.02, (e.clientX - b.left) / b.width)); apply(); }
+  handle.addEventListener('pointerdown', function (e) { dragging = true; handle.setPointerCapture(e.pointerId); fromEvent(e); });
+  handle.addEventListener('pointermove', function (e) { if (dragging) fromEvent(e); });
+  handle.addEventListener('pointerup', function () { dragging = false; });
+  handle.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') { split = Math.max(.02, split - .05); apply(); }
+    if (e.key === 'ArrowRight') { split = Math.min(.98, split + .05); apply(); }
+  });
+  render(); apply();
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let t0 = null; split = .02; apply();
+    function sweep(now) {
+      if (!t0) t0 = now;
+      const k = Math.min(1, (now - t0) / 2400), e = 1 - Math.pow(1 - k, 3);
+      if (!dragging) { split = .02 + e * .53; apply(); }
+      if (k < 1 && !dragging) requestAnimationFrame(sweep);
+    }
+    new IntersectionObserver(function (en, obs) { if (en[0].isIntersecting) { requestAnimationFrame(sweep); obs.disconnect(); } }, { threshold: .3 }).observe(host);
+  }
+  let rt = null; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(render, 150); });
+};
+// Glass material: edge-refraction map, specular highlight that follows the pointer, morphing segmented
+// controls, and the thickness / variant controls used by the first specimen.
+window.LB = window.LB || {};
+(function () {
+  function lensMap() {
+    const s = 256, c = document.createElement('canvas'); c.width = c.height = s;
+    const g = c.getContext('2d'), img = g.createImageData(s, s), d = img.data, band = .22;
+    for (let y = 0; y < s; y++) for (let x = 0; x < s; x++) {
+      const nx = x / (s - 1), ny = y / (s - 1), ex = Math.min(nx, 1 - nx), ey = Math.min(ny, 1 - ny);
+      let sx = 0, sy = 0;
+      if (ex < band) { const k = 1 - ex / band; sx = (nx < .5 ? 1 : -1) * k * k; }
+      if (ey < band) { const k = 1 - ey / band; sy = (ny < .5 ? 1 : -1) * k * k; }
+      const i = (y * s + x) * 4; d[i] = 128 + sx * 127; d[i + 1] = 128 + sy * 127; d[i + 2] = 0; d[i + 3] = 255;
+    }
+    g.putImageData(img, 0, 0); return c.toDataURL();
+  }
+  const fe = document.getElementById('lensmap');
+  if (fe) { const url = lensMap(); fe.setAttribute('href', url); fe.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', url); }
+
+  document.querySelectorAll('.glass-scope').forEach(function (scope) {
+    let raf = null, ev = null;
+    scope.addEventListener('pointermove', function (e) { ev = e; if (!raf) raf = requestAnimationFrame(update); });
+    function update() {
+      raf = null;
+      scope.querySelectorAll('.glass').forEach(function (g) {
+        const b = g.getBoundingClientRect();
+        g.style.setProperty('--sx', ((ev.clientX - b.left) / b.width * 100).toFixed(1) + '%');
+        g.style.setProperty('--sy', ((ev.clientY - b.top) / b.height * 100).toFixed(1) + '%');
+      });
+    }
+  });
+
+  document.querySelectorAll('.seg').forEach(function (seg) {
+    const pill = seg.querySelector('.pill'), btns = seg.querySelectorAll('button');
+    if (!pill) return;
+    function move(b) {
+      seg.style.setProperty('--l', b.offsetLeft + 'px'); seg.style.setProperty('--w', b.offsetWidth + 'px');
+      btns.forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    }
+    btns.forEach(function (b) { b.addEventListener('click', function () { move(b); }); });
+    const first = seg.querySelector('button.on') || btns[0]; if (first) move(first);
+    addEventListener('resize', function () { const on = seg.querySelector('button.on'); if (on) move(on); });
+  });
+
+  document.querySelectorAll('[data-thickness]').forEach(function (input) {
+    const scope = document.getElementById(input.dataset.thickness), out = document.getElementById(input.dataset.out);
+    function set() {
+      const t = +input.value / 100;
+      scope.style.setProperty('--ga', (t * .45).toFixed(3)); scope.style.setProperty('--gb', (t * 22).toFixed(1) + 'px');
+      if (out) out.textContent = Math.round(t * 100) + '%';
+    }
+    input.addEventListener('input', set); set();
+  });
+  document.querySelectorAll('[data-variant]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const scope = document.getElementById(btn.dataset.variant), clear = scope.classList.toggle('clear');
+      btn.setAttribute('aria-pressed', clear ? 'true' : 'false');
+      const slider = document.querySelector('[data-thickness="' + scope.id + '"]');
+      if (slider) { slider.value = clear ? 10 : 26; slider.dispatchEvent(new Event('input')); }
+      btn.textContent = clear ? 'Clear glass. Switch to Regular' : 'Regular glass. Switch to Clear';
+    });
+  });
+  document.querySelectorAll('.tools').forEach(function (rail) {
+    rail.querySelectorAll('.tool').forEach(function (t) { t.addEventListener('click', function () {
+      rail.querySelectorAll('.tool').forEach(function (x) { x.classList.toggle('on', x === t); }); }); });
+  });
+  document.querySelectorAll('.swatches').forEach(function (row) {
+    row.querySelectorAll('.sw').forEach(function (s) { s.addEventListener('click', function () {
+      row.querySelectorAll('.sw').forEach(function (x) { x.classList.toggle('on', x === s); }); }); });
+  });
+})();
+// Colours that teach: pick two paints, the bowl shows what real paint would give and names it.
+(function () {
+  const bowl = document.getElementById('mix-bowl'), name = document.getElementById('mix-name');
+  const dots = document.querySelectorAll('#mix-paints button');
+  if (!bowl) return;
+  const paints = { coral: '#FF6F61', sunflower: '#FFC93C', sky: '#4FB3FF', leaf: '#5ED6A6', violet: '#9B7BFF', tangerine: '#FF9F43' };
+  const order = Object.keys(paints);
+  const mixes = {
+    'coral+sunflower': ['#FF9A3C', 'Tangerine'], 'coral+sky': ['#A77BB5', 'Plum'], 'coral+leaf': ['#B9917A', 'Clay'],
+    'coral+violet': ['#C46CA8', 'Berry'], 'coral+tangerine': ['#FF7F52', 'Poppy'], 'sunflower+sky': ['#9FD26A', 'Spring green'],
+    'sunflower+leaf': ['#B5E070', 'Lime'], 'sunflower+violet': ['#D2B58C', 'Sand'], 'sunflower+tangerine': ['#FFB43F', 'Apricot'],
+    'sky+leaf': ['#5AC9D6', 'Sea glass'], 'sky+violet': ['#7A97FF', 'Periwinkle'], 'sky+tangerine': ['#B79E9C', 'Dusty rose'],
+    'leaf+violet': ['#86A6C9', 'Lavender grey'], 'leaf+tangerine': ['#B4BD53', 'Olive'], 'violet+tangerine': ['#CF8D91', 'Coral pink']
+  };
+  let picked = [];
+  function cap(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
+  dots.forEach(function (d) {
+    d.addEventListener('click', function () {
+      picked.push(d.dataset.paint); if (picked.length > 2) picked = picked.slice(-2);
+      dots.forEach(function (x) { x.classList.toggle('on', picked.indexOf(x.dataset.paint) >= 0); });
+      bowl.classList.add('full');
+      if (picked.length === 2) {
+        const k = picked.slice().sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); }).join('+');
+        const m = mixes[k] || ['#C9C2B8', 'a brand-new colour'];
+        bowl.style.background = m[0]; name.textContent = cap(picked[0]) + ' + ' + cap(picked[1]) + ' makes ' + m[1];
+      } else { bowl.style.background = paints[picked[0]]; name.textContent = 'Now pick a second paint'; }
+    });
+  });
+})();
+// Splat, the companion: eyes follow the pointer; the bubble types at reading pace; "Say it" uses the system voice.
+(function () {
+  document.querySelectorAll('.splat').forEach(function (s) {
+    const pupils = s.querySelectorAll('.pupil'); let raf = null, ev = null;
+    document.addEventListener('pointermove', function (e) { ev = e; if (!raf) raf = requestAnimationFrame(look); });
+    function look() {
+      raf = null; const b = s.getBoundingClientRect();
+      const dx = ev.clientX - (b.left + b.width / 2), dy = ev.clientY - (b.top + b.height / 2);
+      const d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 200) * 3;
+      pupils.forEach(function (p) { p.style.transform = 'translate(' + (dx / d * k).toFixed(1) + 'px,' + (dy / d * k).toFixed(1) + 'px)'; });
+    }
+  });
+  const out = document.getElementById('buddy-text'), say = document.getElementById('buddy-say');
+  if (!out) return;
+  const text = out.dataset.text; out.textContent = '';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let started = false;
+  function type() {
+    if (started) return; started = true;
+    if (reduced) { out.textContent = text; return; }
+    let i = 0; (function step() { out.textContent = text.slice(0, ++i); if (i < text.length) setTimeout(step, 28); })();
+  }
+  new IntersectionObserver(function (en) { if (en[0].isIntersecting) type(); }, { threshold: .1 }).observe(out);
+  if (say) {
+    if (!('speechSynthesis' in window)) say.hidden = true;
+    else say.addEventListener('click', function () {
+      const u = new SpeechSynthesisUtterance(text); u.rate = .95; u.pitch = 1.15;
+      speechSynthesis.cancel(); speechSynthesis.speak(u);
+    });
+  }
+})();
+// The gallery wall: procedurally painted frames with pointer parallax.
+(function () {
+  const wall = document.getElementById('wall'); if (!wall) return;
+  const palettes = [['#FF6F61', '#FFC93C', '#4FB3FF'], ['#9B7BFF', '#5ED6A6', '#FFF1A8'], ['#FF9F43', '#4FB3FF', '#FF6F61'],
+    ['#5ED6A6', '#9B7BFF', '#FFC93C'], ['#4FB3FF', '#FFD6E0', '#FF6F61']];
+  let seed = 3; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+  wall.querySelectorAll('canvas').forEach(function (c, i) {
+    const dpr = Math.min(devicePixelRatio || 1, 2); c.width = c.clientWidth * dpr; c.height = c.clientHeight * dpr;
+    const g = c.getContext('2d'), W = c.width, H = c.height, pal = palettes[i % palettes.length];
+    g.fillStyle = '#FFFDF8'; g.fillRect(0, 0, W, H);
+    for (let k = 0; k < 40; k++) {
+      const x = rnd() * W, y = rnd() * H, r = (8 + rnd() * 22) * dpr, gr = g.createRadialGradient(x, y, 0, x, y, r);
+      gr.addColorStop(0, pal[k % 3]); gr.addColorStop(1, 'rgba(255,255,255,0)');
+      g.globalAlpha = .7; g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    }
+    g.globalAlpha = 1; g.strokeStyle = pal[0]; g.lineWidth = 3 * dpr; g.lineCap = 'round'; g.lineJoin = 'round'; g.beginPath();
+    for (let k = 0; k < 6; k++) g.lineTo(rnd() * W, rnd() * H);
+    g.stroke();
+  });
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let raf = null, ev = null;
+  wall.addEventListener('pointermove', function (e) { ev = e; if (!raf) raf = requestAnimationFrame(tilt); });
+  wall.addEventListener('pointerleave', function () { wall.style.setProperty('--px', '0'); wall.style.setProperty('--py', '0'); });
+  function tilt() {
+    raf = null; const b = wall.getBoundingClientRect();
+    wall.style.setProperty('--px', ((ev.clientX - b.left) / b.width - .5).toFixed(3));
+    wall.style.setProperty('--py', ((ev.clientY - b.top) / b.height - .5).toFixed(3));
+  }
+})();
+// Round type and springy motion: pressing a big button pops a sticker.
+(function () {
+  const stage = document.getElementById('spring-stage'); if (!stage) return;
+  const stick = stage.querySelector('.sticker'), labels = ['Well done!', 'So bright!', 'Love it!', 'Wow!'];
+  let n = 0;
+  stage.querySelectorAll('button.big').forEach(function (b) {
+    b.addEventListener('click', function () {
+      stick.textContent = labels[n++ % labels.length];
+      stick.style.setProperty('--rot', ((Math.random() - .5) * 24).toFixed(1) + 'deg');
+      stick.classList.remove('pop'); void stick.offsetWidth; stick.classList.add('pop');
+    });
+  });
+})();
+// Wiring: artwork into the studio and the specimen; roadshow toggle.
+(function () {
+  const ha = document.getElementById('hero-art'); if (ha) LB.mountArt(ha);
+  const sa = document.getElementById('spec-art'); if (sa) LB.mountArt(sa);
+  const hero = document.getElementById('hero'), tog = document.getElementById('roadshow');
+  if (hero && tog) tog.addEventListener('click', function () {
+    const on = hero.classList.toggle('roadshow');
+    tog.setAttribute('aria-pressed', on ? 'true' : 'false');
+    tog.textContent = on ? 'Back to working view' : 'Roadshow view';
+  });
+})();
+</script>

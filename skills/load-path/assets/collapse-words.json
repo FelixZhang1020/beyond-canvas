@@ -1,0 +1,14 @@
+{
+  "zh": {
+    "start_tenon": "抽掉这根柱头的馒头榫",
+    "start": "抽掉 {piece} 下面的榫",
+    "link": "第 {n} 环 · 已塌 {gone} 件",
+    "end": "{total} 件一环扣一环塌下来；柱子、墙和台基还站着"
+  },
+  "en": {
+    "start_tenon": "The tenon on this column's head is taken out",
+    "start": "The joint under {piece} is taken out",
+    "link": "Link {n} · {gone} pieces down",
+    "end": "{total} pieces came down link by link; the columns, walls and platform stand"
+  }
+}

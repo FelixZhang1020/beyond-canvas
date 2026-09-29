@@ -1,0 +1,7 @@
+{
+  "Column -12.50 -8.83": {
+    "tenon": [["Perimeter timber column.002", "Column -12.50 -8.83 | Ludou foot"]],
+    "crosslap": [["Column -12.50 -8.83 | Hua 1 - touxin", "Column -12.50 -8.83 | Nidao gong"]],
+    "dovetail": [["Perimeter tie beam", "Perimeter timber column.002", "max"]]
+  }
+}

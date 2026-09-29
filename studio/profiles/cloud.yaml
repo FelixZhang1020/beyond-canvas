@@ -1,0 +1,266 @@
+# Phase 0, before the DGX Spark arrives.
+#
+# Rewritten: every slot this profile can buy from StepFun is now
+# bought from StepFun. The director and both voice slots go straight to
+# platform.stepfun.com, and the picture slot runs StepFun's Step1X-Edit through
+# Replicate because StepFun is discontinuing its own image API.
+# What is left on another vendor is what StepFun does not sell: `vlm.studio`'s
+# hosted stand-in, and 3D.
+#
+# This header used to claim that both language slots point at Step 3.7
+# Flash. That stopped being true when acceptance criterion B5 —
+# a model must not grade its own work — moved `vlm.studio` to Qwen3-VL-8B, and
+# the header was not updated with it.
+#
+# The options below are not defaults. Step 3.7 Flash returns empty content when
+# max_tokens is small and refuses a request that disables reasoning. It used to
+# behave differently depending on which host OpenRouter routed to; there is one
+# host now, which is one class of flakiness gone.
+#
+# On max_tokens, raised from 1600 and 1200. This model spends
+# thousands of tokens on hidden thinking and bills them as ordinary completion
+# with reasoning_tokens reported as 0, so that field cannot warn you. Measured:
+# one judge call returned 3524 completion tokens for a single line of JSON, and
+# another passed at 1562 against a 1600 ceiling, which is a near miss rather
+# than a pass. The old numbers then failed a benchmark on the writer call too,
+# on a drawing whose sibling had succeeded minutes earlier, which is what a
+# marginal ceiling looks like. max_tokens is a ceiling and not a spend: tokens
+# are billed as generated, so headroom is free and truncation is not.
+# Numbers in docs/measured/judge-token-budget.md.
+#
+# Raised again, from 8000 and 6000, and the reason is the shape of
+# the failure rather than the size of the number. A sweep of fourteen drawings
+# came back with two empty completions, both on the sketch entrance, whose prompt
+# had just grown by three rules. The same drawings had answered minutes earlier
+# under the shorter prompt. That is a marginal ceiling exactly as recorded in the
+# measured note: it does not fail consistently, it fails on whichever input makes
+# the model think a little longer, so it reads as flakiness rather than as
+# misconfiguration. Both writer slots now sit at the judge's budget.
+slots:
+  mesh.portrait:
+    provider: hybridmesh
+    model: trellis2
+    options:
+      task: to_mesh
+      base_url: http://127.0.0.1:7240
+      timeout_s: 600
+      extra:
+        scene_format: glb
+
+  # Bought from StepFun directly, where it used to go through OpenRouter.
+  # Same weights either way — OpenRouter resells them — so this is not a
+  # model change, and every measured number above still describes this slot. What
+  # changes is that the sponsor's model now comes from the sponsor, on an account
+  # that takes Chinese payment, with no reseller between.
+  #
+  # `provider_order` is gone with it. That option existed to stop OpenRouter
+  # routing to a third-party host of the same weights; there is one host here.
+  #
+  # THE OPTION NAME CHANGED SHAPE. OpenRouter takes `{"reasoning": {"effort": ...}}`
+  # and StepFun takes a top-level `reasoning_effort`. The profile key is the same
+  # either way; the provider decides how to send it. Measured against the live
+  # API, because the wrong shape is accepted and silently ignored.
+  vlm.director:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      reasoning_effort: low
+      max_tokens: 12000
+      # StepFun returns no cost field at all, so the benchmark's number is
+      # computed from these. Their list is ¥1.35 in / ¥8.1 out per million
+      # (read off platform.stepfun.com pricing); at 7.1 CNY to the USD
+      # that is the pair below — within a cent of what OpenRouter charged, which
+      # is the sanity check that says the conversion is not wrong by a factor.
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+
+  # NOT Step 3.7 Flash, which is the director above. Acceptance criterion B5 says
+  # the model that writes a critique must not grade its own work, and at first
+  # this slot and the director resolved to the same model — so every
+  # number in BENCHMARK.md was a model marking itself.
+  #
+  # Qwen3-VL-8B is the spec's own named fallback for this slot (section 8 of the
+  # design record), which makes it the right stand-in rather than an arbitrary
+  # second opinion: open weights, 8B, and it fits the Spark where the box will
+  # run Step3-VL-10B. It is an instruct model, not a thinking one, so it does not
+  # spend its budget on hidden reasoning the way the Step models do — which is
+  # why there is no reasoning_effort here and why max_tokens can be smaller.
+  vlm.studio:
+    provider: openrouter
+    model: qwen/qwen3-vl-8b-instruct
+    options:
+      max_tokens: 4000
+
+  # --- Media slots ---------------------------------------------------------
+  #
+  # TWO ROUTES, on purpose, and they are now StepFun and Replicate.
+  # SiliconFlow is no longer used by this profile at all: it was here because it
+  # took Chinese payment when a Replicate purchase stuck at "in progress", and
+  # StepFun is a Chinese platform that does the same and sells the models this
+  # product actually wants. The voice went to StepFun for a field SiliconFlow
+  # does not have; the pictures went to Replicate for a model StepFun is
+  # discontinuing. Both moves are recorded on their own slots below.
+  #
+  # The provider is still in the codebase and still tested. Nothing about this
+  # revision says SiliconFlow was wrong — it says the sponsor turned out to sell
+  # what the product needed, which was not knowable when it was wired.
+  #
+  # Kept from the revision this replaces: the voice has to be good in Chinese.
+  # Kokoro is 82M parameters and is not in the same class as the voice a child
+  # should hear, which is why the voice slot has moved twice rather than once.
+  #
+  # EVERY SLOT DECLARES A TASK, AND THE VENDOR'S FIELD NAMES LIVE HERE. A skill
+  # calls `speak(text=...)` or `edit_image(image=..., instruction=...)`; this
+  # file says what this particular vendor calls those fields. The operator
+  # expects to swap these models when the results are not good enough, and that
+  # swap has to be an edit to this file rather than to skill code.
+  #
+  # Field names below were read from each model's published schema,
+  # not guessed:
+  #   replicate.com/{model}/api/schema
+
+  # Wan short-video preview. The hosted A14B slot remains the fallback while
+  # the selected 4090 TI2V-5B runtime is turned into a classroom service.
+  video.animation:
+    provider: replicate
+    model: wan-video/wan-2.2-i2v-a14b
+    options:
+      version: 2c62e0842338726c74ad99a3c469255ce3f4c1f66ee000c265451b87754ac0c9
+      task: to_video
+      fields: {image: image, instruction: prompt}
+      extra:
+        seed: 42
+        num_frames: 81
+        resolution: 480p
+        frames_per_second: 24
+        sample_steps: 30
+        go_fast: false
+      timeout_s: 300
+
+  # Splat's speaking voice.
+  #
+  # StepAudio 2.5 now, where this used to be CosyVoice 2 on SiliconFlow.
+  # The reason is the `instruction` field below, and the comment this one
+  # replaces is the argument for it: SiliconFlow's speech API is the OpenAI
+  # shape — model, input, voice — with NO field for "speak kindly", so the tone
+  # had to be carried by whichever preset voice came closest. StepFun's takes a
+  # sentence of Chinese saying HOW to speak, up to 200 characters, and it is a
+  # line anyone can edit without touching code. That was the thing the voice
+  # slot wanted from the beginning and could not have.
+  #
+  # `wenrounvsheng` chosen by the operator from four candidates
+  # heard side by side on this line — 温柔甜美，叙述感强，有关怀感, of the 39
+  # official voices. /v1/audio/voices lists NONE of them: it returns only voices
+  # you uploaded yourself, exactly as SiliconFlow's does, so the id comes from
+  # the docs and is verified by the call working.
+  tts.studio:
+    provider: stepfun
+    model: stepaudio-2.5-tts
+    options:
+      task: speak
+      endpoint: audio/speech
+      fields:
+        text: input
+        voice: voice
+      extra:
+        voice: wenrounvsheng
+        instruction: 像幼儿园美术老师一样说话：温柔、慢一点、带着笑意，像在跟五岁的小朋友聊天
+        response_format: mp3
+        speed: 0.95
+      # ¥5.8 per 万字符; a thirty-character line is ¥0.017, about $0.0025 at
+      # 7.1 CNY to the USD. Per call at a typical length, not a flat rate.
+      price_usd: 0.0025
+      timeout_s: 120
+
+  # The keepsake's narration — the signature of layer three.
+  #
+  # IN A PRESET VOICE, NOT THE CHILD'S. Cloning is out of Phase 0 by operator
+  # decision, and the contradiction that forced it is written down
+  # in docs/measured/media-models-on-real-drawings.md: cloning needs
+  # the child's recording sent to a vendor, and studio/voice/transcribe.py refuses to
+  # send a child's recording anywhere. Two positions that cannot both hold while
+  # anything is hosted. On the box they can, because nothing leaves it.
+  #
+  # So this slot is deliberately identical to tts.studio for now. It keeps its
+  # own name because the box will make them differ again — same model, cloning
+  # mode — and a slot deleted now is a slot to re-derive in three weeks.
+  tts.export:
+    provider: stepfun
+    model: stepaudio-2.5-tts
+    options:
+      task: speak
+      endpoint: audio/speech
+      fields:
+        text: input
+        voice: voice
+      extra:
+        voice: wenrounvsheng
+        instruction: 像在念一本睡前故事书：温柔、清楚、慢慢地讲给一个五岁的孩子听
+        response_format: mp3
+        speed: 0.92
+      price_usd: 0.0025
+      timeout_s: 120
+
+  # 素描立起来 and 角色立起来.
+  #
+  # InstantMesh now, where this used to be Hunyuan3D-2. THE SAME MODEL THE
+  # BOX RUNS, which is the whole point of the change: this was the last slot whose
+  # online results said nothing about the demo, because a stand-in from a
+  # different family cannot predict how the shipped model behaves.
+  #
+  # Hunyuan3D was not rejected for quality — tested the same day, it returned a
+  # valid mesh of 20,008 vertices in 19 seconds of compute, and the thirty-minute
+  # hang recorded the day before was a cold start rather than a defect. It was
+  # rejected because it is not what the Spark will load, and because its licence
+  # is Tencent's community terms: no use in the EU, the UK or South Korea, a
+  # one-million-user ceiling, "Powered by Tencent Hunyuan" attribution, and a
+  # clause forbidding its output from improving another model. InstantMesh is
+  # Apache-2.0 and 6.8 GB against 13.9.
+  #
+  # `camenduru/instantmesh` on Replicate, 42,728 runs. TencentARC also run the
+  # official Space — `TencentARC/InstantMesh`, live on ZeroGPU with the whole
+  # pipeline exposed — which is free and the same weights, and is the right place
+  # to cross-check a result. It is not this slot because a queued shared GPU that
+  # sleeps is not something to put in front of a waiting child.
+  #
+  # BEFORE YOU SWAP THIS MODEL, READ docs/measured/sketch-to-3d.md.
+  # It reconstructs only the forms that carry a tonal shadow: on a pencil study it
+  # returned the sphere and the cylinder and lost the cube, whose lit faces measure
+  # within four levels of the paper. That is not this model's fault and no
+  # replacement fixes it — InstantMesh, TRELLIS and Hi3DGen all segment with the
+  # same `rembg`/u2net, and the whole sketch-trained field is either unmaintained
+  # since 2021 or licence-blocked. All three ship the same escape hatch: supply an
+  # alpha mask and their segmentation is skipped. The work is a masking stage in
+  # front of this slot, not a different model behind it.
+  #
+  # `remove_background` below is the flag that escape hatch needs. Set it false
+  # once something upstream can hand this slot a masked image.
+  mesh.fast:
+    provider: replicate
+    model: camenduru/instantmesh
+    options:
+      task: to_mesh
+      fields:
+        image: image_path
+      extra:
+        remove_background: true
+        export_texmap: false
+      timeout_s: 600
+
+  # video.scene DELETED. Section 07 of the confirmed requirements
+  # lists 视频生成模型驱动的动画 under 明确不做的事, and 4.1 gives the reason: a
+  # video model repaints the child's work, so the strokes they actually made are
+  # gone, and it takes minutes where the moment needs two seconds. It survived in
+  # this file for a day after the decision because nobody reconciled the two
+  # documents. Restoring it means reopening 4.1, not editing a profile.
+  # Still deliberately absent, unchanged from the fal block this replaces.
+  #
+  # safety.image, because the classroom builds a CHAT client for this slot
+  #   whenever a profile has one, so a media provider here stops the studio page
+  #   from starting. It is also the door every child's drawing passes through.
+  #   Replicate does carry the real classifier — google-deepmind/shieldgemma-2-4b-it,
+  #   about $0.001 a call, with the tunable score the stand-in lacks. Wiring it
+  #   needs the classroom to learn which protocol a slot speaks; wire it then.
+  # mesh.premium, because no vendor sells Step1X-3D. mesh.fast covers the job.
+  # depth and rig.figure, because both already run on this machine for nothing.
+  #   Replicate has cjwbw/depth-anything if that ever stops being true.

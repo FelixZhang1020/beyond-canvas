@@ -1,0 +1,11 @@
+{
+  "_note": "Parent-facing text for the keepsake page. Content, not code: the Chinese here is the string a parent reads, so it lives in this locale file rather than in story.py.",
+  "en": {
+    "title": "My story",
+    "footer": "In their own words. Nothing here was written or corrected by a machine."
+  },
+  "zh": {
+    "title": "我的故事",
+    "footer": "这是孩子自己说的话。没有一个字是机器写的或改过的。"
+  }
+}

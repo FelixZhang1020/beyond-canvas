@@ -1,0 +1,50 @@
+/* Tokens from docs/design/DESIGN-PRINCIPLES.md. Change the principles first, then this file. */
+:root{
+  --paper:#FFFDF8;--ink:#403832;--ink-2:#6D6057;--ink-3:#7E7065;
+  --coral:#FF6F61;--tangerine:#FF9F43;--sunflower:#FFC93C;--leaf:#5ED6A6;--sky:#4FB3FF;--violet:#9B7BFF;--rose:#FFB3C7;
+  --good:#0CA30C;--warning:#FAB219;--critical:#D03B3B;
+  --round:ui-rounded,"SF Pro Rounded","Arial Rounded MT Bold","Nunito","PingFang SC","Avenir Next",sans-serif;
+  --spring:linear(0,.35 12%,.8 24%,1.06 38%,1.02 52%,.99 66%,1);
+  --r-panel:28px;--r-bar:30px;--r-tile:20px;
+  --action:#B95741;--magic:#76668F;--line:#EAE1D7;--chat-partner:#F4F0E8;--chat-child:#FFE9D2;
+  --surface-soft:#F7F0E7;--nav-surface:#f6f0e766;--selected-surface:#fff;
+  --selected-shadow:0 4px 15px -9px #71503b66;
+  --ga:.82;--gb:12px;
+  --room-wash:radial-gradient(ellipse at 15% 90%,#f6e9d9aa,transparent 65%);
+  /* One frame for every top-level page, and one height budget for every overlay
+     panel. Measured in the operator's own 1920x794 window: the status
+     board laid its content out 1250px wide, the home page 1504, the showpiece and
+     the harness 1704 and the four-model comparison edge to edge, so moving between
+     them reads as four different products. An overlay panel's own height budget
+     is derived from --overlay-inset where that safe space is set, in 03-layout. */
+  --page-frame:min(1600px,calc(100% - 64px));
+  /* How tall a 3D study, a clip or the original beside it may be. It was a flat
+     590px written into four places, one of them an inline style in JavaScript,
+     so on an 850px window a saved Pixal3D study ended 156px below the screen
+     (measured on the real page). The floor keeps it worth looking at
+     on a short window; the ceiling is the old number, for a tall one. */
+  --study-pane:clamp(240px,calc(100dvh - 490px),590px);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font:15px/1.55 var(--round);-webkit-font-smoothing:antialiased;
+  overflow:hidden;}
+button,input,textarea,select{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--magic);outline-offset:3px}
+/* A field someone types into shows focus on its own edge. The offset ring above
+   drew a second outline around the field's border, and in the chat panel it ran
+   into the panel's edge. A dropdown's ring ran over its caption and notes the same way. */
+textarea:focus-visible,input[type=text]:focus-visible,select:focus-visible{outline:0;box-shadow:0 0 0 2px var(--magic)}
+/* One dropdown for the whole studio: a paper field with the fields' hairline and radius, and a
+   drawn chevron in place of each browser's own. Each select had its own border, radius and grey. */
+select{appearance:none;-webkit-appearance:none;min-height:44px;padding:10px 40px 10px 14px;border:1px solid var(--line);
+  border-radius:14px;color:var(--ink);font-size:15px;line-height:1.4;cursor:pointer;max-width:100%;transition:border-color .2s;
+  background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%236D6057' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center/14px}
+select:not(:disabled):hover{border-color:#d8c8b8}select:disabled{opacity:.55;cursor:default}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* Chinese: a CJK-first face so Latin fragments do not fall to a bold-only face, and more air between lines. */
+:root:lang(zh){--round:"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei",ui-rounded,sans-serif}
+:root:lang(zh) body{line-height:1.6;letter-spacing:.01em}
+h1,h2,h3{text-wrap:balance}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

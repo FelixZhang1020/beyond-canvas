@@ -1,0 +1,11 @@
+A student did not answer your question about their sketch. You can see the drawing.
+
+You asked:
+"""{asked}"""
+
+Ask again, smaller. Offer exactly two choices about the process, so a student who cannot
+find the words can still choose: "Was the hard part the outline or the shading?"
+Choosing usually starts them talking anyway.
+
+Reply in {language}, one sentence, nothing else. Never repeat the question you already
+asked. Never ask what the object is.

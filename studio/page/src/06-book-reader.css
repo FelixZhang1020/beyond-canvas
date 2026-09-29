@@ -1,0 +1,97 @@
+/* The same reader lives in the review panel and the creation overlay. */
+#app[data-course-view=review] #review-book-panel:not([hidden]){display:flex;flex-direction:column;min-height:0;overflow:auto}
+#review-book-title,#review-book-status{flex:none;width:min(1220px,100%);margin:0 auto 14px}
+#review-book-title{font-family:var(--round);font-size:clamp(19px,2vw,26px);font-weight:600}
+#review-book-status:empty{display:none}
+#review-book-reader{display:flex;flex-direction:column;flex:1;min-height:0;width:min(1220px,100%);margin-inline:auto}
+#review-book-reader #book:not([hidden]){width:100%;padding:0}
+@media(min-width:761px){
+  /* Keep both pages square at a readable size; the review panel scrolls if needed. */
+  #review-book-title,#review-book-status,#review-book-reader{width:min(100%,900px)}
+  #review-book-reader #book:not([hidden]){flex:0 0 auto}
+  #review-book-reader #book .book-stage{flex:0 0 auto;aspect-ratio:2/1}
+  #review-book-reader #book .book:not(.is-ending){grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:761px) and (max-height:700px){
+  #review-book-title,#review-book-status,#review-book-reader{width:min(100%,max(400px,calc((100dvh - 325px)*2)))}
+}
+@media(max-width:760px){
+  #app[data-course-view=review] #review-book-panel:not([hidden]){min-height:calc(100dvh - 190px);padding:12px;overflow:visible}
+  #review-book-reader{min-height:560px}
+}
+#viewer-overlay:has(#book:not([hidden])){padding:16px;background:#55463655;backdrop-filter:blur(8px)}
+#viewer-overlay:has(#book:not([hidden]))>.viewer{width:min(1220px,100%);height:min(850px,calc(100dvh - 32px));max-height:none;padding:0;display:flex;flex-direction:column;overflow:hidden;border-radius:28px;background:#f8f3eb;box-shadow:0 28px 100px #30271f38}
+#viewer-overlay:has(#book:not([hidden])) .viewer-head{flex:none;flex-wrap:nowrap;min-height:72px;padding:16px 28px;border-bottom:1px solid var(--line);background:var(--paper);gap:12px}
+#viewer-overlay:has(#book:not([hidden])) #viewer-save{order:0;flex:0 0 auto}
+#viewer-overlay:has(#book:not([hidden])) .viewer-head h2{font-family:var(--round);font-size:20px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#viewer-overlay:has(#book:not([hidden])) .viewer-head .btn{min-height:44px;white-space:nowrap;padding:10px 16px}
+#book:not([hidden]){display:flex;flex-direction:column;flex:1;min-height:0;padding:20px 28px 14px;gap:0}
+#book .book-stage{flex:1;min-height:0;isolation:isolate;border:1px solid #e7ddcf;border-radius:14px;margin:0 0 16px;background:var(--paper);box-shadow:0 12px 28px -18px #79624866;perspective:2000px}
+#book .book{display:grid;grid-template-columns:minmax(0,56fr) minmax(0,44fr);height:100%;min-height:0;margin:0;padding:0;border-radius:0;box-shadow:none;background:var(--paper);overflow:hidden}
+#book .book-visual{position:relative;min-width:0;min-height:0;padding:28px;display:flex;align-items:stretch;justify-content:center;background:linear-gradient(90deg,#fffdf8 96%,#eee5d6);overflow:hidden}
+#book .book-visual .page-art,#book .book-visual video{width:100%;height:100%;min-height:0;max-height:none;aspect-ratio:auto;border-radius:4px;padding:0;background-size:contain;background-position:center;background-repeat:no-repeat;background-origin:border-box;object-fit:contain;display:block}
+#book .book-copy{min-width:0;min-height:0;padding:36px 32px 48px;display:flex;flex-direction:column;gap:22px;background:linear-gradient(90deg,#f4ecdf 0,#fffdf8 5%);overflow:hidden}
+#book .book-kicker{font:500 12px/1.5 var(--round);color:var(--ink-3);letter-spacing:.08em;flex:none}
+#book .page-text{font-family:"Songti SC","STSong",Georgia,serif;font-size:clamp(18px,1.8vw,23px);line-height:1.95;color:var(--ink);font-weight:400;padding:0;margin:0;display:block;box-shadow:none;overflow:auto;min-height:0;white-space:pre-wrap;overflow-wrap:anywhere;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#d4c4b0 transparent}
+#book .page-text.more{-webkit-mask-image:linear-gradient(#000 78%,transparent);mask-image:linear-gradient(#000 78%,transparent)}
+#book .book-page-rule{width:32px;height:2px;background:#c7ad86;flex:none;margin-top:auto}
+#book .book.is-ending{grid-template-columns:1fr}
+#book .book.is-ending .book-visual{display:none}
+#book .book.is-ending .book-copy{background:var(--paper);max-width:740px;width:100%;margin:auto;padding:40px 60px;max-height:100%;text-align:center}
+#book .book.is-ending .book-page-rule{margin:12px auto 0}
+#book .book-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;min-height:50px}
+#book .book-nav .btn{min-height:48px;padding:12px 20px;font-size:14px;gap:10px;white-space:nowrap}
+#book .book-reading-controls{display:flex;align-items:center;justify-content:center;gap:20px;flex:1}
+#book .book-nav .n{order:initial;flex-basis:auto;margin:0;font-size:13px;min-width:105px;text-align:center}
+#book #book-read{background:var(--paper);border-color:var(--line);color:var(--ink-2);min-width:100px;min-height:44px;padding:8px 14px;font-size:13px;border-radius:999px}
+#book .book-turn-hint{text-align:center;color:var(--ink-3);font-size:11px;margin:10px 0 0;flex:none}
+#book .page-corner{width:48px;height:48px;opacity:.8}
+#book .page-corner:hover{opacity:1}
+#book .book-video-toggle{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);border:1px solid var(--line);border-radius:999px;min-height:36px;padding:6px 14px;background:#fffdf8ed;color:var(--ink-2);font:500 12px/1.4 var(--round);cursor:pointer;white-space:nowrap}
+#book .book-audio-bar{flex:none;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;margin-top:10px;padding:10px 14px;border:1px solid var(--line);border-radius:16px;background:var(--paper)}
+#book-voice-slot{min-width:0}
+#book #classroom-voice{display:flex;flex-direction:column;align-items:stretch;gap:8px;font-size:12px}
+#book #classroom-voice audio{width:100%;max-width:none;height:34px}
+#book #voice-stop{display:none}
+#book #voice-status:empty{display:none}
+#book .ending{flex:none;margin:12px 0 0;padding:12px;max-height:130px;overflow:auto}
+#book .ending .actions{margin:8px 0 0;gap:8px}
+#book .ending .btn{min-height:40px;font-size:13px;padding:8px 12px}
+#book .flip-face{height:100%;margin:0}
+#book .flip-preview{height:100%}
+#book .flip-paper{box-shadow:8px 0 18px #59443018;will-change:transform,opacity}
+#book .flip-preview{will-change:transform}
+#book .flip-back{display:none}
+#book .flip-video-frame{display:block;width:100%;height:100%;object-fit:contain}
+@media(max-width:760px){
+  #viewer-overlay:has(#book:not([hidden])){padding:8px}
+  #viewer-overlay:has(#book:not([hidden]))>.viewer{height:calc(100dvh - 16px);border-radius:20px}
+  #viewer-overlay:has(#book:not([hidden])) .viewer-head{height:76px;min-height:76px;padding:10px 14px;gap:6px}
+  #viewer-overlay:has(#book:not([hidden])) .viewer-head h2{font-size:16px;flex:1 1 0;white-space:normal;line-height:1.45;max-height:2.9em}
+  #viewer-overlay:has(#book:not([hidden])) .viewer-head .btn{font-size:12px;padding:8px;min-height:40px}
+  #book:not([hidden]){padding:12px 12px 8px}
+  #book .book-stage{margin-bottom:12px}
+  #book .book{grid-template-columns:1fr;grid-template-rows:minmax(0,52fr) minmax(0,48fr)}
+  #book .book-visual{padding:14px 16px 20px;background:#fffdf8}
+  #book .book-copy{padding:16px 22px 36px;gap:10px;background:linear-gradient(#f3ebdf,#fffdf8 8px);border-top:1px solid #ece3d7}
+  #book .page-text{font-size:18px;line-height:1.85}
+  #book .book-kicker{font-size:11px}
+  #book .book-page-rule{display:none}
+  #book .book.is-ending{grid-template-rows:1fr}
+  #book .book.is-ending .book-copy{padding:24px;border:0}
+  #book .book-nav{flex-wrap:nowrap;gap:8px;min-height:48px}
+  #book .book-nav .btn{font-size:12px;min-height:44px;padding:10px;gap:5px}
+  #book .book-reading-controls{gap:2px;flex-direction:column}
+  #book .book-nav .n{font-size:11px;min-width:0}
+  #book #book-read{min-width:100px;min-height:36px;padding:7px 12px}
+  #book .book-turn-hint{margin-top:7px;font-size:10px}
+  #book .book-video-toggle{min-height:32px;bottom:4px;font-size:11px}
+  #book .book-nav:has(#book-edit-ending:not([hidden])){flex-wrap:wrap}
+  #book #book-edit-ending{order:4;flex-basis:100%}
+}
+@media(max-height:520px) and (min-width:761px){
+  #viewer-overlay:has(#book:not([hidden])) .viewer-head{min-height:54px;padding-block:6px}
+  #book:not([hidden]){padding-top:10px}
+  #book .book-copy{padding:18px 24px 34px;gap:10px}
+  #book .book-turn-hint{display:none}
+}

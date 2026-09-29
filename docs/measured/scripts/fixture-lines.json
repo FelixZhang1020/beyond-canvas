@@ -1,0 +1,14 @@
+{
+  "technique": "练习冷暖色的搭配",
+  "technique_sketch": "练习明暗与结构",
+  "folder": "skills/art-feedback/evals/files",
+  "drawings": [
+    ["blank-page", "blank-page.png", "今天画自己的小狗，用蜡笔"],
+    ["cat-shaded", "cat-shaded.png", "今天画院子里的猫和树，练习远近"],
+    ["dog-sun", "dog-sun.png", "今天画和家人一起遛狗，用蜡笔"],
+    ["monster", "monster.png", "今天画一只怪兽"],
+    ["named-drawing", "named-drawing.png", "今天画我最喜欢的玩具球"],
+    ["scribble", "scribble.png", "今天画蜗牛和草地"],
+    ["sphere-study", "sphere-study.png", "今天画石膏球体的明暗"]
+  ]
+}

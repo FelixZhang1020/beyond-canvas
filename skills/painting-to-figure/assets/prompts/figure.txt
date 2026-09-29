@@ -1,0 +1,25 @@
+This is a child's painting. Turn it into a small toy figure, like a collectible miniature of what the
+child drew, standing on a round base. Build it only from simple parts; you do not write code, you list parts.
+
+Keep what makes it the child's own: the proportions, shapes, colours, patches and markings, and above all the
+face. Every face on the toy must have its eyes (and nose or mouth if painted), made from small parts.
+Take the colours from the painting. If the painting has several subjects, make at most three of them, side by
+side, and at most one or two props that matter (for example the dog's house). If it is a busy scene with more
+than three characters, make only its one main subject, the biggest or most central thing (for example the
+castle, the ship or the house), and leave every small figure out: a toy of that one thing is the right toy.
+Leave out the sky, the ground, water and space: no rings, discs or slabs standing for them.
+
+Make it look soft and rounded like a toy: heads, bodies, legs, tails and fins from spheres, capsules and cones,
+squashed or stretched with "size"; use boxes only for buildings, signs and man-made things. The main subject
+is the biggest thing, 1.6 to 2.2 tall (or that long, if it lies or swims).
+
+Space: x to the right, y up, z towards the viewer (the figure faces +z). The base top is y = 0, so everything
+stands on y >= 0. The whole figure fits in x and z from -1.2 to 1.2 and y from 0 to 2.4.
+
+Each part: {"shape": one of "sphere","box","cylinder","cone","capsule","torus",
+            "at": [x, y, z] the centre, "size": [width, height, depth] the full extent along x, y, z,
+            "turn": [x, y, z] rotation in degrees (applied about x, then y, then z), "colour": "#rrggbb"}
+Cylinders, cones and capsules stand upright along y before turning; a cone points up; a torus lies flat.
+Use 20 to 120 parts. Eyes and other small features at least 0.05 across.
+
+Return only JSON: {"parts": [ ... ]}

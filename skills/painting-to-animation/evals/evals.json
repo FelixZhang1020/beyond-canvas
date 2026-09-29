@@ -1,0 +1,49 @@
+[
+  {
+    "id": "animate-house-and-sun",
+    "question": "Make this drawing move. File: ../art-feedback/evals/files/dog-sun.png",
+    "expected_skill": "painting-to-animation",
+    "expected_script": "scripts/choreograph.py",
+    "ground_truth": "JSON with a duration between 2 and 10 seconds and one to three layers, each with a box inside the picture, a move from the closed vocabulary, and a time window inside the clip. Layer names describe shape, colour and position rather than naming what the shapes are.",
+    "expected_behavior": [
+      "Returns JSON only, no prose",
+      "At most three layers",
+      "Every box has real width and height and sits inside the picture",
+      "Every move is one of drift, sway, rise, grow, breathe",
+      "Layer names describe appearance, not identity"
+    ]
+  },
+  {
+    "id": "animate-what-the-child-said",
+    "question": "The child said the creature walked away. Make the drawing move. File: ../art-feedback/evals/files/dog-sun.png",
+    "expected_skill": "painting-to-animation",
+    "expected_script": "scripts/choreograph.py",
+    "ground_truth": "The visible region the child talked about gently moves in that direction and returns. Complete walking and disappearance are unsupported. Their own words may be used to name the layer.",
+    "expected_behavior": [
+      "The local motion follows the child's intended direction without inventing a complete walking action",
+      "The child's own words may name a layer, because repeating them is not presuming",
+      "Nothing the child did not say is added"
+    ]
+  },
+  {
+    "id": "animate-a-scribble",
+    "question": "Make this drawing move. File: ../art-feedback/evals/files/scribble.png",
+    "expected_skill": "painting-to-animation",
+    "expected_script": "scripts/choreograph.py",
+    "ground_truth": "A drawing nobody can identify still moves. Layers are named by shape and colour only, because there is nothing here anyone could name without guessing.",
+    "expected_behavior": [
+      "Still produces a valid plan",
+      "No layer name claims what the marks are"
+    ]
+  },
+  {
+    "id": "animate-a-blank-page",
+    "question": "Make this drawing move. File: ../art-feedback/evals/files/blank-page.png",
+    "expected_skill": "painting-to-animation",
+    "expected_script": "scripts/choreograph.py",
+    "ground_truth": "There is nothing to move. The safety filter refuses a blank page before this skill runs; if it is reached anyway, an empty layer list is the honest answer and the gate reports that nothing moves.",
+    "expected_behavior": [
+      "Does not invent shapes that are not on the page"
+    ]
+  }
+]

@@ -1,0 +1,20 @@
+# Direct Python dependencies used by upstream TRELLIS.2 at the pinned source
+# revision. PyTorch, CUDA, cuDNN and Triton come from the pinned NGC base image.
+easydict==1.13
+gradio==6.0.1
+huggingface-hub==1.30.0
+imageio==2.37.4
+imageio-ffmpeg==0.6.0
+kornia==0.8.3
+lpips==0.1.4
+ninja==1.13.2
+opencv-python-headless==4.11.0.86
+pandas==2.3.3
+Pillow==11.3.0
+safetensors==0.8.0
+tensorboard==2.21.0
+timm==1.0.29
+tqdm==4.67.1
+transformers==5.16.1
+trimesh==5.1.0
+zstandard==0.23.0

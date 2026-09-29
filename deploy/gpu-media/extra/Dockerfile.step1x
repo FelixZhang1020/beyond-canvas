@@ -1,0 +1,6 @@
+FROM beyond-canvas/pixal3d:f7cf384
+COPY step1x-pinned /opt/step1x
+RUN python -m pip install --no-cache-dir transformers==4.51.3 qwen_vl_utils==0.0.10 liger_kernel==0.5.4 && python -m pip install --no-cache-dir --no-deps xfuser==0.4.3.post3 distvae==0.0.0b5 yunchang==0.6.2
+ENV PYTHONPATH=/opt/step1x HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+WORKDIR /opt/step1x
+ENTRYPOINT ["python", "/runner/step1x_worker.py"]

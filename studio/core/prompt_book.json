@@ -1,0 +1,227 @@
+{
+  "_": "Every instruction the studio gives an AI model, for the read-only prompt page in system management. Each entry points at where the wording lives; studio/core/prompt_book.py reads it fresh, so this file never holds a copy. tests/core/test_prompt_book.py fails when a prompt file or a named prompt line exists that no entry lists. Developer-only tools (voice lab, the first-hour script, evalkit's benchmark runner) are left out on purpose.",
+  "groups": [
+    {
+      "id": "feedback",
+      "name": {"en": "Talk about it", "zh": "聊聊你的画"},
+      "entries": [
+        {"file": "skills/art-feedback/assets/prompts/colour-opening.txt",
+         "label": {"en": "Colour drawing: first look and question", "zh": "彩色画：第一次点评与提问"}},
+        {"file": "skills/art-feedback/assets/prompts/colour-reply.txt",
+         "label": {"en": "Colour drawing: reply to what the child said", "zh": "彩色画：回应孩子的话"}},
+        {"file": "skills/art-feedback/assets/prompts/colour-open-question.txt",
+         "label": {"en": "Colour drawing: the reply's question again, open this time", "zh": "彩色画：把回应里的问题改成开放问题"}},
+        {"file": "skills/art-feedback/assets/prompts/say-back.txt",
+         "label": {"en": "A reply that said none of the child's words back, rewritten to start with them", "zh": "没有复述孩子原话的回应，改为先说回孩子的话"}},
+        {"file": "studio/prompts/who-said-it.txt",
+         "label": {"en": "Check: a reply keeps the child's he or she about the one the question asked about", "zh": "检查：孩子说的“他/她/它”，回应仍说的是问题里问到的那一位"}},
+        {"file": "studio/prompts/bridge-zh.txt",
+         "label": {"en": "The quick line while the studio looks again (fast voice model, before the reply)", "zh": "回应之前的快速接话（快速语音模型，只复述孩子的话）"}},
+        {"file": "studio/prompts/bridge-en.txt",
+         "label": {"en": "The quick line, English class", "zh": "快速接话（英文课堂）"}},
+        {"file": "skills/art-feedback/assets/prompts/colour-rung-2.txt",
+         "label": {"en": "Colour drawing: no answer, ask again with two choices", "zh": "彩色画：没有回答时，给两个选项再问"}},
+        {"file": "skills/art-feedback/assets/prompts/colour-rung-3.txt",
+         "label": {"en": "Colour drawing: still no answer, a character in the picture asks", "zh": "彩色画：仍没有回答时，让画中角色来问"}},
+        {"file": "skills/art-feedback/assets/prompts/sketch-opening.txt",
+         "label": {"en": "Sketch: first look and question", "zh": "素描：第一次点评与提问"}},
+        {"file": "skills/art-feedback/assets/prompts/sketch-reply.txt",
+         "label": {"en": "Sketch: reply to what the student said", "zh": "素描：回应学生的话"}},
+        {"file": "skills/art-feedback/assets/prompts/sketch-rung-2.txt",
+         "label": {"en": "Sketch: no answer, ask again with two choices", "zh": "素描：没有回答时，给两个选项再问"}},
+        {"file": "skills/art-feedback/assets/prompts/sketch-rung-3.txt",
+         "label": {"en": "Sketch: still no answer, the drawn object asks", "zh": "素描：仍没有回答时，让画中物体来问"}},
+        {"file": "skills/art-feedback/assets/prompts/shared-tail.txt",
+         "label": {"en": "Added to every first look: blank pages, photographs, names", "zh": "每次首评都附加：空白页、照片与姓名"}},
+        {"file": "skills/art-feedback/assets/prompts/lesson-clause.txt",
+         "label": {"en": "Added when the teacher set a lesson focus", "zh": "老师设置了课程重点时附加"}},
+        {"code": "skills/art-feedback/scripts/feedback.py", "parts": ["AGAIN_CLAUSE"],
+         "label": {"en": "Added when the previous attempt was refused", "zh": "上一次回答被拒绝时附加"}}
+      ]
+    },
+    {
+      "id": "quality",
+      "name": {"en": "Quality check before a child hears it", "zh": "孩子听到之前的质量检查"},
+      "note": {"en": "Judges that check each reply against the pedagogy rules. A reply that fails is written again or stopped.",
+               "zh": "按教学规则检查每条回复；未通过的回复会重写或停止。"},
+      "entries": [
+        {"code": "evalkit/rubric/assisted.py", "parts": ["JUDGE_SYSTEM"],
+         "label": {"en": "Standing instruction for every judge", "zh": "每个评审的固定指令"}},
+        {"code": "evalkit/rubric/assisted.py", "parts": ["GROUNDING_PROMPT"],
+         "label": {"en": "Is every detail mentioned really in the drawing?", "zh": "提到的细节是否真的在画里？"}},
+        {"code": "evalkit/rubric/assisted.py", "parts": ["PRESUMPTION_PROMPT"],
+         "label": {"en": "Does it name an unclear shape as something it may not be?", "zh": "是否把看不清的形状说成了具体的东西？"}},
+        {"code": "evalkit/rubric/assisted.py", "parts": ["NAME_RECHECK_PROMPT"],
+         "label": {"en": "Second look at one named shape: did the child or the first comment already name it?", "zh": "再看一次被指出的名字：孩子或第一句评语是否已经这样叫过？"}},
+        {"code": "evalkit/rubric/assisted.py", "parts": ["FOLLOWUP_PROMPT"],
+         "label": {"en": "Does a later reply's question take the child's story further?", "zh": "后续回应的问题是否让孩子的故事往前走？"}},
+        {"code": "evalkit/rubric/assisted.py", "parts": ["CHILD_SAID_CLAUSE"],
+         "label": {"en": "Added to that check when the child has spoken", "zh": "孩子说过话时附加到上一项"}},
+        {"code": "evalkit/rubric/assisted.py", "parts": ["LESSON_CLAUSE"],
+         "label": {"en": "Added to that check when the teacher set a lesson focus", "zh": "老师设置了课程重点时附加到上一项"}},
+        {"code": "evalkit/rubric/assisted.py", "parts": ["CHILD_OUTRANKS_LESSON"],
+         "label": {"en": "Added when both apply: the child's word comes first", "zh": "两者都有时附加：孩子的话优先"}},
+        {"code": "evalkit/rubric/loop.py", "parts": ["LESSON_PROMPT"],
+         "label": {"en": "Does it connect the child's work to the lesson?", "zh": "是否把孩子的作品与课程重点联系起来？"}},
+        {"code": "evalkit/rubric/loop.py", "parts": ["INVENTION_PROMPT"],
+         "label": {"en": "Does the reply invent story the child did not tell?", "zh": "回复是否编造了孩子没讲的故事？"}},
+        {"code": "evalkit/rubric/loop.py", "parts": ["ALREADY_SAID"],
+         "label": {"en": "Fills {already} in that check: what the studio said before the child spoke", "zh": "填入上一项的 {already}：孩子说话前画室已说过的话"}},
+        {"code": "evalkit/rubric/loop.py", "parts": ["STORY_RECHECK_PROMPT"],
+         "label": {"en": "Second look at one objection: is it new story, or the child's own in other words?", "zh": "再看一次被指出的句子：是新编的故事，还是孩子的话换了说法？"}},
+        {"code": "evalkit/rubric/loop.py", "parts": ["WORLD_QUESTION_PROMPT"],
+         "label": {"en": "Colour drawing: is the question about the world inside the picture?", "zh": "彩色画：问题是否关于画中的世界？"}},
+        {"code": "evalkit/rubric/loop.py", "parts": ["PROCESS_QUESTION_PROMPT"],
+         "label": {"en": "Sketch: is the question about how the student worked?", "zh": "素描：问题是否关于学生自己的创作过程？"}}
+      ]
+    },
+    {
+      "id": "safety",
+      "name": {"en": "Safety check", "zh": "安全检查"},
+      "entries": [
+        {"code": "skills/studio-safety/scripts/safety.py", "parts": ["SAFETY_PROMPT"],
+         "label": {"en": "Is this a child's drawing, and is it safe to talk about?", "zh": "这是孩子的画吗？可以安全地谈论吗？"}},
+        {"code": "skills/studio-safety/scripts/safety.py", "parts": ["JUDGE_SYSTEM"],
+         "label": {"en": "Standing instruction for the safety check", "zh": "安全检查的固定指令"}},
+        {"code": "skills/studio-safety/scripts/nemotron.py", "parts": ["QUESTIONS.door"],
+         "label": {"en": "Second look (NVIDIA Nemotron): a picture brought to class", "zh": "第二次查看（NVIDIA Nemotron）：带进课堂的图片"}},
+        {"code": "skills/studio-safety/scripts/nemotron.py", "parts": ["QUESTIONS.out"],
+         "label": {"en": "Second look (NVIDIA Nemotron): a picture the studio made", "zh": "第二次查看（NVIDIA Nemotron）：画室生成的图片"}},
+        {"file": "skills/studio-safety/references/childrens-studio-policy.md",
+         "between": ["<!-- policy:start -->", "<!-- policy:end -->"],
+         "label": {"en": "Studio rules for the second look, used only when it runs the studio's rules instead of NVIDIA's own",
+                   "zh": "第二次查看的画室规则，仅在不使用 NVIDIA 自带规则时使用"}}
+      ]
+    },
+    {
+      "id": "teacher",
+      "name": {"en": "Teacher review", "zh": "老师评价"},
+      "entries": [
+        {"file": "studio/prompts/teacher-review.txt",
+         "label": {"en": "The review itself", "zh": "评价正文"}},
+        {"code": "studio/conversation/teacher_review.py", "parts": ["MATERIALS_CLAUSE", "{output_language, entrance, lesson_context}"],
+         "label": {"en": "Added after it: the class details", "zh": "附加在后：课堂资料"}}
+      ]
+    },
+    {
+      "id": "motion",
+      "name": {"en": "Short clip and motion", "zh": "让画动起来"},
+      "entries": [
+        {"code": "studio/making/animation.py", "parts": ["VIDEO_PROMPT", "{child_said}"],
+         "label": {"en": "Short clip: the video request", "zh": "短视频：视频生成指令"}},
+        {"file": "skills/painting-to-animation/assets/prompts/clip-check.txt",
+         "label": {"en": "Short clip: the check for a real hand or art tool painted in", "zh": "短视频：检查有没有画进真人的手或画笔"}},
+        {"code": "studio/making/animation.py", "parts": ["VIDEO_DEFAULT_ACTION"],
+         "label": {"en": "Short clip: fills {child_said} when the child gave no action", "zh": "短视频：孩子没说动作时填入 {child_said}"}},
+        {"file": "skills/painting-to-animation/assets/prompts/choreography.txt",
+         "label": {"en": "Gentle motion plan for the drawing", "zh": "画面的轻柔动作规划"}},
+        {"file": "skills/painting-to-animation/assets/prompts/said-clause.txt",
+         "label": {"en": "Added to the plan when the child said what should move", "zh": "孩子说了要怎么动时附加到规划"}},
+        {"code": "skills/painting-to-animation/scripts/choreograph.py", "parts": ["JUDGE_SYSTEM"],
+         "label": {"en": "Standing instruction for the motion plan", "zh": "动作规划的固定指令"}},
+        {"file": "skills/painting-to-figure/assets/prompts/figure.txt",
+         "label": {"en": "3D figure: build a toy of simple shapes from the painting", "zh": "立体小雕塑：用简单形状搭出画里的玩具"}},
+        {"code": "studio/making/figure.py", "parts": ["WRITE_SYSTEM"],
+         "label": {"en": "3D figure: standing instruction for the builder", "zh": "立体小雕塑：搭建的固定指令"}},
+        {"file": "skills/painting-to-figure/assets/prompts/look.txt",
+         "label": {"en": "3D figure: compare the toy with the painting before a child sees it", "zh": "立体小雕塑：给孩子看之前，对照原画检查"}},
+        {"code": "studio/making/figure.py", "parts": ["LOOK_SYSTEM"],
+         "label": {"en": "3D figure: standing instruction for the check", "zh": "立体小雕塑：检查的固定指令"}},
+        {"code": "studio/making/figure.py", "parts": ["FIX_CLAUSE"],
+         "label": {"en": "3D figure: added to a second try, with the check's reason as {fix}", "zh": "立体小雕塑：第二次搭建时附加，{fix} 为检查给出的原因"}},
+        {"code": "studio/making/figure.py", "parts": ["FIX_INSTRUCTION.unreadable"],
+         "label": {"en": "3D figure: {fix} when the first answer could not be read", "zh": "立体小雕塑：第一次回答读不出时的 {fix}"}},
+        {"code": "studio/making/figure.py", "parts": ["FIX_INSTRUCTION.screened"],
+         "label": {"en": "3D figure: {fix} when the safety check held the toy back", "zh": "立体小雕塑：安全检查拦下时的 {fix}"}},
+        {"code": "studio/making/figure.py", "parts": ["FIX_INSTRUCTION.unclear"],
+         "label": {"en": "3D figure: {fix} when the check gave no reason", "zh": "立体小雕塑：检查没给原因时的 {fix}"}}
+      ]
+    },
+    {
+      "id": "storybook",
+      "name": {"en": "Storybook", "zh": "做本故事书"},
+      "entries": [
+        {"file": "skills/drawings-to-storybook/assets/prompts/scene.txt",
+         "label": {"en": "Scene and motion description for one drawing", "zh": "单幅画的场景与动作描述"}},
+        {"file": "skills/drawings-to-storybook/assets/prompts/story.txt",
+         "label": {"en": "One story across the chosen drawings", "zh": "串起所选画作的故事"}},
+        {"file": "skills/drawings-to-storybook/assets/prompts/picture-keep.txt",
+         "label": {"en": "Picture book: what each drawing must keep when it is redrawn", "zh": "绘本风格：重画时每幅画必须保留的内容"}},
+        {"file": "skills/drawings-to-storybook/assets/prompts/picture-compare.txt",
+         "label": {"en": "Picture book: whether a redraw kept the child's picture", "zh": "绘本风格：新画是否保留了孩子的画"}},
+        {"code": "studio/conversation/creation.py", "parts": ["LANGUAGE_CLAUSE", "{language}", "SOURCE_CLAUSE", "{source}"],
+         "label": {"en": "Added after both: the language and the source material", "zh": "两者之后附加：输出语言与资料"}},
+        {"code": "studio/conversation/drafting.py", "parts": ["REVIEW_SYSTEM"],
+         "label": {"en": "Independent review of a draft before the teacher sees it", "zh": "老师看到之前对草稿的独立复核"}},
+        {"code": "studio/conversation/drafting.py", "parts": ["SCENE_REVIEW_CLAUSE"],
+         "label": {"en": "Fills {scene_policy} when the draft is a motion description", "zh": "草稿是动作描述时填入 {scene_policy}"}},
+        {"code": "studio/conversation/drafting.py", "parts": ["STORY_REVIEW_CLAUSE"],
+         "label": {"en": "Fills {scene_policy} when the draft is a story: one hero may travel through the pages", "zh": "草稿是故事时填入 {scene_policy}：一个主角可以走过每一页"}}
+      ]
+    },
+    {
+      "id": "sketch3d",
+      "name": {"en": "Light and motion (3D)", "zh": "形体与光影"},
+      "entries": [
+        {"file": "skills/sketch-to-3d/assets/prompts/reconstruction.txt",
+         "label": {"en": "Read the shapes in the sketch", "zh": "识别素描中的形体"}},
+        {"code": "studio/making/sketch.py", "parts": ["ANNOTATE_SYSTEM"],
+         "label": {"en": "Standing instruction for reading the shapes", "zh": "识别形体的固定指令"}},
+        {"code": "studio/making/sketch.py", "parts": ["RETRY_JSON_CLAUSE"],
+         "label": {"en": "Retry: the answer was cut off", "zh": "重试：回答不完整"}},
+        {"code": "studio/making/sketch.py", "parts": ["RETRY_FRUIT_CLAUSE"],
+         "label": {"en": "Retry: fruit details were missing", "zh": "重试：缺少水果细节"}},
+        {"code": "studio/making/view_calibration.py", "parts": ["PICK_VIEW_PROMPT"],
+         "label": {"en": "Turn the 3D model to match the drawing's angle", "zh": "让三维模型的角度与原画一致"}},
+        {"code": "studio/making/view_calibration.py", "parts": ["PICK_VIEW_SYSTEM"],
+         "label": {"en": "Standing instruction for matching the angle", "zh": "匹配角度的固定指令"}},
+        {"code": "studio/making/view_calibration.py", "parts": ["CONFIRM_VIEW_PROMPT"],
+         "label": {"en": "Independent check of the chosen angle", "zh": "对所选角度的独立复核"}},
+        {"code": "studio/making/view_calibration.py", "parts": ["CONFIRM_VIEW_SYSTEM"],
+         "label": {"en": "Standing instruction for that check", "zh": "该复核的固定指令"}}
+      ]
+    },
+    {
+      "id": "hearing",
+      "name": {"en": "Hearing the child", "zh": "听孩子说话"},
+      "note": {"en": "Transcription on StepFun is sent no instruction.", "zh": "StepFun 转写不发送任何指令。"},
+      "entries": []
+    },
+    {
+      "id": "agent",
+      "name": {"en": "Agentic 3D agent", "zh": "画里画外 · 大殿篇 · Agentic 3D"},
+      "note": {"en": "The agent also receives each skill's own instructions (SKILL.md) and what its tools report back. Skill instructions are not shown here.",
+               "zh": "智能体还会收到各技能自己的说明（SKILL.md）和工具返回的结果。技能说明不在这里显示。"},
+      "entries": [
+        {"file": "studio/showpiece/prompts/protocol.txt",
+         "label": {"en": "How the agent works, sent every turn", "zh": "智能体的工作方式，每一轮都发送"}},
+        {"code": "studio/showpiece/driver.py", "parts": ["ASK_PROMPT"],
+         "label": {"en": "Every turn's message", "zh": "每一轮的消息"}},
+        {"file": "studio/showpiece/prompts/carpenter.txt",
+         "label": {"en": "How the agent works when it builds a hall from nothing", "zh": "从零搭建大殿时智能体的工作方式"}},
+        {"file": "studio/showpiece/prompts/designer.txt",
+         "label": {"en": "How the agent works when it designs a hall from a written brief", "zh": "按文字简报设计大殿时智能体的工作方式"}}
+      ]
+    },
+    {
+      "id": "judge",
+      "name": {"en": "Judge", "zh": "Judge"},
+      "entries": [
+        {"file": "skills/shot-judge/assets/prompts/judge.txt",
+         "label": {"en": "Does the picture show what it was meant to show?", "zh": "图片是否展示了它该展示的内容？"}},
+        {"code": "skills/shot-judge/scripts/judge.py", "parts": ["SYSTEM"],
+         "label": {"en": "Standing instruction for the Judge", "zh": "Judge 的固定指令"}}
+      ]
+    },
+    {
+      "id": "hall",
+      "name": {"en": "Hall builder", "zh": "大殿营造"},
+      "entries": [
+        {"file": "skills/hall-carpenter/assets/prompts/review.txt",
+         "label": {"en": "A structural engineer reviews the rebuilt hall", "zh": "结构工程师审阅重建的大殿"}},
+        {"code": "skills/hall-carpenter/scripts/review.py", "parts": ["SYSTEM"],
+         "label": {"en": "Standing instruction for that review", "zh": "该审阅的固定指令"}}
+      ]
+    }
+  ]
+}

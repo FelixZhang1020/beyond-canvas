@@ -1,0 +1,2 @@
+# One file name per line: files in the sample folder that never go to the node, such as a photo
+# showing children's faces. The real list is kept privately.

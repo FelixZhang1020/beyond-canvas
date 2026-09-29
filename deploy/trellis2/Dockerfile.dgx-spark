@@ -1,0 +1,108 @@
+ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:26.08-py3@sha256:237ecf9ac7373daf91b31bb4f86651ce1ce57b676366ed435aa1aba61dad81d5
+FROM ${BASE_IMAGE}
+
+# Every GitHub-hosted input comes from vendor/, laid out at the revisions in
+# versions.env by deploy/spark/vendor_sources.py. This file used to
+# clone them itself, which cannot work on the hackathon's hosted Spark: it has
+# no route to GitHub. Fetching them beforehand works on a Spark with or without
+# one, and makes the build read exactly what was pinned.
+#
+# PIP_INDEX_URL and APT_MIRROR default to the official sources; the hosted Spark
+# passes the Tsinghua mirrors, because pypi.org is too slow from it.
+ARG DEBIAN_FRONTEND=noninteractive
+ARG FLASH_ATTN_VERSION=2.8.3
+ARG TORCH_CUDA_ARCH_LIST=12.1a
+ARG CMAKE_CUDA_ARCHITECTURES=121-real
+ARG PIP_INDEX_URL=https://pypi.org/simple
+ARG APT_MIRROR=
+ARG MAX_JOBS=4
+
+ENV CUDA_HOME=/usr/local/cuda \
+    TORCH_CUDA_ARCH_LIST=${TORCH_CUDA_ARCH_LIST} \
+    CMAKE_CUDA_ARCHITECTURES=${CMAKE_CUDA_ARCHITECTURES} \
+    CUDAARCHS=${CMAKE_CUDA_ARCHITECTURES} \
+    MAX_JOBS=${MAX_JOBS} \
+    PIP_INDEX_URL=${PIP_INDEX_URL} \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONUNBUFFERED=1
+
+RUN test "$(uname -m)" = "aarch64" \
+    && if [ -n "$APT_MIRROR" ]; then \
+         sed -i "s#http://ports.ubuntu.com/ubuntu-ports#$APT_MIRROR#g" /etc/apt/sources.list.d/*.sources /etc/apt/sources.list 2>/dev/null || true; \
+       fi \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        cmake \
+        ffmpeg \
+        git \
+        libgl1 \
+        libglib2.0-0 \
+        libjpeg-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY vendor/trellis2/ /app/
+COPY requirements-dgx-spark.txt /tmp/requirements-dgx-spark.txt
+
+# Two pins for the NGC base image's own packages, not TRELLIS's, found by
+# `pip check` on the first build: nvidia-dali needs packaging<=26.2,
+# which an unpinned upgrade broke, and triton-kernels lists pytest, which the
+# image does not ship.
+RUN python -m pip install --upgrade pip setuptools wheel "packaging<=26.2" pytest \
+    && python -m pip install -r /tmp/requirements-dgx-spark.txt \
+    && python -m pip check
+
+COPY vendor/utils3d/ /tmp/utils3d/
+RUN python -m pip install /tmp/utils3d --no-deps && rm -rf /tmp/utils3d
+
+# Upstream pins 2.7.3, but that release predates GB10/sm_121 support. 2.8.3 is
+# the first version for which a source build on DGX Spark is documented. This
+# is an explicit Spark porting variance and must pass the runtime smoke test.
+# Its setup.py compiles every kernel for 80;90;100;120 unless told otherwise, with
+# NVCC_THREADS=4 per job: at MAX_JOBS=12 that was 48 compilers at once, and the
+# Spark froze. sm_120 cubins run on the GB10 (sm_121), so build only those.
+RUN FLASH_ATTENTION_FORCE_BUILD=TRUE FLASH_ATTN_CUDA_ARCHS=120 \
+    python -m pip install "flash-attn==$FLASH_ATTN_VERSION" --no-build-isolation
+
+COPY vendor/nvdiffrast/ /tmp/nvdiffrast/
+COPY vendor/nvdiffrec/ /tmp/nvdiffrec/
+COPY vendor/CuMesh/ /tmp/CuMesh/
+COPY vendor/FlexGEMM/ /tmp/FlexGEMM/
+RUN python -m pip install /tmp/nvdiffrast --no-build-isolation \
+    && python -m pip install /tmp/nvdiffrec --no-build-isolation \
+    && python -m pip install /tmp/CuMesh --no-build-isolation \
+    && python -m pip install /tmp/FlexGEMM --no-build-isolation \
+    && cp -a /app/o-voxel /tmp/o-voxel \
+    && python -m pip install /tmp/o-voxel --no-build-isolation \
+    && rm -rf /tmp/nvdiffrast /tmp/nvdiffrec /tmp/CuMesh /tmp/FlexGEMM /tmp/o-voxel
+
+# utils3d goes in with --no-deps above, so the one dependency it lists that the NGC
+# image lacks, moderngl, is added here: the 4090's image gets it from utils3d's
+# plain install, and `pip check` failed without it. Neither it nor
+# glcontext publishes an aarch64 wheel for Python 3.12, and glcontext's source
+# build needs the X11 and EGL headers. Added after flash-attn so that adding it
+# did not compile flash-attn again.
+RUN sed -i \
+    "s#from_pretrained('microsoft/TRELLIS.2-4B')#from_pretrained(os.environ.get('TRELLIS2_MODEL_PATH', 'microsoft/TRELLIS.2-4B'))#" \
+    /app/app.py \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends libx11-dev libegl-dev libgl-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && python -m pip install moderngl==5.12.0 \
+    && python -m pip check
+
+# NGC's OpenCV has no OpenEXR reader; Dockerfile.runtime-fix adds the same
+# pinned wheel on the 4090. Kept last so changing it never rebuilds flash-attn.
+# The other 4090 runtime fix, patches/image_feature_extractor.py, is mounted
+# over the upstream file at run time on both boxes rather than baked in here.
+RUN python -m pip install OpenEXR==3.4.15 && python -m pip check
+
+ENV ATTN_BACKEND=flash_attn \
+    SPARSE_ATTN_BACKEND=flash_attn \
+    GRADIO_SERVER_NAME=0.0.0.0 \
+    GRADIO_SERVER_PORT=7860 \
+    HF_HOME=/models/huggingface
+
+EXPOSE 7860
+CMD ["python", "app.py"]

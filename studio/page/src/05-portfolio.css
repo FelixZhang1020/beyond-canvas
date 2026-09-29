@@ -1,0 +1,503 @@
+/* Direction A: reuse the classroom brand, paper cards, buttons and quiet glass. */
+.portfolio{position:fixed;inset:0;z-index:19;overflow:auto;overscroll-behavior:contain;
+  background:var(--room-wash),var(--paper)}
+.portfolio-shell{box-sizing:border-box;width:100%;max-width:var(--page-frame);margin:auto;padding:32px var(--gutter,32px) 64px}
+.portfolio-header{display:flex;align-items:center;gap:32px;min-height:104px;margin:0 auto 36px}
+.portfolio .btn{min-height:48px;padding:11px 18px;border-radius:16px;font-size:15px;font-weight:600}
+#portfolio-home{gap:24px}
+.portfolio-brand{display:flex;align-items:center;gap:18px;min-width:0;flex-shrink:0}
+#portfolio-home{font-size:22px;letter-spacing:.02em}
+#portfolio-home .brand-copy{gap:6px}
+#portfolio-home .brand-copy small{font-size:12px;font-weight:500;letter-spacing:.06em}
+.home-mascot{position:relative;display:block;flex:none;width:104px;height:104px;padding:0;border:0;background:none;color:var(--ink);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;border-radius:48%;user-select:none}
+.home-mascot:focus-visible{outline:3px solid var(--ink);outline-offset:6px}
+.home-mascot::before{content:"";position:absolute;left:20%;right:20%;bottom:-1px;height:15px;background:#9b44292b;border-radius:50%;filter:blur(7px)}
+.mascot-body{display:block;position:absolute;inset:0;border-radius:48% 52% 44% 46% / 51% 50% 42% 43%;background:radial-gradient(ellipse at 48% 83%,#ffd6b899,transparent 58%),radial-gradient(ellipse at 30% 19%,#ffe9dba6,transparent 43%),linear-gradient(145deg,#f6ac929c,#ee907dc9 60%,#ef9e869c);box-shadow:inset 2px 3px 5px #fff7e9a6,inset -3px -4px 7px #fff1d96b,inset 0 -12px 22px #ffcfac66,0 14px 20px -15px #9b442955;transform-origin:50% 90%;transition:transform .2s ease,border-radius .2s ease}
+.mascot-body::before{content:"";position:absolute;left:17%;top:10%;width:32%;height:13%;border-radius:50%;background:linear-gradient(180deg,#fffdf2b3,#fff5df1a);transform:rotate(-27deg);filter:blur(1px)}
+.mascot-body .brand-eye{top:30%;left:17%;width:29%;height:38%;box-shadow:0 2px 2px #a5523512;transition:height .12s,top .12s,transform .12s,border-radius .12s}
+.mascot-body .brand-eye+.brand-eye{left:auto;right:17%}
+.mascot-body .pupil{background:#483b35;width:56%;height:57%;left:22%;top:25%}
+.mascot-body .pupil::after{content:"";position:absolute;left:19%;top:12%;width:28%;height:28%;border-radius:50%;background:#fffdf4}
+.mascot-cheek{position:absolute;top:65%;width:16%;height:7%;border-radius:50%;background:#e7747433;filter:blur(3px);transition:background .15s}
+.mascot-cheek.left{left:13%}.mascot-cheek.right{right:13%}
+.mascot-spark{position:absolute;right:0;top:8%;color:#d29b51;font-size:28px;opacity:0;pointer-events:none}
+.home-mascot:hover .mascot-body{transform:translateY(-4px) rotate(-3deg)}
+.home-mascot.is-pressed .mascot-body{transform:translateY(10px) scale(1.12,.85);border-radius:48% 52% 42% 42%}
+.home-mascot.is-pressed .brand-eye{top:43%;height:13%}
+.home-mascot[data-mood="wink"] .brand-eye:first-child{top:45%;height:4%;background:#754d42}
+.home-mascot[data-mood="wink"] .brand-eye:first-child .pupil{opacity:0}
+.home-mascot.is-bouncing .mascot-body{animation:mascot-boing .65s both}
+.home-mascot.is-bouncing .mascot-spark{animation:mascot-spark .65s both}
+@keyframes mascot-boing{0%{transform:translateY(9px) scale(1.12,.85)}25%{transform:translateY(-19px) scale(.91,1.1) rotate(-5deg)}48%{transform:translateY(2px) scale(1.07,.94) rotate(4deg)}68%{transform:translateY(-6px) scale(.98,1.03) rotate(-2deg)}85%{transform:translateY(0) scale(1.02,.98)}100%{transform:none}}
+@keyframes mascot-spark{0%{opacity:0;transform:translateY(10px) scale(.4)}35%{opacity:1;transform:translateY(-8px) scale(1)}100%{opacity:0;transform:translateY(-22px) scale(.7)}}
+@media(max-width:480px){.portfolio-brand{gap:16px}.portfolio-brand .brand{white-space:normal}.home-mascot{width:88px;height:88px}}
+@media(prefers-reduced-motion:reduce){.home-mascot .mascot-body,.home-mascot .brand-eye{transition:none;animation:none}.home-mascot:hover .mascot-body,.home-mascot.is-pressed .mascot-body{transform:none}.home-mascot.is-bouncing .mascot-spark{animation:none}}
+@media(max-width:480px){#portfolio-home{gap:16px;white-space:normal}#portfolio-home .brand-copy{min-width:0}}
+.portfolio-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-left:auto}
+/* One filled button, last; the showpiece and management are quiet beside it (operator). On a phone
+   only the filled one stretches (the 560px rule below). */
+#portfolio-showpiece{text-decoration:none}
+#portfolio-list,.course-profile{margin:0 auto}
+.portfolio-intro{min-width:0;margin:0 0 28px}
+#portfolio-home,.portfolio-actions{flex-shrink:0}
+.portfolio:has(#portfolio-list[hidden]) .portfolio-intro{display:none}
+.portfolio:has(#portfolio-list[hidden]):has(#course-profile[hidden]) .portfolio-header{display:none}
+.portfolio-intro .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--ink-3)}
+.portfolio-intro h1{font-size:30px;line-height:1.4;letter-spacing:.02em;margin:0 0 10px;font-weight:600}
+.portfolio-intro p{color:var(--ink-2);font-size:15px;margin:0;line-height:1.8;max-width:760px;text-wrap:pretty}
+.portfolio-muted{color:var(--ink-3);font-size:14px}
+.portfolio input{border:1px solid var(--line);border-radius:16px;background:var(--paper);
+  padding:12px 14px;min-height:48px;max-width:100%;font-size:15px}
+.portfolio select{border-radius:16px;min-height:48px}
+.portfolio-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+/* Lift the whole card while keeping the grid in place. */
+.course-card{position:relative;padding:18px;text-align:left;overflow:hidden;min-width:0;
+  --lift-duration:.26s;--lift-easing:cubic-bezier(.4,0,.2,1);
+  transition:transform var(--lift-duration) var(--lift-easing),box-shadow var(--lift-duration) var(--lift-easing),border-color var(--lift-duration) ease}
+@media(hover:hover) and (pointer:fine){
+  .course-card:hover{--lift-duration:.36s;z-index:1;transform:translateY(-28px);border-color:#c4a688;
+    box-shadow:0 34px 48px -24px #80644855}
+}
+.course-card:focus-visible{--lift-duration:.36s;z-index:1;transform:translateY(-28px);border-color:#c4a688;
+  box-shadow:0 34px 48px -24px #80644855}
+.course-card:active{transform:translateY(-3px)}
+@media(prefers-reduced-motion:reduce){
+  .course-card:hover,.course-card:focus-visible,.course-card:active{transform:none}
+}
+.course-cover{aspect-ratio:1.5;background:#fffaf0;display:grid;place-items:center;overflow:hidden;border-radius:12px}
+.course-cover img{display:block;width:100%;height:100%;object-fit:contain;min-height:0}
+.course-cover span{font-size:13px;color:var(--ink-3);padding:18px}
+.course-card-copy{padding-top:18px;position:relative}
+/* One line and an ellipsis, so a long name cannot make its row taller; hovering shows it whole. */
+.course-card h2{font-size:23px;font-weight:600;line-height:1.5;margin:10px 0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.course-card p{color:var(--ink-3);font-size:13px;margin:0}
+.course-tag{display:inline-block;font-size:12px;color:var(--ink-2);background:var(--surface-soft);border-radius:999px;padding:5px 10px}
+.course-state{position:absolute;right:0;top:24px;font-size:12px;color:var(--ink-3)}
+#end-class-status:empty{display:none}
+.portfolio-empty{text-align:center;padding:48px 24px;border:1px solid var(--line);border-radius:var(--r-panel);background:var(--paper)}
+.portfolio-empty h2{font-size:28px;font-weight:600;margin:0 0 12px}.portfolio-empty p{color:var(--ink-2);margin:0 0 24px}
+.portfolio-status{color:var(--ink-2);margin:20px auto;max-width:1120px}.portfolio-status:empty{display:none}
+.portfolio-more{display:block;margin:32px auto 0}
+.course-profile{padding-top:18px}
+.course-profile>#course-back{min-height:44px;padding:8px 10px;font-size:12px;gap:7px}
+.course-profile>#course-back svg{width:16px;height:16px}
+.course-profile h2{font-size:22px;font-weight:600;margin:28px 0 16px}
+.course-drawings{display:flex;gap:12px;overflow:auto;padding:5px 4px 14px}
+.course-art{background:var(--paper);flex:0 0 124px;border:2px solid transparent;border-radius:16px;padding:8px;cursor:pointer}
+.course-art[aria-pressed=true]{border-color:#bd9d79;background:#faf4eb}
+.course-art img{width:104px;height:88px;object-fit:contain;display:block;margin-bottom:8px;border-radius:8px}.course-art span{font-size:12px}
+.course-work{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:32px;margin-top:12px;align-items:start}
+.course-original{width:100%;max-height:600px;object-fit:contain;border-radius:12px}
+.course-conversation{max-height:600px;overflow:auto;padding:24px;scrollbar-width:thin;scrollbar-color:#dcccb9 transparent}
+.course-message{padding:0 0 18px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+.course-message:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
+.course-message h3{font-size:12px;font-weight:500;color:var(--ink-3);margin:0 0 10px}
+.course-message p{font-size:15px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0;color:var(--ink-2)}
+.course-message .course-question{font-size:19px;font-weight:600;color:var(--ink)}
+.course-message.child-words{background:#fff9f0;border:0;border-radius:16px;padding:16px}
+.course-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.course-result{display:flex;align-items:center;gap:16px;text-align:left;padding:16px;min-width:0}
+.course-result img{width:64px;height:72px;object-fit:contain;background:#fffaf0;border-radius:8px}
+.course-result-copy{display:grid;gap:8px;min-width:0}.course-result strong{font-size:16px;font-weight:600}.course-result span{font-size:12px;color:var(--ink-3)}
+@media(max-width:1200px){
+  .portfolio-header{flex-wrap:wrap;gap:20px 24px}
+  .portfolio-actions{margin-left:auto}
+}
+@media(max-width:1000px){
+  .portfolio-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.course-results{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .course-work{gap:24px}
+}
+@media(max-width:760px){
+  .portfolio-header{gap:24px;flex-wrap:wrap;margin-bottom:28px}
+  .portfolio-header .portfolio-actions{order:3}.portfolio-header .brand{margin-right:0}.portfolio-header .btn{font-size:14px}
+  .portfolio-intro{margin-bottom:24px}.portfolio-intro h1{font-size:25px}
+  .course-work{grid-template-columns:1fr;gap:20px}
+  .course-original{max-height:440px}.course-conversation{max-height:none;padding:23px}
+}
+@media(max-width:560px){
+  .portfolio-shell{padding-top:24px;padding-bottom:40px}.portfolio-actions{width:100%}.portfolio-actions>.primary{flex:1}
+  .portfolio-grid,.course-results{grid-template-columns:1fr;gap:18px}.portfolio-intro p{font-size:14px}
+  .course-card{padding:16px}.course-card h2{font-size:22px}.course-cover{aspect-ratio:1.65}
+}
+/* The same saved timeline is available beside the active drawing. */
+.course-history { margin: 16px 0; border-block: 1px solid #e8dfd4; padding: 12px 0; }
+.course-history summary { cursor: pointer; min-height: 44px; }
+.course-history summary small { display: block; margin-top: 6px; color: #6d6057; }
+.course-history > p { font-size: 13px; color: #6d6057; }
+.history-results { display: flex; gap: 8px; flex-wrap: wrap; }
+.history-messages { max-height: 360px; overflow-y: auto; overscroll-behavior: contain; }
+#motion-editor textarea { width: 100%; box-sizing: border-box; margin-top: 8px; padding: 12px; border: 1px solid #e8dfd4; border-radius: 12px; font: inherit; resize: vertical; }
+#motion-editor p { font-size: 13px; color: #6d6057; }
+/* One course identity and view navigation, shared by creation and review. */
+.review-output-picker{display:flex;align-items:center;gap:24px;margin-bottom:24px;padding:16px 24px;font-size:14px;min-width:0;--r:28px}
+.review-output-picker>strong{flex:none;color:var(--ink-2);font-weight:500}
+#review-output{padding:6px;gap:12px;scroll-snap-type:x proximity}
+#review-output button{flex-basis:64px;width:64px;height:66px;border-radius:16px;scroll-snap-align:start}
+#review-output button img{width:100%;height:100%;object-fit:cover;border-radius:12px;display:block}
+@media(max-width:760px){.review-output-picker{padding:12px;gap:12px}.review-output-picker>strong{display:none}}
+.review-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.review-pair>figure{margin:0;min-width:0;padding:24px}
+.review-pair figcaption{font-size:14px;font-weight:600;margin-bottom:20px;color:var(--ink-2)}
+/* In Review the course header, the Create/Review switch, the tabs and the drawing strip
+   take the first 383px of the window, so a flat 420px drawing below them ran 75px past
+   the bottom of a 795px window (measured). The drawing takes what is left:
+   490px of header and panel frame come off the window height. The same share sizes a
+   saved 3D study beside it (--study-pane). The page still scrolls if a long answer on the
+   right needs more; nothing is cut. */
+.review-pair img,.review-pair video{display:block;width:100%;height:var(--study-pane);max-height:520px;object-fit:contain;background:transparent;border-radius:12px}
+#review-output-content:empty{min-height:200px}
+.review-reflection{padding:12px 4px 20px;border-bottom:1px solid var(--line)}
+.review-reflection:last-child{border-bottom:0}
+.review-reflection h3{font-size:13px;font-weight:500;margin:0 0 12px;color:var(--ink-3)}
+.review-reflection p{font-size:15px;line-height:1.85;color:var(--ink-2);white-space:pre-wrap;overflow-wrap:anywhere}
+#review-output-content .relight-original{display:none}
+#review-output-content .relight-views{grid-template-columns:1fr}
+#review-output-content iframe{height:var(--study-pane)!important;min-height:280px!important}
+.review-original-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.review-original-card{margin:0;min-width:0;padding:18px}
+.review-original-card img{width:100%;height:240px;object-fit:contain;display:block}
+/* On an HD screen three columns of drawings made each card 496px wide and 464 tall, so the
+   shelf showed one row per screen. Four columns show a row and a half. */
+@media(min-width:1500px){.review-original-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.review-original-card img{height:200px}}
+/* Two whole rows of courses on a 1920x1080 screen (operator). Four columns of cards
+   404px tall under a 285px header showed one row and the top of the next. Five columns from
+   1500px and four from 1200 make a card about 300px tall, and on a short window the cover gives
+   up height before the second row would leave it: 228px is half of the one-row header (172),
+   the gap between rows and a little air, plus the card's padding and words (124). The width is
+   stated because Chrome otherwise narrows a capped cover to keep its 1.5 shape. */
+@media(min-width:1200px){
+  .portfolio-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}.course-card{padding:14px}
+  .course-cover{width:100%;max-height:max(120px,calc(50dvh - 228px))}.course-card-copy{padding-top:12px}.course-state{top:17px}
+  .course-card h2{font-size:19px;line-height:1.35;margin:6px 0 4px}
+}
+@media(min-width:1500px){.portfolio-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.review-original-card figcaption{margin:18px 0 8px;font-size:15px;font-weight:600}
+.review-original-card .btn{font-size:13px;min-height:44px;padding:8px 12px}
+@media(max-width:760px){.review-pair{grid-template-columns:1fr}.review-pair>figure{padding:20px}.review-original-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.review-original-card img{height:170px}.review-pair img,.review-pair video{height:300px}}
+@media(max-width:420px){.review-original-grid{grid-template-columns:1fr}.review-output-picker select{width:100%}}
+.course-space{position:absolute;inset:0 0 auto;z-index:19;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 32px;height:88px}
+.course-space-heading{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px;min-height:54px}
+.course-space-identity,.course-space-actions,.mode-cluster{display:flex;align-items:center;min-width:0}
+.course-space-identity{grid-column:1;gap:12px}.course-space-identity>strong{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:20px}
+.course-space-identity .course-tag{flex:none}.course-space-actions{grid-column:3;justify-content:flex-end}
+.mode-cluster{grid-column:2;justify-content:center;gap:13px}.mode-cluster .seg{flex:none}
+.pet-slot{display:block;flex:0 0 56px;width:56px;height:56px}
+.mode-cluster .splat{display:block;width:56px;height:56px;margin:0;padding:0;border:0;background:none;box-shadow:none;transform:none;color:var(--ink);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.mode-cluster .splat:active{cursor:grabbing}.mode-cluster .splat:focus-visible{outline:3px solid var(--action);outline-offset:4px}
+.mode-cluster .splat.floating{position:fixed;z-index:19;margin:0}
+#app:not([data-course-view=create]) .mode-cluster{display:none}
+/* Review's tabs take the creation tabs' place in the header, so the cards start under it in both. */
+.course-space .review-tabs{grid-column:2;justify-self:center;min-width:0;max-width:100%;margin:0}
+#app:not([data-course-view=review]) .review-tabs{display:none}
+.course-space .btn{min-height:44px;padding:8px 12px;font-size:13px;white-space:nowrap}
+#space-status{position:absolute;top:100%;right:24px;background:var(--paper);padding:8px 12px;border-radius:12px;font-size:13px}
+#space-status:empty{display:none}
+#creation-workspace{position:absolute;inset:0}
+#app[data-course-view=create] #creation-workspace{top:88px}
+#app[data-course-view=create] #creation-workspace .bar{display:none}
+#app[data-course-view=review] #creation-workspace{visibility:hidden}
+#app[data-course-view=review] #portfolio{top:88px}
+#app[data-course-view] #creation-workspace .bar .brand,
+#app[data-course-view] #creation-workspace #btn-end-course{display:none}
+#app[data-course-view=""] #creation-workspace .bar .brand{display:flex}
+#app[data-course-view=review] .portfolio-header,
+#app[data-course-view=review] #course-back{display:none}
+#app[data-course-view=review] .course-profile{padding-top:0}
+@media(min-width:761px) and (max-width:1150px){
+  #app:is([data-course-view=create],[data-course-view=review]) .course-space{height:124px;padding:8px 22px}
+  #app:is([data-course-view=create],[data-course-view=review]) .course-space-heading{
+    grid-template-columns:minmax(0,1fr) auto;grid-template-rows:52px 52px;gap:4px 10px}
+  #app:is([data-course-view=create],[data-course-view=review]) .course-space-identity{grid-column:1;grid-row:1}
+  #app:is([data-course-view=create],[data-course-view=review]) .course-space-actions{grid-column:2;grid-row:1}
+  #app[data-course-view=create] .mode-cluster,#app[data-course-view=review] .review-tabs{grid-column:1/-1;grid-row:2;justify-self:center}
+  #app[data-course-view=create] #creation-workspace,#app[data-course-view=review] #portfolio{top:124px}
+}
+/* Review uses the same frame as Create (03-layout): its tabs sit where Create's tabs sit,
+   the drawing is the picture card,
+   the saved result and the child's words are the work card, and the drawings are the row under
+   the picture. Review used to be its own page: tabs on the left, drawings across the
+   top, a narrower frame, and a scrollbar that shifted everything on one tab. The storybooks and
+   the art collection have no single drawing to show, so they take both cards' room as one card. */
+@media(min-width:761px){
+  #app:is([data-course-view=create],[data-course-view=review]){--frame-top:20px}
+  #app[data-course-view=create] #creation-workspace .wayfinding{top:20px}
+  #app[data-course-view=create] #creation-workspace .rail{top:77px}
+  #app[data-course-view=review] #portfolio{overflow:hidden}
+  #app[data-course-view=review] .review-output-picker{position:absolute;left:calc(var(--frame-left) + 16px);
+    right:calc(var(--frame-share) * 100% + var(--frame-right) + var(--frame-gap) + 16px);bottom:24px;min-height:78px;margin:0;padding:10px 12px 10px 18px;gap:18px;--r:24px}
+  #app[data-course-view=review] #review-output{padding:0}
+  #app[data-course-view=review] #review-output button{flex-basis:52px;width:52px;height:52px;border-radius:14px}
+  #app[data-course-view=review] .review-pair{display:contents}
+  #app[data-course-view=review] .review-pair>figure,#app[data-course-view=review] #review-empty{position:absolute;top:var(--frame-top);
+    display:flex;flex-direction:column;margin:0;border:1px solid var(--line);border-radius:28px}
+  #app[data-course-view=review] .review-pair>figure:first-child,#app[data-course-view=review] #review-comparison:has(#review-empty:not([hidden]))::before{
+    position:absolute;top:var(--frame-top);left:var(--frame-left);right:calc(var(--frame-share) * 100% + var(--frame-right) + var(--frame-gap));
+    bottom:calc(var(--frame-bottom) + var(--frame-dock));padding:22px;border:1px solid var(--line);border-radius:28px;background:#f8f3eb}
+  #app[data-course-view=review] #review-comparison:has(#review-empty:not([hidden]))::before{content:"";box-sizing:border-box}
+  /* A stage with nothing saved keeps both cards; the work card says so. */
+  #app[data-course-view=review] #review-empty{right:var(--frame-right);bottom:var(--frame-bottom);width:calc(var(--frame-share) * 100%);
+    padding:30px 32px;background:#fffefb;box-shadow:0 24px 55px -42px #795b4466;font-size:15px;color:var(--ink-2)}
+  #app[data-course-view=review] .review-pair>figure:first-child>figcaption{margin:0 0 12px;font-size:13px;font-weight:500;color:var(--ink-3)}
+  #app[data-course-view=review] .review-pair>figure:first-child>img{flex:1 1 0;min-height:0;height:auto;max-height:none;background:#fffdf8;border-radius:18px;
+    box-shadow:0 16px 32px -26px #61493688}
+  #app[data-course-view=review] .review-pair>figure:last-child{right:var(--frame-right);bottom:var(--frame-bottom);width:calc(var(--frame-share) * 100%);
+    padding:30px 32px;background:#fffefb;box-shadow:0 24px 55px -42px #795b4466}
+  #app[data-course-view=review] #review-output-caption{flex:none;margin:0 0 20px;padding-bottom:22px;border-bottom:1px solid var(--line);
+    font-size:clamp(26px,2vw,32px);line-height:1.35;font-weight:650;letter-spacing:.02em;color:var(--ink)}
+  #app[data-course-view=review] .review-pair>figure:last-child>*{flex:none}
+  #app[data-course-view=review] #review-output-content{flex:1 1 auto;min-height:0;overflow:auto;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:#dcccb9 transparent}
+  #app[data-course-view=review] #review-output-content>*{flex:none}
+  #app[data-course-view=review] #review-output-content>:is(video,iframe),#app[data-course-view=review] #review-output-content video{flex:1 1 0;min-height:0!important;height:auto!important;max-height:none}
+  /* Words scroll inside their own box and the read-aloud button under them stays in sight. Named
+     under #review-pair so these outrank the card's own "children keep their height" rules above. */
+  #app[data-course-view=review] #review-pair :is(.review-child-description,.review-reflection){flex:0 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+  #app[data-course-view=review] #review-pair :is(.review-child-description,.review-reflection)>*{flex:none}
+  #app[data-course-view=review] #review-pair :is(.review-child-description,.review-reflection)>p{flex:0 1 auto;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#dcccb9 transparent}
+  #app[data-course-view=review] .review-child-description{margin-top:16px;padding:18px 20px}
+  /* The bring-to-life tab (mode.pose) in Review: the saved clip, 3D study or figure is the picture, so it fills the picture
+     card (the drawing it came from stays selected in the row beneath), and the work card keeps the
+     heading and the child's words. The output sits inside the work card's figure, so its place is
+     worked out from the frame, as the story picks' is (07-creation). */
+  #app[data-course-view=review]:has(#review-stage2[aria-pressed="true"]) .course-profile .review-pair>figure:first-child{display:none}
+  #app[data-course-view=review]:has(#review-stage2[aria-pressed="true"]) .course-profile #review-output-content{position:absolute;top:-1px;
+    bottom:calc(var(--frame-dock) - 1px);right:calc(100% + var(--frame-gap) + 1px);left:calc(var(--frame-left) + var(--frame-right) - 1px - (1 - var(--frame-share)) * 100vw);
+    padding:22px;gap:10px;justify-content:center;overflow:hidden;border:1px solid var(--line);border-radius:28px;background:#f8f3eb}
+  #app[data-course-view=review] #review-output-content>:is(video,iframe,img){width:100%;object-fit:contain;background:#fffdf8;border-radius:18px}
+  #app[data-course-view=review] #review-output-content>img{flex:1 1 0;min-height:0;height:auto}
+  #app[data-course-view=review] #review-book-panel,#app[data-course-view=review] #review-original-panel{position:absolute;top:var(--frame-top);left:var(--frame-left);
+    right:var(--frame-right);bottom:var(--frame-bottom);overflow:auto;padding:24px;border:1px solid var(--line);border-radius:28px;background:#fffefb;
+    box-shadow:0 24px 55px -42px #795b4466;scrollbar-width:thin;scrollbar-color:#dcccb9 transparent}
+}
+#course-continue-drawing{min-height:44px;padding:10px 16px;font-size:14px;margin-bottom:16px}
+.history-results>p{flex-basis:100%;margin:12px 0 0;font-size:13px;color:var(--ink-3)}
+@media(max-width:760px){
+  .course-space{padding:6px 18px;height:120px}
+  .course-space-heading{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:52px 52px;gap:4px 10px}
+  .course-space-identity{grid-column:1;grid-row:1;gap:7px}.course-space-identity>strong{font-size:16px}
+  .course-space-actions{grid-column:2;grid-row:1}.course-space .btn{font-size:12px;padding:8px}
+  #space-back{min-width:44px;justify-content:center}#space-back span{display:none}
+  .mode-cluster{grid-column:1/-1;grid-row:2;justify-self:center;width:max-content;max-width:100%;gap:6px}
+  .mode-cluster .seg{flex:0 1 auto;min-width:0;overflow-x:auto}.mode-cluster .seg button{padding-inline:7px;font-size:11px}
+  .mode-cluster .pet-slot{flex-basis:42px;width:42px;height:42px}.mode-cluster .splat{transform:scale(.75);transform-origin:top left}
+  .course-space .review-tabs{grid-column:1/-1;grid-row:2;overflow-x:auto}.review-tabs button{padding-inline:7px;font-size:11px}
+  #app[data-course-view=create] #creation-workspace,#app[data-course-view=review] #portfolio{top:120px}
+  #creation-workspace{min-height:0}
+}
+@media(max-width:480px){.course-space-identity{gap:5px}.course-space-identity .course-tag{padding:5px 7px;font-size:11px}}
+@media(max-width:380px){.mode-cluster .seg button,.review-tabs button{padding-inline:5px;font-size:10px}}
+/* The workbench compares the untouched drawing with one 3D study. */
+.sketch-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:stretch;width:100%}
+.sketch-pair figure{margin:0;min-width:0;border:1px solid var(--line);border-radius:24px;background:#fffdf9;overflow:hidden;padding:14px}
+.sketch-pair figcaption{font-size:13px;color:var(--ink-2);margin:0 0 12px}
+.sketch-pair img{display:block;width:100%;height:var(--study-pane);object-fit:contain;border-radius:14px}
+.sketch-pair .sketch-empty{display:grid;place-items:center;min-height:400px;padding:40px;color:var(--ink-3);font-size:15px;line-height:1.8;background:radial-gradient(circle,#fff7df,#f8f4ee)}
+.sketch-study .sketch-pair .sketch-empty{display:flex;flex-direction:column;padding:12px}
+.sketch-pair .sketch-empty-copy{flex:1;min-height:120px;display:grid;place-items:center;text-align:center;padding:24px}
+#sketch-workbench{position:relative;margin:0 32px 24px 140px;z-index:3}
+#sketch-workbench>.relight-note{font-size:12px;color:var(--ink-3);line-height:1.7;margin:16px 0 0}
+.has-sketch-workbench .room .picture{display:none}
+.has-sketch-workbench .buddy{position:relative;inset:auto;margin:0 32px 140px 140px;width:auto;max-height:none}
+.has-sketch-workbench.sketch-study .buddy{display:none}
+.has-sketch-workbench .piece-meta{position:relative;inset:auto;margin:110px 32px 24px 140px;pointer-events:auto}
+.has-sketch-workbench .piece-meta h1{font-size:30px;line-height:1.35;letter-spacing:0;margin:8px 0}
+.has-sketch-workbench .piece-meta p{display:block;font-size:15px;line-height:1.7;max-width:48em}
+.has-sketch-workbench .room{display:none}
+.has-sketch-workbench .dock{position:fixed}
+#sketch-workbench .sketch-controls{display:flex;flex-direction:column;gap:8px;flex:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+#sketch-workbench .sketch-controls #buddy-actions{margin:0;padding:0;border:0}
+#sketch-workbench .sketch-controls #btn-primary{flex:1 1 auto}
+#sketch-workbench .sketch-options{font-size:12px;color:var(--ink-2)}
+#sketch-workbench .sketch-options summary{width:max-content;cursor:pointer;padding:7px 2px}
+#sketch-workbench .sketch-options #cloud3d-choice{margin-top:8px}
+#sketch-workbench .sketch-version-choice{display:grid;gap:6px;margin-top:8px;font-size:12px;color:var(--ink-2)}
+#sketch-workbench .sketch-version-choice select{min-height:38px;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:#fffdf9;color:var(--ink)}
+#sketch-workbench .sketch-result-kind{margin:8px 0 0;font-size:12px;color:var(--ink-3)}
+#sketch-workbench .sketch-controls.has-model{flex-direction:row;align-items:center;justify-content:space-between;gap:12px}
+#sketch-workbench .sketch-controls.has-model .sketch-options{min-width:0}
+#sketch-workbench .sketch-controls.has-model .sketch-options summary{white-space:nowrap}
+#sketch-workbench .sketch-controls.has-model .sketch-options[open]{align-self:stretch;flex:1}
+#sketch-workbench .sketch-controls.has-model .sketch-options #buddy-actions{margin-top:8px}
+#sketch-workbench .sketch-controls.has-model .keep-view{min-height:36px;padding:7px 14px;white-space:nowrap}
+#sketch-workbench .sketch-pair .relight-note{font-size:12px;color:var(--ink-3);line-height:1.6;margin:10px 0 0}
+.sketch-study #sketch-workbench>.relight-views{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+.sketch-study #sketch-workbench>.relight-views>*{min-width:0;border:1px solid var(--line);border-radius:24px;background:#fffdf9;padding:12px}
+.sketch-study #sketch-workbench .relight-original{display:flex;flex-direction:column}
+.sketch-study #sketch-workbench .relight-original img{flex:1 1 0;width:100%;height:auto;min-height:0;object-fit:contain}
+.sketch-study #sketch-workbench .relight-stage{position:relative;display:flex;flex-direction:column;gap:8px;min-height:0;overflow:hidden}
+.sketch-study #sketch-workbench .sketch-pair>figure:nth-child(2){position:relative}
+.sketch-study #sketch-workbench .relight-stage canvas{display:block;flex:1 1 0;width:100%;height:0;min-height:120px;max-height:none;aspect-ratio:auto!important;touch-action:none;border-radius:12px}
+.sketch-study #sketch-workbench .relight-quick{display:flex;gap:8px;flex-wrap:wrap;flex:none;min-height:40px}
+.sketch-study #sketch-workbench .relight-quick .btn{min-height:40px;padding:6px 10px;font-size:12px;border:1px solid var(--line)}
+.sketch-study #sketch-workbench .relight-quick .btn[aria-pressed="true"]{background:#f4e9de;border-color:#c7ab91}
+.sketch-study #sketch-workbench .relight-quick .relight-icon{font-size:18px}
+.sketch-study #sketch-workbench .relight-quick .relight-compare{display:none}
+.sketch-study #sketch-workbench .relight-stage .relight-note,.sketch-study #sketch-workbench .relight-stage .relight-hint{flex:none;margin:0;font-size:12px;line-height:1.4;color:var(--ink-3)}
+.sketch-study #sketch-workbench .sketch-light-options{flex:none;font-size:12px;color:var(--ink-2)}
+.sketch-study #sketch-workbench .sketch-light-options summary{cursor:pointer;width:max-content;padding:6px 0}
+.sketch-study #sketch-workbench .sketch-light-options[open]{position:absolute;z-index:3;left:12px;right:12px;bottom:12px;max-height:70%;overflow:auto;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:#fffdf9;box-shadow:0 12px 28px #43342824}
+.sketch-study #sketch-workbench .relight-stage .relight-controls{gap:8px;margin-top:8px}
+.sketch-study #sketch-workbench .sketch-generation-status{position:absolute;z-index:2;left:50%;top:72px;transform:translateX(-50%);box-sizing:border-box;width:max-content;max-width:calc(100% - 32px);margin:0;padding:7px 12px;border-radius:12px;background:#fffaf0e8;color:var(--ink-2);font-size:12px;line-height:1.45;text-align:center}
+.sketch-study #sketch-workbench .sketch-generation-status .btn{min-height:30px;margin-left:8px;padding:4px 8px;font-size:12px}
+@media(max-width:760px){.sketch-study #sketch-workbench .relight-stage canvas{height:320px;flex:none}.sketch-study #sketch-workbench .relight-quick .relight-compare{display:flex}}
+/* Equal panels fill the full content frame; model controls stay with the model. */
+@media(min-width:761px){
+  #sketch-workbench{position:absolute;left:var(--frame-left);right:calc(var(--frame-share) * 100% + var(--frame-right) + var(--frame-gap));
+    top:var(--frame-top);bottom:calc(var(--frame-bottom) + var(--frame-dock));margin:0;padding:16px;display:flex;flex-direction:column;
+    border:1px solid var(--line);border-radius:28px;background:#f8f3eb}
+  #creation-workspace.sketch-study #sketch-workbench{right:var(--frame-right)}
+  #sketch-workbench>*{flex:none}
+  #sketch-workbench>.sketch-pair,#sketch-workbench>.relight-views{flex:1 1 auto;min-height:0;grid-template-rows:minmax(0,1fr)}
+  #sketch-workbench>.sketch-pair{grid-template-columns:minmax(0,.8fr) minmax(0,1.3fr)}
+  #creation-workspace.sketch-study #sketch-workbench>.sketch-pair{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #creation-workspace.sketch-study #sketch-workbench .sketch-pair>figure:nth-child(2){position:relative}
+  #creation-workspace.sketch-study #sketch-workbench .sketch-controls.has-model{position:absolute;top:8px;right:12px;z-index:2;
+    margin:0;padding:0;border:0}
+  #creation-workspace.sketch-study #sketch-workbench .sketch-controls.has-model .sketch-options[open]{
+    align-self:flex-start;padding:0 12px 12px;border:1px solid var(--line);border-radius:16px;background:#fffdf9;
+    box-shadow:0 12px 28px #43342824}
+  .has-sketch-workbench .sketch-pair>figure{display:flex;flex-direction:column;min-height:0;padding:12px}
+  .has-sketch-workbench .sketch-pair img,.has-sketch-workbench .sketch-pair iframe{flex:1 1 0;min-height:120px;height:auto!important}
+  .has-sketch-workbench .sketch-pair .sketch-empty{min-height:0}
+  #sketch-workbench>.relight-note{margin:10px 4px 0}
+  #creation-workspace.sketch-study .dock{right:var(--frame-right)}
+}
+#media:has(.sketch-pair){max-width:1200px;width:100%}
+#review-output-content iframe{display:block}
+.review-pair:has(iframe){grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+.review-pair:has(iframe) .course-original{height:var(--study-pane)}
+#review-output-content>.relight-note{font-size:12px;color:var(--ink-3);line-height:1.7}
+@media(max-width:760px){
+ .has-sketch-workbench .piece-meta{margin:20px 0 24px;padding:0;min-height:0}
+ .has-sketch-workbench .piece-meta h1{font-size:28px}
+ #sketch-workbench{margin:0 0 16px;order:3;width:100%}.sketch-pair{grid-template-columns:1fr}
+ .sketch-pair img{height:280px}.has-sketch-workbench .dock{position:relative}
+ .has-sketch-workbench:not(.sketch-study) .buddy{margin:0;width:100%}
+ .sketch-study #sketch-workbench .relight-original img{flex:none;height:280px}
+ .review-pair:has(iframe){grid-template-columns:1fr}.review-pair:has(iframe) .course-original{height:280px}
+}
+
+/* The sketch comparison keeps one compact viewer chrome for saved GLBs and older studies. */
+.sketch-study #sketch-workbench .sketch-viewer-panel{position:relative;display:flex;flex-direction:column;gap:0;min-height:0;overflow:hidden}
+.sketch-study #sketch-workbench .sketch-viewer-panel>figcaption{flex:none;min-height:37px;margin:0 116px 6px 0;padding:9px 0;font-size:14px;font-weight:700;color:var(--ink)}
+.sketch-study #sketch-workbench .sketch-viewer-panel>iframe,
+.sketch-study #sketch-workbench .sketch-viewer-panel>canvas{display:block;flex:1 1 0;width:100%;height:auto!important;min-height:140px;max-height:none;aspect-ratio:auto!important;border-radius:13px;object-fit:contain}
+.sketch-study #sketch-workbench .sketch-viewer-panel>.relight-quick,
+.sketch-study #sketch-workbench .sketch-viewer-panel>.relight-note,
+.sketch-study #sketch-workbench .sketch-viewer-panel>.relight-hint,
+.sketch-study #sketch-workbench .sketch-viewer-panel>.relight-controls{display:none}
+.sketch-study #sketch-workbench .sketch-viewer-panel>.cloud-opening-note:not(:empty){display:block;flex:none;margin:4px 0;color:var(--ink-3);font-size:11px}
+#sketch-workbench .sketch-viewer-panel .sketch-controls{display:block;flex:none;margin:0;padding:0;border:0}
+#sketch-workbench .sketch-viewer-panel .sketch-controls #buddy-actions{position:absolute;top:8px;right:0;width:auto;margin:0;padding:0;z-index:2}
+#sketch-workbench .sketch-viewer-panel .sketch-controls #btn-primary{flex:none;min-height:35px;padding:6px 12px;font-size:12px;border:1px solid #d9b4a2;border-radius:10px;background:#fff7f2;color:#a35139;white-space:nowrap}
+#sketch-workbench .sketch-viewer-panel .sketch-controls #btn-primary svg{display:none}
+.sketch-study #sketch-workbench .sketch-viewer-ui{flex:none;display:grid;gap:5px;margin-top:6px}
+.sketch-study #sketch-workbench .sketch-viewer-tools,
+.sketch-study #sketch-workbench .sketch-viewer-modes,
+.sketch-study #sketch-workbench .sketch-view-actions{display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:4px}
+.sketch-study #sketch-workbench .sketch-viewer-tools{gap:5px}
+.sketch-study #sketch-workbench .sketch-viewer-ui button{min-height:30px;padding:5px 8px;border:1px solid var(--line);border-radius:9px;background:#fffdfa;color:var(--ink-2);font-size:11px;font-weight:700;white-space:nowrap}
+.sketch-study #sketch-workbench .sketch-viewer-ui button[aria-pressed=true]{background:#f6e9df;border-color:#d9bca9;color:#9e5a41}
+.sketch-study #sketch-workbench .sketch-viewer-ui button:disabled{opacity:.45;cursor:not-allowed}
+.sketch-study #sketch-workbench .sketch-viewer-ui button[data-action=zoom]{min-width:30px;padding:4px;font-size:15px}
+.sketch-study #sketch-workbench .sketch-viewer-settings{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}
+.sketch-study #sketch-workbench .sketch-setting-card{min-width:0;padding:7px 9px;border:1px solid var(--line);border-radius:10px;background:#fffbf7}
+.sketch-study #sketch-workbench .sketch-setting-card>strong{display:block;margin-bottom:3px;color:var(--ink-2);font-size:11px}
+.sketch-study #sketch-workbench .sketch-light-slider{display:grid;grid-template-columns:38px minmax(0,1fr) 34px;align-items:center;gap:5px;margin:2px 0;font-size:11px;color:var(--ink-2)}
+.sketch-study #sketch-workbench .sketch-light-slider input{width:100%;min-width:0;height:20px;margin:0;accent-color:#a88a9e}
+.sketch-study #sketch-workbench .sketch-light-slider output{text-align:right;font-variant-numeric:tabular-nums}
+.sketch-study #sketch-workbench .sketch-materials{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px}
+.sketch-study #sketch-workbench .sketch-materials button{min-width:0;min-height:25px;padding:3px 2px;font-size:10px}
+.sketch-study #sketch-workbench .sketch-viewer-checks{display:flex;flex-wrap:wrap;gap:4px 9px}
+.sketch-study #sketch-workbench .sketch-viewer-checks{margin-top:5px}
+.sketch-study #sketch-workbench .sketch-viewer-checks label{display:inline-flex;align-items:center;gap:5px;font-size:10px;white-space:nowrap;color:var(--ink-2)}
+.sketch-study #sketch-workbench .sketch-viewer-checks input{width:15px;height:15px;margin:0;accent-color:#9c7897}
+.sketch-study #sketch-workbench .sketch-viewer-foot{margin:0;color:var(--ink-3);font-size:10px;line-height:1.3}
+@media(max-width:760px){
+ .sketch-study #sketch-workbench .sketch-materials{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .sketch-study #sketch-workbench .sketch-viewer-panel{min-height:460px}
+ .sketch-study #sketch-workbench .sketch-viewer-settings{grid-template-columns:1fr}
+}
+
+.review-child-description{margin-top:24px;padding:24px;border:1px solid var(--line);border-radius:24px;background:var(--paper)}
+.review-child-description h3{margin:0 0 12px;font-size:16px;color:var(--ink-2)}
+.review-child-description p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:16px;line-height:1.85;color:var(--ink-2)}
+
+.review-child-description>.btn{margin-top:16px}
+
+
+/* A single, full-width narration area below the introduction. */
+.review-play{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:9px 15px;font-size:14px;border-radius:999px}
+.review-play::before{content:"";width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid currentColor}
+.review-voice-host{width:100%;min-width:0}
+.review-voice-host .classroom-voice{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:16px;padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--paper)}
+.review-voice-host .classroom-voice:has(#voice-stop[hidden]):has(audio[hidden]):has(#voice-status:empty){display:none}
+.review-voice-host #voice-status{grid-column:1;grid-row:1;font-size:13px;line-height:1.5}
+.review-voice-host #voice-stop{grid-column:2;grid-row:1;min-height:44px;padding:8px 12px;font-size:13px}
+.review-voice-host audio{grid-column:1 / -1;grid-row:2;width:100%;max-width:none;height:40px}
+.review-reflection:has(.review-voice-host #voice-stop:not([hidden]))>.review-play,
+.review-reflection:has(.review-voice-host audio:not([hidden]))>.review-play{display:none}
+
+/* Short idle performances and playful protest; never move the surrounding layout. */
+.home-mascot[data-action="dance"] .mascot-body{animation:mascot-dance 1.8s both}
+.home-mascot[data-action="spin"] .mascot-body{transform-origin:50% 55%;animation:mascot-spin 1.3s both}
+.home-mascot[data-action="stomp"] .mascot-body{animation:mascot-stomp .8s both}
+.home-mascot[data-action="dance"] .mascot-spark,.home-mascot[data-action="spin"] .mascot-spark{animation:mascot-spark 1.3s both}
+@keyframes mascot-dance{0%,100%{transform:none}15%,55%{transform:translate(-7px,-6px) rotate(-12deg) scale(.96,1.04)}30%,70%{transform:translate(7px,-6px) rotate(12deg) scale(.96,1.04)}42%,82%{transform:translateY(4px) scale(1.08,.91)}92%{transform:translateY(-10px) scale(.97,1.03)}}
+@keyframes mascot-spin{0%{transform:scale(1.08,.9)}20%{transform:translateY(-8px) rotate(-18deg)}80%{transform:translateY(-8px) rotate(365deg) scale(.97,1.03)}92%{transform:rotate(358deg) scale(1.06,.94)}100%{transform:rotate(360deg)}}
+@keyframes mascot-stomp{0%,100%{transform:none}15%,45%,75%{transform:translate(-4px,3px) rotate(-5deg) scale(1.08,.94)}30%,60%,90%{transform:translate(4px,-3px) rotate(5deg) scale(1.05,.97)}}
+@media(prefers-reduced-motion:reduce){.home-mascot[data-action] .mascot-body,.home-mascot[data-action] .mascot-spark{animation:none}}
+
+/* Emotion lives in the eyes; the jelly and blush keep their resting colours. */
+.home-mascot[data-mood="happy"] .brand-eye{top:36%;height:25%;border-radius:55% 55% 35% 35%}
+.home-mascot[data-mood="happy"] .brand-eye::after{content:"";position:absolute;inset:61% -5% -5%;border-radius:50% 50% 0 0;background:#f3b5a1}
+.home-mascot[data-mood="surprised"] .brand-eye{top:24%;height:44%;border-radius:50%}
+.home-mascot[data-mood="surprised"] .pupil{width:36%;height:38%;left:32%;top:31%}
+.home-mascot[data-mood="angry"] .brand-eye{top:37%;height:25%;border-radius:15% 15% 50% 50%;transform:rotate(16deg)}
+.home-mascot[data-mood="angry"] .brand-eye+.brand-eye{transform:rotate(-16deg)}
+.home-mascot[data-mood="angry"] .pupil{top:21%;height:62%}
+
+/* The header pet has its own bounded lane, separate from navigation, until it is dragged somewhere of its own. */
+.mascot-garden{--pet-size:104px;position:relative;flex:1;min-width:140px;height:128px;margin:0 12px}
+.mascot-garden .home-mascot{position:absolute;left:0;top:12px;width:var(--pet-size);height:var(--pet-size);transition:left 6s cubic-bezier(.4,0,.6,1);cursor:grab;touch-action:none}.mascot-garden .home-mascot.floating{position:fixed;z-index:5;transition:none}.mascot-garden .home-mascot.is-dragging{cursor:grabbing}.mascot-garden .home-mascot.is-dragging .mascot-body{transform:translateY(-6px) scale(.96,1.05)}
+.mascot-sleep{position:absolute;right:-8px;top:-6px;opacity:0;color:var(--ink-3);font-size:18px;letter-spacing:7px;pointer-events:none}
+.home-mascot[data-action="walk"] .mascot-body{animation:mascot-walk .65s ease-in-out infinite}
+.home-mascot[data-action="rest"] .mascot-body{transform:translateY(8px) scale(1.06,.9)}
+.home-mascot[data-action="rest"] .brand-eye{height:24%;top:36%}
+.home-mascot[data-action="nap"] .mascot-body{animation:mascot-breathe 3s ease-in-out infinite}
+.home-mascot[data-action="nap"] .brand-eye{top:49%;height:3%;background:#754d42;border-radius:50%}
+.home-mascot[data-action="nap"] .pupil{opacity:0}
+.home-mascot[data-action="nap"] .mascot-sleep{animation:mascot-dream 3s ease-in-out infinite}
+@keyframes mascot-walk{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+@keyframes mascot-breathe{0%,100%{transform:translateY(12px) scale(1.09,.84)}50%{transform:translateY(10px) scale(1.07,.87)}}
+@keyframes mascot-dream{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:.75;transform:translateY(-8px)}}
+@media(prefers-reduced-motion:reduce){.mascot-garden .home-mascot:not(.floating){left:0!important}.home-mascot[data-action] .mascot-body,.home-mascot[data-action] .mascot-sleep{animation:none}}
+
+/* One header row on the home page (operator): the title where the small "Course
+   portfolio" label was, the pet's lane in the middle, the actions on the right. The title and its note
+   were a second row under the actions, which with the pet's lane made the header about 285px
+   tall. A course page keeps the label, which is its way home, and has no title and no pet. */
+.portfolio .portfolio-header{display:block;min-height:0;margin-bottom:24px}
+.portfolio-topline{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.portfolio:not(:has(#portfolio-list[hidden])) .portfolio-brand{display:none}
+.portfolio:has(#portfolio-list[hidden]) .mascot-garden{display:none}
+.portfolio-topline .portfolio-intro{flex:0 1 auto;margin:0}
+.portfolio-topline .portfolio-intro h1{font-size:clamp(25px,2.2vw,32px);line-height:1.3;margin-bottom:6px;text-wrap:balance}
+.portfolio-topline .portfolio-intro p{max-width:560px;font-size:14px;line-height:1.6}
+.portfolio-header .portfolio-topline .mascot-garden{flex:1 1 120px;min-width:120px;height:116px;margin:0}
+/* Too narrow for one row: the title and the pet share the first row, the actions take the second. */
+@media(max-width:1000px){
+ .portfolio:not(:has(#portfolio-list[hidden])) .portfolio-topline{flex-wrap:wrap}
+ .portfolio-topline .portfolio-intro{flex:1 1 0}
+ .portfolio-header .portfolio-topline .mascot-garden{flex:0 0 160px}
+ .portfolio:not(:has(#portfolio-list[hidden])) .portfolio-actions{flex-basis:100%;justify-content:flex-end}
+}
+@media(max-width:760px){
+ .portfolio-topline{flex-wrap:wrap;gap:14px}
+ .portfolio-topline .portfolio-actions{width:auto;margin-left:auto}
+ .portfolio-header .portfolio-topline .mascot-garden{flex-basis:112px;min-width:0;--pet-size:88px;height:104px}
+}
+@media(max-width:480px){
+ .portfolio-topline .portfolio-actions{width:100%}
+ .portfolio-topline .portfolio-intro h1{font-size:24px}
+ .portfolio-header .portfolio-topline .mascot-garden{flex-basis:88px;--pet-size:72px;height:92px}
+}

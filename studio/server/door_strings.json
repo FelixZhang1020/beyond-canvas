@@ -1,0 +1,16 @@
+{
+  "zh": {
+    "title": "画里画外",
+    "prompt": "输入课堂密码",
+    "button": "进入课堂",
+    "wrong": "密码不对，请再试一次。",
+    "certificate": "在 iPad 上用摄像头和麦克风？先安装这张证书"
+  },
+  "en": {
+    "title": "Beyond Canvas",
+    "prompt": "Enter the class password",
+    "button": "Open the class",
+    "wrong": "That password is not right. Try again.",
+    "certificate": "Using the camera and microphone on an iPad? Install this certificate first"
+  }
+}

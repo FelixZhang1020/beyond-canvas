@@ -1,0 +1,323 @@
+# StepFun First — the studio's only deployment.
+#
+# StepFun sells language and voice, and this deployment buys some of both: reading
+# geometry sketches and designing toy figures are `step-3.7-flash`, speech and hearing
+# `stepaudio-2.5-tts` and `stepaudio-2.5-asr`, all on the subscription.
+# The conversation (the screen, every line written, every check, the teacher review)
+# is Qwen3.6 on the hosted DGX Spark with thinking off; 3D and the storybook's pictures
+# and voice run there too, on its own loopback ports (deploy/spark/start.sh). The clip
+# is Wan 3.0 on DashScope where its key is set, and the Spark's Wan 2.2 where it is not.
+#
+# The whole project moved to the Spark (operator decision; the Mac
+# is for development). Until then this deployment also ran from the Mac, with
+# pictures and 3D on the 4090 over a tunnel and the clip bought from Replicate,
+# because the 4090 holds Wan's 5B and not the 14B; stepfun-spark.yaml and the
+# BEYOND_CANVAS_MACHINE switch chose between the two. That variant is in
+# archive/stepfun-mac-4090.yaml.
+#
+# API First and Local First were archived (operator decision:
+# StepFun First is the only solution). Until then this file was `extends: api`
+# and inherited its six reading slots, its voice and its video slot; they were
+# copied here unchanged so that archiving api.yaml changed nothing this
+# deployment runs. The two archived files are in studio/profiles/archive/.
+#
+# Every step-3.7-flash slot below carries the list price pair, and it is not
+# decoration: StepFun returns no cost field, so a ledger line's `cost` is computed
+# from these. The list is ¥1.35 in / ¥8.1 out per million (platform.stepfun.com,
+# read off its price page); at 7.1 CNY to the USD that is 0.19 / 1.14, the pair cloud.yaml
+# already carried. Under the subscription `included_in_plan` below stops that
+# arithmetic, and the pair stays so a slot pulled back to the pay-per-call
+# endpoint is still priced rather than shown as free.
+
+# Every StepFun call this deployment makes goes through the subscription, not the
+# pay-as-you-go endpoint. Operator decision.
+#
+# READ OFF THE PLAN'S OWN PAGE: the subscription answers on a different base URL,
+# `https://api.stepfun.com/step_plan/v1`, beside the `.../v1` this project used
+# before. NOT MEASURED, and it is the assumption this file rests
+# on: that a call to the old address is billed against the account balance rather
+# than against the plan already paid for. Nothing distinguishes them from the
+# caller's side — both take the same key and answer normally — so if that
+# assumption is wrong the only cost is that the plan goes unused. Checking it
+# takes one class run and a look at the plan's usage page.
+#
+# What IS measured: one key serves both addresses, and they list
+# different catalogues — 10 models on the plan, 36 on the old one, the plan's ten
+# being a subset. All three models this product uses are on the plan.
+# docs/measured/stepfun-plan-catalogue.md
+#
+# Keyed by provider rather than set profile-wide, because this file also owns
+# GPU-machine and Replicate slots and a StepFun address handed to those would be
+# a nonsense they might not refuse. Slot options still win, so any one slot can be
+# pulled back to the old endpoint by naming its own base_url.
+provider_options:
+  stepfun:
+    base_url: https://api.stepfun.com/step_plan/v1
+    # The price pair below every step-3.7-flash slot is a list price in USD, and
+    # under a plan it is a fiction — the call is already paid for, so computing
+    # dollars from tokens would invent a bill nobody receives. This stops that
+    # arithmetic and records the truth: no marginal cost per call.
+    included_in_plan: true
+
+slots:
+  # No Step 3.7 Flash in anything a person waits for (operator: "don't use StepFun for all
+  # conversation or interaction workings... never ever", because its thinking cannot be switched off and
+  # every check took 20-60 s). The chat's writer, every rule judge and draft reviewer, the drawing's
+  # safety screen, the teacher review and the story drafts all run on Qwen3.6 on the Spark with its
+  # thinking off. StepFun keeps only the voice and the hearing, which do not think.
+  vlm.studio:
+    provider: llamacpp
+    model: qwen3.6-35b-a3b
+    options:
+      base_url: http://127.0.0.1:7160
+      max_tokens: 1200
+      # Qwen's window is 16384 tokens with the prompt and the picture inside it: a caller's larger
+      # budget (the rule judges ask for 12000) would be refused before a word was written.
+      most_tokens: 4000
+      temperature: 0.6
+      timeout_s: 30
+      chat_template_kwargs:
+        enable_thinking: false
+  # The class's first voice (operator): Qwen3.6 on the Spark writes the opening, the reply and
+  # the smaller question in about a second. Whenever it gives no line the same call goes to vlm.studio,
+  # which is the same Qwen (studio/providers/frontvoice.py). Kept loaded by
+  # deploy/spark/qwen-front.sh; the Spark's own clip, for which it would step aside, is closed to teachers.
+  # docs/measured/chat-speed-and-front-voice.md
+  vlm.front:
+    provider: llamacpp
+    model: qwen3.6-35b-a3b
+    options:
+      base_url: http://127.0.0.1:7160
+      max_tokens: 1200
+      temperature: 0.6
+      timeout_s: 30
+      chat_template_kwargs:
+        enable_thinking: false
+  # The rule judges and the draft reviewers. A cut-off judge is skipped, as an empty one already was.
+  vlm.director:
+    provider: llamacpp
+    model: qwen3.6-35b-a3b
+    options:
+      base_url: http://127.0.0.1:7160
+      max_tokens: 1200
+      # Qwen's window is 16384 tokens with the prompt and the picture inside it: a caller's larger
+      # budget (the rule judges ask for 12000) would be refused before a word was written.
+      most_tokens: 4000
+      temperature: 0.1
+      timeout_s: 30
+      chat_template_kwargs:
+        enable_thinking: false
+  safety.image:
+    provider: llamacpp
+    model: qwen3.6-35b-a3b
+    options:
+      base_url: http://127.0.0.1:7160
+      max_tokens: 1200
+      # Qwen's window is 16384 tokens with the prompt and the picture inside it: a caller's larger
+      # budget (the rule judges ask for 12000) would be refused before a word was written.
+      most_tokens: 4000
+      temperature: 0.1
+      timeout_s: 30
+      chat_template_kwargs:
+        enable_thinking: false
+  # NVIDIA's safety model, the second look at the door and on the way out (operator's go).
+  # Kept loaded on the Spark by deploy/spark/safety-reader.sh; it steps aside while a clip needs the
+  # memory, and the clip's own check waits for it to load again. A look it cannot take stops nothing,
+  # and the ledger says second-look:unavailable. A look takes 0.4 s; ten is the most a drawing waits.
+  safety.reader:
+    provider: safetyreader
+    model: Nemotron-3.5-Content-Safety
+    options:
+      base_url: http://127.0.0.1:7140
+      timeout_s: 10
+  vlm.sketch:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      reasoning_effort: medium
+      max_tokens: 12000
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+  vlm.creation:
+    provider: llamacpp
+    model: qwen3.6-35b-a3b
+    options:
+      base_url: http://127.0.0.1:7160
+      max_tokens: 4000
+      # Qwen's window is 16384 tokens with the prompt and the picture inside it: a caller's larger
+      # budget (the rule judges ask for 12000) would be refused before a word was written.
+      most_tokens: 4000
+      temperature: 0.6
+      timeout_s: 180   # a hung draft lets go of the class after three minutes
+      chat_template_kwargs:
+        enable_thinking: false
+  # The 3D figure (painting-to-figure) is written and looked at here, apart from the drafts on vlm.creation:
+  # a writing took 61-151 s and six at once passed the default 180, while a hung draft should
+  # still let go of the class after three minutes. Without this slot the figure uses vlm.creation.
+  vlm.figure:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      reasoning_effort: medium
+      max_tokens: 32000
+      timeout_s: 360
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+  # The toy's check, apart from its writer. Writing needs room for a hundred parts;
+  # looking needs care about one picture, and it answers in a line. Splitting them means either can be
+  # tuned without the other, which one overnight run could not do: its speed trial moved both.
+  vlm.figure.look:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      reasoning_effort: medium
+      max_tokens: 16000
+      timeout_s: 180
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+  # The temple showpiece is a StepFun Agentic Skills showcase, so its live runs and their picture checks run on
+  # StepFun (operator: all of it StepFun, above all 现场生成). It used to share vlm.studio, and so
+  # went to Qwen with the class chat without anyone deciding it (studio/server/serve_showpiece.py).
+  vlm.showpiece:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      reasoning_effort: low
+      max_tokens: 12000
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+  # No chat.bridge (operator): the quick line said the child's words back, and the
+  # checked reply that followed said them again, so a child heard the same sentence twice. Without the
+  # slot the studio speaks its fixed line ("我听到啦！让我再好好看看你的画。", studio/conversation/strings.json),
+  # which repeats nothing. The echo (stepaudio-2.5-chat, studio/conversation/bridge.py) comes back by restoring it.
+  vlm.teacher:
+    provider: llamacpp
+    model: qwen3.6-35b-a3b
+    options:
+      base_url: http://127.0.0.1:7160
+      max_tokens: 3000
+      # Qwen's window is 16384 tokens with the prompt and the picture inside it: a caller's larger
+      # budget (the rule judges ask for 12000) would be refused before a word was written.
+      most_tokens: 4000
+      temperature: 0.6
+      timeout_s: 90
+      chat_template_kwargs:
+        enable_thinking: false
+  # No image.edit (operator): the FLUX still pose was retired because Wan 2.2
+  # makes the real animation. The older dev profiles (cloud, local, spark) keep their picture slot
+  # as configuration.
+
+  # The storybook's picture-book pages (operator): FLUX.2 Klein 4B on the Spark redraws a
+  # book's pages in the style the teacher picks, several pages per job so the model loads once (~20 s,
+  # then ~5 s a page: docs/measured/storybook-styles.md). Optional: without it a book is
+  # made of the originals, as before.
+  image.book:
+    provider: localimage
+    model: flux
+    options:
+      task: restyle_pictures
+      base_url: http://127.0.0.1:7270
+      label: FLUX.2 Klein 4B
+      # A job can wait for the chip behind another; past this it is given up and the teacher is told to try again.
+      timeout_s: 300
+
+  # A storybook page read in a child's own voice (operator): VoxCPM2 on the Spark copies it from
+  # the first answer the child said out loud about the page's drawing, and the copy never leaves the Spark
+  # (studio/voice/child_voice.py, docs/measured/child-voice.md). Optional: without it the studio's
+  # voice reads every page, as before.
+  tts.child:
+    provider: remotevoice
+    model: VoxCPM2
+    options:
+      base_url: http://127.0.0.1:7280
+      # The first page of a book waits for the model to load; a page can also wait behind another job.
+      timeout_s: 300
+
+  # The same Wan 2.2 I2V A14B the Mac bought from Replicate, on open weights
+  # (`Wan-AI/Wan2.2-I2V-A14B-Diffusers`, 126 GB on disk), made on the Spark, which
+  # has about 119 GB free where the 4090 had 24. Operator decision.
+  # Measured on the GB10: the old 81-frame, 30-step clip needs ~31 min; the worker
+  # makes 81 frames in 15 steps (~5 s at 16 fps), 1,082 s, the length the
+  # operator chose (docs/measured/clip-length-trial.md; 49 frames,
+  # 691 s, before that). 1500 s is the video service's own job deadline, so a
+  # clip queued behind a 3D job still finishes. docs/measured/faster-jobs-on-the-spark.md
+  video.animation:
+    provider: localvideo
+    model: wan2.2-i2v-a14b
+    options:
+      task: to_video
+      base_url: http://127.0.0.1:7260
+      timeout_s: 1500
+      # Shown to teachers greyed, not startable (operator): a clip holds about 72 GB of the
+      # node for eighteen minutes. The online clip (video.online) is the one a class makes. Remove the line
+      # to give teachers the choice back.
+      closed_to_teachers: true
+
+  # The teacher's other clip choice (operator): 5 s from Wan 3.0 on Alibaba's DashScope,
+  # about 2 minutes against the Spark's 18 (10 s at first, until the operator made both 5 s). Hosted only (Wan 3.0 has no download), so it is the one
+  # slot the Spark could not run itself; the operator chose it knowing that. 480P because both 720P
+  # clips painted a person paddling a boat into the river, against the instruction
+  # (docs/measured/wan3-online.md). Its key is the second one sync.sh copies to the node.
+  video.online:
+    provider: dashscopevideo
+    model: wan3.0-video
+    options:
+      task: to_video
+      base_url: https://dashscope.aliyuncs.com
+      resolution: 480P
+      duration_s: 5
+      timeout_s: 600
+
+  mesh.portrait:
+    provider: localmesh
+    model: trellis2
+    options:
+      task: to_mesh
+      base_url: http://127.0.0.1:7240
+      timeout_s: 600
+
+  # No mesh.alternative (operator): Pixal3D, the teacher's second 3D choice, was
+  # archived after timing out three times on the Spark in one day. Its weights and container stay
+  # on the node, unused; the older dev profiles keep it as configuration.
+
+  tts.studio:
+    provider: stepfun
+    model: stepaudio-2.5-tts
+    options:
+      task: speak
+      endpoint: audio/speech
+      fields:
+        text: input
+        voice: voice
+      extra:
+        voice: wenrounvsheng
+        instruction: 像幼儿园美术老师一样说话：温柔、慢一点、带着笑意，像在跟五岁的小朋友聊天
+        response_format: mp3
+        speed: 0.95
+      price_usd: 0.0025
+      timeout_s: 120
+
+  # Hearing is bought here too, because this deployment means every Step model
+  # first and StepFun sells one. THIS SLOT SENDS A CHILD'S RECORDED VOICE TO A
+  # COMPANY, and it is now the only way the studio hears: Local
+  # First, the one deployment that kept recordings on hardware the operator owns
+  # (Whisper on the 4090), was archived by operator decision, taken with
+  # this consequence stated. An earlier operator decision for this slot itself.
+  # studio/providers/stepfun_asr.py carries the whole note.
+  #
+  # StepFun takes no language field and decides for itself; it does take hotwords,
+  # which is worth using for children's names once someone collects them.
+  #
+  # The one StepFun slot NOT on the subscription: step_plan/v1 has no
+  # transcription and answers 404, so every recording failed for two days,
+  # until a log line finally said why. Pay-per-use is the
+  # operator's choice, over the node's own Whisper; each recording
+  # is charged to the account balance.
+  speech.in:
+    provider: stepfun
+    model: stepaudio-2.5-asr
+    options:
+      task: transcribe
+      endpoint: audio/transcriptions
+      base_url: https://api.stepfun.com/v1
+      included_in_plan: false

@@ -1,0 +1,222 @@
+# Phase 1, from when the hosted DGX Spark arrives.
+#
+# LOCAL SERVICES ARE UNVERIFIED. Ports and memory estimates need checking on the
+# actual Spark. The hosted Wan fallback was tested through Replicate.
+#
+# Including the 20 GB portrait allowance leaves 68 GB declared resident
+# and a 19 GB rotating mesh.premium slot: 87 GB on paper, below the 90 GB ceiling.
+# These remaining estimates are not measured runtime peaks. Image upload/decode
+# still uses host memory, and the other models' activations need day-zero checks.
+#
+# The director is the exception and remains wrong on purpose: 109 GB below is
+# roughly Q4_K_S, which measures 110.0 with its vision projector and does NOT
+# clear 90. The largest build that does is UD-Q3_K_M at 86.8. Correcting it is
+# deferred, not cancelled — docs/measured/model-sizes-measured.md
+# carries the whole ladder.
+slots:
+  # Optional local head / fruit worker. CUDA inference is capped at one job and a
+  # 12 GiB torch allocator budget; Spark latency and total memory are unmeasured.
+  # Preparation and the tested Mac precision difference: portrait_runtime/README.md.
+  mesh.portrait:
+    provider: localmesh
+    model: triposg
+    options:
+      task: to_mesh
+      base_url: http://127.0.0.1:7240
+      timeout_s: 180
+      # Planning allowance including CPU loading and masks, not a measurement.
+      size_gb: 20
+
+  # Request alias for the same resident studio endpoint, not another weight
+  # allocation. The geometry path never asks mesh.fast or the director to load.
+  # This prefill was tested on the Mac's llama.cpp; verify it again on the box.
+  vlm.sketch:
+    provider: llamacpp
+    model: step3-vl-10b
+    options:
+      base_url: http://127.0.0.1:7100
+      assistant_prefill: "<think>\n</think>\n"
+      temperature: 0.7
+
+  # The studio voice. Resident for the whole class: every child's feedback,
+  # every reply, every rung comes from here, so it is the one slot whose latency
+  # a child feels. Tuned later; until then the base model serves.
+  vlm.studio:
+    provider: llamacpp
+    model: step3-vl-10b
+    options:
+      base_url: http://127.0.0.1:7100
+      max_tokens: 6000
+      size_gb: 24
+
+  # The director. Loaded alone, with the studio unloaded, for scheduled work:
+  # judging the rubric, teacher data, story polish. Never while a child waits.
+  vlm.director:
+    provider: llamacpp
+    model: step-3.7-flash
+    options:
+      base_url: http://127.0.0.1:7110
+      max_tokens: 8000
+      size_gb: 109
+      director_mode: true
+
+  # The filter that runs before any skill. Small, resident, and never unloaded:
+  # a studio that cannot screen an image does not open.
+  #
+  # Changed: this slot named ShieldGemma 2 (8 GB, port 7120), which was never built and
+  # could never have served it: it classifies harm and cannot tell a photograph or a blank page from
+  # a drawing, nor read the writing on one (surveyed). The
+  # four verdicts are written by the resident studio model, a request alias like vlm.sketch and not
+  # a second copy of the weights. The dedicated safety model is safety.reader below, NVIDIA's.
+  safety.image:
+    provider: llamacpp
+    model: step3-vl-10b
+    options:
+      base_url: http://127.0.0.1:7100
+      max_tokens: 12000
+
+  # NVIDIA's own safety model, the second reader inside studio-safety: Nemotron 3.5 Content Safety,
+  # asked before the four verdicts at the door and on the way out. Not a chat model: it answers about
+  # one picture in three fixed lines, so it has its own provider and its own builder. What it may
+  # decide is the operator's rule in skills/studio-safety/scripts/nemotron.py. Served by the skill's
+  # nemotron_server.py. MEASURED on the hosted Spark: 12 s to load, 0.4 s a look, about
+  # 11 GB (docs/measured/nemotron-safety-on-spark.md). That is 3 GB more than the
+  # ShieldGemma 2 it replaces, and it uses the last of the class's room: 71 GB resident and the
+  # 19 GB rotating slot make exactly the 90 GB ceiling. The next resident model has to take
+  # something out.
+  safety.reader:
+    provider: safetyreader
+    model: Nemotron-3.5-Content-Safety
+    options:
+      base_url: http://127.0.0.1:7140
+      size_gb: 11
+
+  # The four media slots. None of these is built; their sizes are here so the
+  # watchdog's arithmetic can be checked against a full studio on day zero.
+  mesh.fast:
+    provider: llamacpp
+    model: instantmesh
+    options:
+      base_url: http://127.0.0.1:7200
+      size_gb: 6
+
+  # video.scene DELETED. Section 07 of the confirmed requirements
+  # lists 视频生成模型驱动的动画 under 明确不做的事, and 4.1 gives the reason: a
+  # video model repaints the child's work, so the strokes they actually made are
+  # gone, and it takes minutes where the moment needs two seconds. It survived in
+  # this file for a day after the decision because nobody reconciled the two
+  # documents. Restoring it means reopening 4.1, not editing a profile.
+
+  # Budgeted at 2 GB; the published file is 0.1 GB. Held at 1 for working room.
+  depth:
+    provider: llamacpp
+    model: depth-anything-v2-small
+    options:
+      base_url: http://127.0.0.1:7220
+      size_gb: 1
+
+  # Added later, and it should have been here from the start. Listening had
+  # run on the Mac before that on this same port and appeared in no box
+  # profile at all — on the one machine where hearing a child breaks no promise,
+  # because nothing leaves it. `studio/voice/transcribe.py` already points here.
+  #
+  # Whisper rather than the sponsor's own: StepAudio 2.5 ASR is better on paper
+  # and Step-Audio-2-mini scores a Chinese error rate of 3.08, but it costs 16.6
+  # GB where this costs 0.18 and is already word-perfect on both languages in
+  # under a second. Revisit only if a real classroom finds it wanting.
+  speech.in:
+    provider: llamacpp
+    model: whisper-small-q5_1
+    options:
+      base_url: http://127.0.0.1:7130
+      # 0.18 GB measured. Held at 1, the same working-room rule as depth above.
+      size_gb: 1
+
+  # Changed twice. First from Kokoro, which is 82M parameters and
+  # whose Mandarin is not the voice a child should hear; then from CosyVoice 2 to
+  # the sponsor's own, once Phase 0 moved the voice to StepAudio 2.5 and it made
+  # no sense for the box to run a different family from the one being tuned
+  # against. It still serves tts.export below, so the box loads ONE voice model
+  # for both slots — 8 GB where the plan budgeted 9.
+  #
+  # Step-Audio-EditX and not Step-Audio-TTS-3B, and the choice is only about the
+  # box: EditX does zero-shot cloning AND a "child" speaking style, which is what
+  # layer three needs when the child's own voice comes back in Phase 1. TTS-3B is
+  # 8.54 GB and does the speaking half only.
+  #
+  # OPEN, and it decides between them: EditX's weights repo sets NO licence field
+  # on HuggingFace. Its GitHub declares Apache-2.0 for the *code*. TTS-3B is
+  # Apache-2.0 on the weights themselves and is the safe fallback if the licence
+  # cannot be confirmed before the entry ships.
+  tts.studio:
+    provider: llamacpp
+    model: step-audio-editx
+    options:
+      base_url: http://127.0.0.1:7230
+      # 7.74 GB measured BF16, held at 8 for working room.
+      size_gb: 8
+
+  # rig.figure DELETED. The shipped painting-to-animation skill moves
+  # a drawn figure with NO model at all — the studio model writes choreography
+  # and the browser plays it — so this slot had nothing left to serve. Meta
+  # archived AnimatedDrawings and it needs Python 3.8, which
+  # would have made it the hardest thing on the box to build.
+
+  # Wan short-video preview. The hosted A14B slot is the fallback until the
+  # selected TI2V-5B runtime is measured on the actual Spark.
+  video.animation:
+    provider: replicate
+    model: wan-video/wan-2.2-i2v-a14b
+    options:
+      version: 2c62e0842338726c74ad99a3c469255ce3f4c1f66ee000c265451b87754ac0c9
+      task: to_video
+      fields: {image: image, instruction: prompt}
+      extra:
+        seed: 42
+        num_frames: 81
+        resolution: 480p
+        frames_per_second: 24
+        sample_steps: 30
+        go_fast: false
+      timeout_s: 300
+
+  # Remaining local rotating slot: unload before loading another occupant.
+  mesh.premium:
+    provider: llamacpp
+    model: step1x-3d
+    options:
+      base_url: http://127.0.0.1:7310
+      # Budgeted at 30; Step1X-3D measures 18.3 GB.
+      size_gb: 19
+      rotating_slot: true
+
+  # The engineer's review of the rebuilt hall (hall-carpenter review): NVIDIA's text-only Nemotron
+  # reads the hall's numbers and is shown no picture. A showpiece slot, never a classroom one: the
+  # three classroom deployments do not carry it because no class calls it. It shares the rotating
+  # slot, started for a review and stopped after it; served by NVIDIA's vLLM container on the
+  # OpenAI-compatible route, which is the route this provider speaks. From the Mac the same address is
+  # an SSH tunnel to the hosted node. 19.4 GB of weights (as ModelScope lists them) plus room to
+  # think; vLLM must be given a fixed share of memory, because by default it takes nine tenths of the
+  # machine and this one freezes when memory runs out. UNMEASURED on the GB10 until its first run.
+  llm.engineer:
+    provider: llamacpp
+    model: NVIDIA-Nemotron-3-Nano-30B-A3B-NVFP4
+    options:
+      base_url: http://127.0.0.1:7330
+      temperature: 0.2
+      max_tokens: 6000
+      size_gb: 21
+      rotating_slot: true
+      # Never loaded while a class runs, so it is kept out of the class arithmetic
+      # (studio/ops/dayzero.py) and only has to fit the box by itself.
+      outside_class: true
+
+  # The same model and the same server as tts.studio, in its cloning mode. It is
+  # no longer a rotating-slot occupant: it is already resident for Splat's own
+  # voice, which leaves the local rotating slot for mesh.premium alone.
+  tts.export:
+    provider: llamacpp
+    model: step-audio-editx
+    options:
+      base_url: http://127.0.0.1:7230
+      size_gb: 0

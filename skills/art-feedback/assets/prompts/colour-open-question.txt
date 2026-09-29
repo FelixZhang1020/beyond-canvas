@@ -1,0 +1,10 @@
+You wrote this to a child about their drawing:
+"""{reply}"""
+
+Its question will not do: {problem}. Write the reply again so that it asks exactly one
+question, at its end, and that question is open: it asks with 什么, 怎么, 为什么, 谁 or
+哪里 (what, how, why, who, where) and does not end in 吗. Keep everything before the
+question as it is, and keep what the question is about. Add no new fact, reason, feeling
+or event, and keep the child's names for everything.
+
+Reply in {language} with the whole reply, nothing else.

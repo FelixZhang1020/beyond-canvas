@@ -1,0 +1,38 @@
+{
+  "raise": {
+    "request": {"zh": "把大殿从零盖到屋脊", "en": "Build the hall from the platform to the ridge"},
+    "think": {"zh": "大殿要按真实的承托顺序盖：先清点构件，再算谁托着谁，排出阶段，最后出片。",
+              "en": "The hall must be built in its true carrying order: inventory, bearing, the stages, then the film."},
+    "final": {"zh": "大殿从柱子到屋脊一幕一幕立起来；成片是 raise.mp4。",
+              "en": "The hall goes up scene by scene from the columns to the ridge; the film is raise.mp4."}
+  },
+  "tour": {
+    "request": {"zh": "带我里里外外看一遍这座大殿", "en": "Take me on a tour of the hall, outside and in"},
+    "think": {"zh": "游一圈得先认得地标：清点构件，算承托，再走四段路。",
+              "en": "A tour needs the anatomy for its landmarks; inventory, bearing, then the four moves."},
+    "final": {"zh": "绕外一圈，从正门进去，抬头看天花，再掀了屋顶俯瞰骨架；成片是 tour.mp4。",
+              "en": "Around the outside, in through the front, up under the ceiling, and over the frame with the roof off; the film is tour.mp4."}
+  },
+  "explode": {
+    "request": {"zh": "把正面左起第二根柱头的斗拱拆开，看看榫卯怎么咬合",
+                "en": "Take apart the bracket set on the second column from the left along the front and show how its joints lock"},
+    "think": {"zh": "看榫卯：清点构件，算承托，在复制的大殿上切出三个真榫卯，再一个一个近看拉开。",
+              "en": "Show the joints: inventory, bearing, cut three real joints on a copy of the hall, then open each one close up."},
+    "final": {"zh": "三个真榫卯一个一个拉开又合上：柱头的馒头榫，栌斗里十字刻半相交的华栱和泥道栱，阑额的燕尾榫；成片是 explode.mp4。",
+              "en": "Three real joints open and close one at a time: the tenon on the column head, the two arms half-lapped across each other in the big block, the tie beam's dovetail; the film is explode.mp4."}
+  },
+  "load": {
+    "request": {"zh": "重量都去了哪里，把它画出来", "en": "Show me where the weight goes"},
+    "think": {"zh": "重量去了哪里：清点构件，算承托，把重量沿承托关系往下传，再画出流向。",
+              "en": "Where the weight goes: inventory, bearing, the weights down the carrying graph, then the flow."},
+    "final": {"zh": "重量从屋顶经斗拱流进柱子；成片是 flow.mp4。",
+              "en": "The weight flows from the roof down the brackets into the columns; the film is flow.mp4."}
+  },
+  "settle": {
+    "request": {"zh": "抽掉正面左起第二根柱头的馒头榫，看大殿一环扣一环塌下来", "en": "Take out the tenon on the head of the second column from the left along the front and watch the hall come down link by link"},
+    "think": {"zh": "抽掉一个榫卯：清点构件，算承托，找出谁压在谁上面、谁和谁榫在一起，再一环一环看它们塌下来。",
+              "en": "Take out one joint: inventory, bearing, find what rests on what and what is joined to what, then watch them give way link by link."},
+    "final": {"zh": "柱头的馒头榫一抽掉，栌斗先落，压在它上面、和它榫在一起的构件一环接一环跟着塌下来，最后整个屋顶砸到柱子上；柱子、墙和台基还站着。成片是 collapse.mp4。",
+              "en": "With the column-head tenon gone the big block drops first, then what rested on it and what was joined into it gives way link after link, until the whole roof falls onto the columns; the columns, walls and platform still stand. The film is collapse.mp4."}
+  }
+}

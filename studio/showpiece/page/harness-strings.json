@@ -1,0 +1,21 @@
+{
+  "zh": {
+    "title": "Harness",
+    "sub": "我们做的每一个技能，怎么走过同一套 harness；部件用业界通用的叫法",
+    "hint": "按一个技能，看它的请求怎么走过 harness；再按一次从头来",
+    "play": "播放",
+    "pause": "暂停",
+    "now": "现在",
+    "step": "第 {n} 步 / {m}",
+    "transcript": "Transcript",
+    "console": "harness console",
+    "idle": "按上面的一个技能开始",
+    "card.common": "通用叫法",
+    "card.here": "我们这里是",
+    "card.gap": "差在哪",
+    "card.code": "在代码里",
+    "card.now": "刚才",
+    "card.hint": "点图上任何一个部件换卡；再点一次松开",
+    "honest": "图上没有沙箱、没有网络白名单，因为系统里没有。每个部件都对应一个真实文件，卡片上写着它与通用做法的差别；每条旅程是按代码和实测数字写好的演示，不是现场运行。"
+  }
+}

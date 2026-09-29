@@ -1,0 +1,48 @@
+/* Direction A: light paper glass, one quiet layer over the drawing. */
+.glass{position:relative;border-radius:var(--r,var(--r-panel));color:var(--ink);
+  background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(255,253,248,.82));
+  -webkit-backdrop-filter:blur(var(--gb));backdrop-filter:blur(var(--gb));
+  border:1px solid rgba(255,255,255,.96);
+  box-shadow:0 14px 40px -28px #78543e55,inset 0 1px 0 #fff}
+.glass>*{position:relative;z-index:1}
+.scrim{border-radius:16px;padding:12px;background:#fff9f0}
+.icon{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.btn{min-height:48px;padding:11px 18px;border:1px solid var(--line);border-radius:16px;
+  background:#fffdf8;color:var(--ink);font-weight:600;cursor:pointer;
+  transition:transform .5s var(--spring),background .2s;display:inline-flex;align-items:center;
+  justify-content:center;gap:9px;line-height:1.4;text-align:center}
+.btn:hover{background:#f8f1e7}.btn:active{transform:scale(.96)}.btn:disabled{opacity:.48;cursor:default}
+.btn.primary,.btn.magic{border-color:transparent;color:#fff;min-height:56px;padding:13px 22px;font-size:16px;font-weight:600}
+.btn.primary{background:var(--action);box-shadow:0 7px 20px -14px #9b4429aa}.btn.primary:hover{background:#a84e3b}
+.btn.magic{background:var(--magic);box-shadow:0 7px 20px -14px #68517d88}.btn.magic:hover{background:#69587f}
+.btn.ink{background:var(--ink);color:#fff;border-color:transparent}
+.btn.quiet{background:transparent;border-color:transparent;color:var(--ink-2)}.btn.quiet:hover{background:#f5eddf}
+.btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none;order:-1}
+.tool{border:0;background:transparent;display:flex;flex-direction:column;gap:5px;align-items:center;
+  justify-content:center;min-width:48px;min-height:64px;padding:8px 5px;border-radius:17px;
+  cursor:pointer;color:var(--ink-2);transition:transform .5s var(--spring),background .2s}
+.tool:hover{background:#fff6e9}.tool:active{transform:scale(.94)}.tool.on{background:#f8eee3;color:#945a41}
+.tool svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tool span{font-size:11px;white-space:nowrap}
+.seg,.review-tabs{position:relative;display:flex;gap:2px;padding:5px;border-radius:var(--r-bar);background:var(--nav-surface);--l:5px;--w:0px}
+.seg .pill{position:absolute;top:5px;bottom:5px;left:var(--l);width:var(--w);border-radius:999px;
+  background:var(--selected-surface);box-shadow:var(--selected-shadow);transition:left .55s var(--spring),width .55s var(--spring);z-index:0}
+.seg button,.review-tabs button{position:relative;z-index:1;font-weight:500;font-size:13px;white-space:nowrap;color:var(--ink-2);
+  background:none;border:0;padding:12px 18px;border-radius:999px;cursor:pointer;min-height:44px}
+.seg button.on,.review-tabs button[aria-pressed=true]{color:var(--ink);font-weight:650}
+/* No storybook in a sketch class (operator). */
+#app[data-entrance=sketch] #mode [data-mode=book]{display:none}
+.review-tabs button[aria-pressed=true]{background:var(--selected-surface);box-shadow:var(--selected-shadow)}
+.review-tabs button:not(:disabled):hover{color:var(--ink)}
+.review-tabs button:disabled{opacity:.48;cursor:default}
+.switch{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-weight:600}
+.switch input{appearance:none;width:52px;height:30px;border-radius:999px;background:#ddd2c4;position:relative;
+  margin:0;cursor:pointer;transition:background .2s}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 6px #0002;transition:left .5s var(--spring)}
+.switch input:checked{background:var(--action)}.switch input:checked::after{left:25px}
+.chip{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-size:12px;color:var(--ink-2);padding:8px 12px;border-radius:999px;background:var(--surface-soft)}
+.lamp{width:6px;height:6px;border-radius:50%;background:#a7927c;flex:none}
+.lamp.wait{background:var(--warning);animation:breathe 1.2s ease-in-out infinite}.lamp.bad{background:var(--critical)}
+@keyframes breathe{50%{opacity:.4}}
+@media(pointer:coarse){.btn.primary,.btn.magic,#btn-answered,#btn-listen,#cam-shoot{min-height:76px}.tool{min-height:76px}.seg button,.review-tabs button{min-height:48px}}

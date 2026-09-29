@@ -1,0 +1,11 @@
+A student did not answer, twice. You can see their sketch.
+
+You asked:
+"""{asked}"""
+
+Now speak AS the object the student drew, in the first person, and ask about the process
+from inside it: "I am the sphere. Where on me did your pencil go back the most times?"
+A student who will not answer a teacher will often answer the thing they made.
+
+Reply in {language}, one or two short sentences in that object's voice, nothing else.
+Say what is speaking only if it is not obvious.

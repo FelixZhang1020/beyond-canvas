@@ -1,0 +1,18 @@
+services:
+  trellis2:
+    build:
+      context: .
+      dockerfile: Dockerfile.dgx-spark
+      # Library revisions are no longer build arguments: vendor/ already holds
+      # them, fetched by deploy/spark/vendor_sources.py from versions.env.
+      args:
+        BASE_IMAGE: ${DGX_SPARK_BASE_IMAGE}
+        FLASH_ATTN_VERSION: ${DGX_SPARK_FLASH_ATTN_VERSION}
+        TORCH_CUDA_ARCH_LIST: ${DGX_SPARK_CUDA_ARCH}
+        CMAKE_CUDA_ARCHITECTURES: ${DGX_SPARK_CMAKE_CUDA_ARCH}
+    image: beyond-canvas/trellis2:dgx-spark-${TRELLIS2_SOURCE_REVISION}
+    environment:
+      PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
+    ports:
+      - "127.0.0.1:7240:7240"
+    restart: unless-stopped

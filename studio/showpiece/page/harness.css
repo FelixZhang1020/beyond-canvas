@@ -1,0 +1,81 @@
+/* The harness view: the wiring board drawn from the roster, the request moving on it, a card for
+   any part, a button per skill, and a console of the journey's log on the rail. Tokens and the
+   console's look come from style.css; only what this page adds is here. The stage rules are
+   written as .stage.hv-stage so they outrank the demo's wide-screen three-column layout. */
+.stage.hv-stage { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+.hv-stage .rail { grid-column: 1 / -1; order: -1; }
+@media (min-width: 1100px) {
+  .stage.hv-stage { grid-template-columns: 300px minmax(0, 1fr); }
+  .hv-stage .rail { grid-column: auto; order: 0; grid-template-columns: none; grid-template-rows: minmax(0, 1fr); min-height: 0; }
+}
+.head .hv-links { display: flex; gap: 8px; align-items: center; }
+.hv-buttons { display: grid; gap: 6px; }
+.hv-buttons .hv-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.hv-buttons button { min-height: 44px; padding: 6px 14px; border-radius: var(--r-card); background: var(--tile); border: 1.5px solid var(--tangerine); color: var(--action); font-weight: 600; box-shadow: var(--tile-shadow); display: grid; gap: 0; text-align: left; }
+.hv-buttons button small { font-family: var(--mono); font-size: 10.5px; font-weight: 400; color: var(--ink-3); }
+.hv-buttons button:hover { background: #fff3e8; }
+.hv-buttons button.on { background: var(--action); border-color: var(--action); color: #fff; }
+.hv-buttons button.on small { color: #ffe4da; }
+.hv-buttons .hint { margin: 0; font-size: 13px; color: var(--ink-3); }
+.panel.hv-panel { display: grid; gap: 12px; min-height: 0; overflow: auto; }
+.hv-boardwrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: start; }
+@media (min-width: 1400px) { .hv-boardwrap { grid-template-columns: minmax(0, 1fr) 320px; } }
+.hv-boardcol { display: grid; gap: 10px; min-width: 0; }
+.hv-board { width: 100%; height: auto; display: block; }
+/* On a one-screen stage (the demo's own breakpoint) the board grows to fill the height it is given. */
+/* The fit-to-screen layout used to ask for 760px of viewport height. A maximised
+   Chrome window on a 1920x1080 display gives 720 to 800 depending on whether the
+   bookmarks bar is showing, so the page flipped between fitting the screen and a
+   1383px scrolling column on the same machine (measured). 640 is below
+   anything a desktop window reports, and the rows inside already flex. */
+@media (min-width: 1100px) and (min-height: 640px) {
+  .wrap.hv-wrap { grid-template-rows: auto auto minmax(0, 1fr); }   /* header, buttons, stage: the demo declares two rows, and here the stage must be the one that flexes */
+  .panel.hv-panel { grid-template-rows: minmax(0, 1fr) auto; }
+  .hv-boardwrap { min-height: 0; grid-template-rows: minmax(0, 1fr); align-items: stretch; }
+  .hv-boardwrap .hv-card { align-self: start; }
+  .hv-boardcol { grid-template-rows: minmax(0, 1fr) auto auto; min-height: 0; }
+  .hv-board { height: 100%; }
+}
+.hv-board text { font-family: var(--round); fill: var(--ink); font-size: 6.2px; pointer-events: none; }
+.hv-board text.s, .hv-board tspan.s { font-size: 4.6px; fill: var(--ink-3); }
+.hv-board text.m { font-family: var(--mono); font-size: 4.2px; fill: var(--ink-3); }
+.hv-board .station { cursor: pointer; outline: none; }
+.hv-board .st { fill: var(--tile); stroke: var(--line); stroke-width: .8; transition: fill .4s, stroke .4s; }
+.hv-board .st.lit { fill: #FFF1DE; stroke: var(--tangerine); stroke-width: 1.2; }
+.hv-board .st.pinned { stroke: var(--action); stroke-width: 1.4; }
+.hv-board .station:focus-visible .st { stroke: var(--magic); stroke-width: 1.4; }
+.hv-board .wire { fill: none; stroke: var(--line); stroke-width: 1.2; transition: stroke .4s; }
+.hv-board .wire.back { stroke-dasharray: 2 2; }
+.hv-board .wire.hot { stroke: var(--action); }
+.hv-board .tile { fill: var(--surface-soft); transition: fill .4s; }
+.hv-board .tile.lit { fill: var(--tangerine); }
+.hv-board .dot { fill: var(--action); }
+.hv-board .halo { fill: var(--coral); opacity: .25; }
+.hv-board .verdict { font-size: 5px; font-weight: 700; }
+.hv-board .verdict.pass { fill: var(--good); }
+.hv-board .verdict.fail { fill: var(--critical); }
+.hv-caption { margin: 0; background: var(--surface-soft); border-radius: var(--r-card); padding: 10px 14px; font-size: 14px; line-height: 1.55; color: var(--ink); min-height: 64px; }
+.hv-caption b { color: var(--action); margin-right: 6px; }
+.hv-ledger { font-family: var(--mono); font-size: 12px; background: var(--tile); color: var(--ink-2); border: 1px solid var(--line); border-radius: var(--r-card); padding: 10px 14px; min-height: 60px; max-height: 150px; overflow: auto; }
+.hv-ledger p { margin: 0 0 3px; }
+.hv-ledger p:last-child { color: var(--action); font-weight: 600; }
+.hv-card { border: 1.5px solid var(--tangerine); border-radius: var(--r-card); background: var(--tile); padding: 14px 16px; display: grid; gap: 5px; align-content: start; box-shadow: var(--tile-shadow); }
+.hv-card.pinned { border-color: var(--action); }
+.hv-card h3 { font-size: 17px; }
+.hv-card p { margin: 0; }
+.hv-card .idea { font-size: 13.5px; color: var(--ink); line-height: 1.5; }
+.hv-card .idea a { color: var(--action); font-size: 12px; }
+.hv-card .gap { font-size: 13px; color: var(--critical); line-height: 1.5; }
+.hv-card .k { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
+.hv-card code { font-family: var(--mono); font-size: 12px; color: var(--ink-3); display: block; overflow-wrap: anywhere; }
+.hv-card .now { border-top: 1px solid var(--line); padding-top: 6px; margin-top: 4px; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+.hv-card .hint { font-size: 12px; color: var(--ink-3); }
+.hv-honest { margin: 0; font-size: 12.5px; color: var(--ink-3); }
+.hv-honest a { color: var(--ink-2); }
+/* The rail's console: the parts checklist above the log, in the console's own mono. */
+.hv-console .hv-parts p { margin: 0; padding: 1px 0; color: #8E8175; }
+.hv-console .hv-parts p.done { color: #D9CBBD; }
+.hv-console .hv-parts p.lit { color: var(--tangerine); }
+.hv-console .hv-parts p.lit::before { content: "\25B6 "; }
+.hv-console .hv-parts p.done::before { content: "\2713 "; }
+.hv-console .hv-parts p::before { content: "\00B7 "; }

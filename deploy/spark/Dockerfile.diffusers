@@ -1,0 +1,19 @@
+# Picture and video models on the Spark: FLUX.2 Klein 4B and Wan 2.2 I2V A14B.
+#
+# NVIDIA's own PyTorch container, because it is built for the GB10 and because
+# nvcr.io is reachable from the node while Docker Hub is not. Library pins are
+# the ones FLUX.2 Klein already runs under on the 4090 (deploy/archive/pixal3d/Dockerfile);
+# Wan 2.2's two-denoiser pipeline has been in diffusers since before 0.37.
+# Packages come from the Tsinghua PyPI mirror: pypi.org is too slow from the node.
+#
+#   docker build -t beyond-canvas/spark-diffusers:1 -f deploy/spark/Dockerfile.diffusers deploy/spark
+ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:26.08-py3
+FROM ${BASE_IMAGE}
+
+RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple \
+      diffusers==0.37.1 transformers==4.57.3 accelerate==1.13.0 \
+      sentencepiece ftfy imageio imageio-ffmpeg
+
+RUN python -c "import torch, diffusers; \
+from diffusers import Flux2KleinPipeline, WanImageToVideoPipeline; \
+print(torch.__version__, diffusers.__version__, torch.cuda.get_arch_list())"

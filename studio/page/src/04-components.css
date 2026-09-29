@@ -1,0 +1,327 @@
+/* Companion */
+.buddy-head{display:grid;grid-template-columns:56px minmax(0,1fr);gap:12px;align-items:center}
+.buddy-name{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.buddy-name b{font-size:14px;font-weight:600}.buddy-name small{font-size:11px;color:var(--ink-3)}
+#btn-say{grid-column:1 / -1;width:100%;min-height:44px;padding:10px 16px;border-radius:16px;white-space:normal}
+.buddy:has(#history-messages .course-message) .bubble{display:none}
+  .splat{position:relative;width:56px;height:56px;flex:0 0 56px;
+  background:radial-gradient(circle at 30% 25%,#ffc4a3,#e98d72 70%);
+  border-radius:46% 54% 52% 48%/54% 46% 54% 46%;transform:rotate(-7deg);
+  box-shadow:inset -3px -4px 6px #b3573210,0 6px 13px -8px #c7816866}
+.splat .eye{position:absolute;top:20px;width:14px;height:16px;border-radius:50%;background:#fff;
+  transform:rotate(7deg)}
+.splat .eye.l{left:13px}.splat .eye.r{left:31px}
+.splat .pupil{position:absolute;left:4px;top:5px;width:7px;height:8px;border-radius:50%;background:var(--ink);
+  transition:transform .12s;}
+.splat.thinking{animation:breathe 1.8s ease-in-out infinite}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes wobble{
+  0%,100%{border-radius:46% 54% 52% 48%/54% 46% 54% 46%}50%{border-radius:54% 46% 48% 52%/46% 54% 46% 54%;
+  transform:translateY(-2px)};}
+  .bubble{font-size:15px;line-height:1.85;font-weight:400;color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
+.bubble.typing::after{content:"▌";animation:blink-cursor 1s steps(2) infinite}
+@keyframes blink-cursor{50%{opacity:0}}
+.ask{padding:0}
+.mode-intro{display:none;font-size:17px;line-height:1.9;color:var(--ink-2);margin:0}
+.studio[data-guide="true"] .mode-intro{display:block}
+.studio[data-guide="true"] #bubble,.studio[data-guide="true"] #btn-say,
+.studio[data-guide="true"] #btn-open,.studio[data-guide="true"] .process{display:none}
+#app:not([data-mode="feedback"]) #ask{display:none}
+.answer{display:flex;flex-direction:column;gap:5px;margin-top:22px}
+.answer .btn{flex:1 1 auto;min-height:48px;font-size:14px}
+.answer .btn.primary{min-height:56px}.answer .btn.quiet{font-size:12px}
+/* The field takes a whole line of its own: a teacher types a sentence into it,
+   and beside a button it collapses to a few characters wide. */
+.heard{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.heard label{font-size:12px;color:var(--ink-2)}
+.heard textarea{width:100%;min-width:0;min-height:100px;border:1px solid var(--line);border-radius:16px;padding:13px;
+  font:inherit;font-size:16px;line-height:1.75;color:var(--ink);background:#fffdf8;resize:vertical}
+.heard-row{display:flex;flex-wrap:wrap;gap:8px}
+.heard .btn{flex:1 1 40%;min-height:48px;font-size:12px;padding:10px}
+.heard .btn.primary{flex-basis:100%;min-height:56px;font-size:14px}
+.heard #btn-heard-back{flex-basis:100%;font-size:12px;min-height:44px}
+.buddy:has(.heard:not([hidden])) #buddy-actions,
+.buddy:has(.heard:not([hidden])) .process{display:none}
+/* The studio opens the conversation; the child answers what it asked. Both rules
+   below key on one fact: 30-main.js leaves #btn-primary unhidden exactly while
+   this drawing has no feedback yet. They live here because that file is over the
+   500-line limit and cannot be written to at all.
+   The rule above used to hide the button that STARTS the conversation
+   the moment the composer appeared, so on this tab a teacher could only type.
+   One did: their question for the child went into the course as the child's own
+   words, and the studio answered a question with a question (course 3f2328b0ef1e). */
+.buddy:has(.heard:not([hidden])):has(#btn-primary:not([hidden])) #buddy-actions{display:flex}
+.buddy:has(#btn-primary:not([hidden])) #heard [type="submit"]{opacity:.45;pointer-events:none}
+.buddy:has(#btn-primary:not([hidden])) .heard-gate{display:block}
+.heard-gate{display:none;font-size:12px;color:var(--ink-2);margin:0}
+.heard .btn.on{background:rgba(255,111,97,.9);color:#fff}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions .btn{flex:1 1 auto}
+#buddy-actions{gap:8px}#buddy-actions .btn{font-size:12px;min-height:44px;padding:9px 12px}
+#buddy-actions:has(>.btn:not([hidden])){border-top:1px solid var(--line);padding-top:14px}
+.process{border-top:1px solid var(--line);padding-top:12px;font-size:12px;color:var(--ink-3)}
+.process:has(#steps[hidden]){display:none}.process summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:8px;list-style:none}
+.process summary::-webkit-details-marker{display:none}.process summary::after{content:"+";margin-left:auto;font-size:18px}
+.process[open] summary::after{content:"−"}.process .steps{padding:4px 0 0;background:transparent}
+.empty .actions{justify-content:center}
+.steps{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.steps .h{font-weight:700;color:var(--ink-2)}
+.step{display:flex;align-items:center;gap:8px;color:var(--ink-2)}
+.step .name{flex:1;min-width:0}
+.step .meta{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .step i{width:18px;height:18px;border-radius:50%;background:rgba(38,34,74,.15);flex:0 0 18px;display:grid;
+  place-items:center;
+  font-size:11px;font-weight:700;color:#fff;font-style:normal}
+.step.done i{background:var(--leaf)}.step.done i::before{content:"✓"}
+.step.running i{background:var(--warning);animation:breathe 1.2s ease-in-out infinite}
+.step.failed i{background:var(--critical)}.step.failed i::before{content:"!"}
+.step.stopped i{background:#a7927c}.step.stopped i::before{content:"−"}
+/* Dock */
+.thumbs{display:flex;gap:8px;align-items:center;flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;padding:3px}
+.thumbs::-webkit-scrollbar{display:none}
+.dock>.btn{flex:0 0 auto}
+.dock>.btn.dock-remove{flex:0 0 auto;min-width:0;min-height:48px;padding:8px 14px;font-size:12px;gap:6px;color:var(--ink-2)}
+.dock>.btn.dock-remove:hover{color:var(--critical)}
+#lesson-delete{flex:0 1 auto;color:var(--critical)}
+.thumbs button{flex:0 0 48px;width:48px;height:50px;border-radius:12px;border:3px solid #fffdf8;padding:0;cursor:pointer;
+  background-size:cover;background-position:center;box-shadow:0 2px 6px -3px #71503b44;
+  transition:transform .5s var(--spring);}
+.thumbs button:hover{transform:scale(1.04)}
+.thumbs button.on{outline:2px solid #bd9d79;outline-offset:1px}
+.thumbs .count{font-size:13px;font-weight:600;color:var(--ink-2);padding:0 4px;white-space:nowrap}
+:root:lang(zh) .bubble{font-size:15px;line-height:1.85}
+/* Empty state and sheets */
+.empty h2,.sheet h2{margin:0;font-size:28px;line-height:1.5;font-weight:600}
+.empty p,.sheet p{margin:0;color:var(--ink-2);text-wrap:balance}
+.empty-art{width:100px;height:112px;display:grid;place-items:center;border:1px solid #eadcc8;border-radius:10px;background:#fffaf0;
+  box-shadow:6px 8px 0 -2px #f3e9db,0 15px 25px -18px #96775977;transform:rotate(-7deg);margin-bottom:15px;color:#d49375}
+.empty-art svg{width:46px;height:46px}.empty .actions{gap:10px}.empty .actions .quiet{flex-basis:100%;font-size:13px}
+.sheet-form{display:flex;flex-direction:column;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:600;font-size:14px}
+.field textarea,.field input[type=text]{font:inherit;font-size:16px;color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:12px 14px;
+  background:#fff;resize:vertical;min-height:48px}
+.field .hint{font-size:12.5px;color:var(--ink-3)}
+/* Viewer */
+.viewer-head{display:flex;align-items:center;gap:12px}
+.viewer-head h2{margin:0;font-size:20px;flex:1}
+.board{width:100%;height:min(70vh,560px);border:0;border-radius:20px;background:#fffdf8;display:block}
+.media{border-radius:20px;overflow:hidden;background:#f7f1e7;aspect-ratio:16/9;display:grid;place-items:center}
+.media canvas,.media video,.media img{width:100%;height:100%;object-fit:contain;display:block}
+.media.square{aspect-ratio:1;max-width:520px;margin:0 auto}
+/* A clip fits the window whole, its controls included: 16:9 of the viewer's width, but never
+   taller than the window leaves under the viewer's heading. On a wide, short window it ran past
+   the bottom and hid the end of the picture and the play bar (operator). */
+.media.clip{flex:none;aspect-ratio:auto;height:min(calc((min(1080px,100vw - 2*var(--overlay-inset,32px)) - 48px) * 9 / 16),calc(100dvh - 2*var(--overlay-inset,32px) - 150px))}
+/* The grid's row grew to the video, so a clip taller than wide (Wan 3.0's 552 x 740) was laid out 1,474 px
+   high in a 580 px window and cut off: measured on the class page. Fixed tracks let it fit. */
+.media.clip{grid-template-rows:minmax(0,1fr);grid-template-columns:minmax(0,1fr)}.media.clip video{min-height:0;min-width:0}
+.media.keyframe-view{display:block;aspect-ratio:auto;background:var(--paper);padding:16px;color:var(--ink)}
+.keyframe-images{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+.keyframe-images figure{margin:0;min-width:0}.keyframe-images figcaption{font-weight:600;margin:0 0 10px}
+.media .keyframe-images img{height:auto;width:100%;border-radius:12px}
+.keyframe-note{font-size:15px;line-height:1.6;margin:16px 0 0;color:var(--ink-secondary,#6D6057)}
+@media(max-width:600px){.keyframe-images{grid-template-columns:minmax(0,1fr)}}
+.viewer:has(.relight){width:min(1180px,100%)}
+.media.relight{display:block;flex-shrink:0;aspect-ratio:auto;background:var(--paper,#FFFDF8);padding:12px;color:var(--ink,#26224A)}
+.relight-note,.relight-hint{font-size:14px;line-height:1.5;margin:0 0 12px}
+.relight-views{display:grid;grid-template-columns:1fr 1.5fr;gap:12px;align-items:center}
+.relight-original{margin:0;min-width:0}
+.relight-original figcaption{font-size:13px;margin-bottom:6px}
+.media .relight-original img{width:100%;height:auto;border-radius:12px}
+.relight-stage{min-width:0;position:relative}
+.media .relight-stage canvas{width:100%;height:auto;display:block;touch-action:none;border-radius:14px;cursor:grab}
+.media.relight-mesh .relight-stage canvas,.media.relight-mesh .relight-original img{height:min(50dvh,480px);object-fit:contain}
+.relight-stage canvas:focus-visible{outline:3px solid #4FB3FF;outline-offset:2px}
+.relight-stage-lamp{position:absolute;z-index:4;transform:translate(-50%,-50%);width:56px;height:56px;min-height:56px;border:0;border-radius:50%;background:transparent;cursor:grab;touch-action:none;padding:0}
+.relight-stage-lamp:hover,.relight-stage-lamp:active{background:transparent;border:0}.relight-stage-lamp:active{cursor:grabbing}
+.relight-stage-lamp::before,.relight-stage-lamp::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none}
+.relight-stage-lamp::before{width:70px;height:70px;background:radial-gradient(circle,#fff4d377,#fff3d033 30%,#fff3d000 68%)}
+.relight-stage-lamp::after{width:16px;height:16px;background:#fffef8;box-shadow:0 0 7px 3px #fff7dfaa,0 0 19px 5px #fff1c75e}
+.relight-stage-lamp span{position:absolute;left:50%;bottom:calc(50% + 14px);transform:translateX(-50%);white-space:nowrap;font-size:11px;color:#69645c;pointer-events:none}
+.relight-stage-lamp.is-dragging span{opacity:0}
+
+.relight-hint{margin:12px 0}
+.relight-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.relight-controls .btn{min-height:48px;font-size:14px;border:1px solid rgba(38,34,74,.16)}
+.relight-controls .btn[aria-pressed="true"]{background:#E8F3FD}
+.relight-slider{display:grid;grid-template-columns:1fr auto;gap:2px 8px;flex:1 1 140px;font-size:13px;min-width:130px}
+.relight-slider input{grid-column:1/-1;width:100%;min-height:44px;accent-color:#5A557A}
+.relight-icon{font-size:24px;line-height:1}
+.relight-error{padding:24px;color:#26224A;background:#FFFDF8}
+.relight-controls .relight-compare{display:none}
+.relight-map-label{font-size:13px;display:grid;gap:8px}
+.relight-map{width:130px;height:100px;position:relative;touch-action:none;cursor:crosshair;background:#F5EEE1;border:1px solid #CFC5B1;border-radius:12px}
+.relight-map-object{position:absolute;background:#DED4C1;border:1px solid #807866;pointer-events:none}
+.relight-map-lamp{position:absolute;font-size:25px;line-height:1;transform:translate(-50%,-50%);pointer-events:none;color:#26224A;background:#FFF8D5;border-radius:50%}
+@media(max-width:760px){.relight-views{grid-template-columns:1fr}.relight-original{display:none}.relight-original.is-visible{display:block}.relight-controls{gap:8px}}
+@media(max-width:760px){.relight-controls .relight-compare{display:flex}}
+@media(pointer:coarse){.relight-controls .btn{min-height:76px}.relight-slider input{min-height:56px}}
+/* Book */
+.book{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;align-items:stretch;
+  background:#fffef9;border-radius:12px;box-shadow:0 16px 40px -25px #74593855;margin:16px 0 26px;min-height:300px}
+  .book .page-art{border-radius:12px 0 0 12px;background:#fffdf8;padding:25px;
+  aspect-ratio:4/3;
+  background-size:contain;background-repeat:no-repeat;background-position:center;background-origin:content-box}
+.book .page-text{font-family:"Songti SC","STSong",Georgia,serif;font-size:23px;line-height:1.9;font-weight:400;padding:36px;display:flex;align-items:center;
+  box-shadow:inset 14px 0 22px -21px #91725277;overflow-wrap:anywhere;white-space:pre-wrap}
+.book:has(.page-art[hidden]){grid-template-columns:minmax(0,1fr)}
+.book-stage{position:relative;perspective:1800px;isolation:isolate;overflow:hidden;border-radius:18px}
+.book-stage>.book{margin-bottom:0;padding-bottom:38px}
+.page-corner{position:absolute;bottom:0;z-index:5;width:56px;height:56px;border:0;cursor:grab;touch-action:none;color:var(--ink-2);font-size:22px;background:linear-gradient(135deg,transparent 48%,#e9ddcb 49%,#fffdf8 70%);border-radius:0 0 14px 0}
+.page-corner.next{right:0}.page-corner.previous{left:0;transform:scaleX(-1)}
+.page-corner.previous span{display:block;transform:scaleX(-1)}
+.page-corner:active{cursor:grabbing}.page-corner:disabled{visibility:hidden}
+.book-stage.turning>#book-sheet{visibility:hidden}
+.flip-preview,.flip-paper{position:absolute!important;inset:0;margin:0!important;pointer-events:none}
+.flip-preview{z-index:1;overflow:hidden;background:var(--paper)}
+.flip-paper{z-index:2;transform-style:preserve-3d;will-change:transform;box-shadow:12px 0 28px #59443033}
+.flip-paper>.flip-face,.flip-back{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;margin:0;background:var(--paper)}
+.flip-back{transform:rotateY(180deg);background:linear-gradient(90deg,#f0e5d5,#fffdf8 20%,#f8f1e7);box-shadow:inset 12px 0 22px #78604822}
+.book-nav{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.book-nav .n{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:760px){.book{grid-template-columns:minmax(0,1fr)}
+  .sticker{right:auto;left:0;margin:0 auto;width:max-content;top:150px}}
+/* Ledger (grown-ups' view) */
+.ledger h1{font-size:28px;margin:0 0 6px}
+.ledger .lead{color:var(--ink-2);margin:0 0 18px;max-width:70ch}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:18px}
+.tile{background:#fff;border:1px solid var(--line);border-radius:var(--r-tile);padding:22px;display:flex;
+  flex-direction:column;gap:6px;}
+.tile .n{font-size:36px;font-weight:700;line-height:1}
+.tile .l{font-size:13px;color:var(--ink-3);font-weight:600}
+  .ledger-scroll{overflow-x:auto;border-radius:var(--r-tile);background:rgba(255,255,255,.78)}
+.ledger-grid{display:grid;grid-template-columns:80px minmax(170px,1fr) 70px 70px 78px 60px 110px 120px;gap:0 12px;font-size:13.5px;
+  padding:8px 16px;min-width:760px}
+.ledger-row{display:contents}
+  .ledger-row>span{padding:9px 0;border-bottom:1px solid rgba(38,34,74,.1);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;
+  font-variant-numeric:tabular-nums}
+.ledger-row.head>span{font-size:12px;color:var(--ink-3);font-weight:600}
+.ledger-row .g-pass{color:var(--good);font-weight:700}.ledger-row .g-fail{color:var(--critical);font-weight:700}
+.ledger .top{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.ledger .top .btn{background:rgba(255,255,255,.8)}
+/* Toast and misc */
+  .toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:40;padding:13px 22px;border-radius:18px;
+  width:max-content;max-width:calc(100% - 40px);background:var(--ink);color:#fffdf8;box-shadow:0 8px 24px #40383222;
+  font-weight:600;
+  animation:pop .6s var(--spring)}
+@keyframes pop{from{transform:translateX(-50%) scale(.6);opacity:0}}
+  .sticker{position:absolute;right:400px;top:120px;z-index:7;background:var(--sunflower);color:var(--ink);
+  font-size:24px;font-weight:800;
+  padding:12px 24px;border-radius:999px;box-shadow:0 14px 30px -12px rgba(0,0,0,.35);transform:rotate(-6deg) scale(0);
+  opacity:0;}
+.sticker.pop{animation:sticker .7s var(--spring) forwards}
+@keyframes sticker{to{transform:rotate(-6deg) scale(1);opacity:1}}
+video::-webkit-media-controls-panel{background:transparent}
+
+/* The opening: two cards, and the tap on one of them is what starts the class.
+   Paper tiles rather than glass, because the sheet under them is glass already
+   and the principles allow one layer, never glass on glass. */
+.start{display:flex;flex-direction:column;gap:18px;width:min(1040px,100%);padding:38px;background:transparent;border:0;box-shadow:none}
+.start>h2{font-size:36px}.start>p{font-size:15px;max-width:540px;margin-bottom:12px}
+.start .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--ink-3)}
+.picks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:560px){.picks{grid-template-columns:minmax(0,1fr)}}
+.pick,.course-card,.course-result,.review-original-card,.review-pair>figure{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--r-tile)}
+.pick,.course-card,.course-result{
+  cursor:pointer;min-height:76px;
+  transition:transform .5s var(--spring),box-shadow .3s ease,border-color .3s ease}
+.pick{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;padding:20px}
+.pick:hover,.course-card:hover,.course-result:hover{border-color:#c4a688;box-shadow:0 14px 30px -23px #87604166}
+.pick:active,.course-card:active,.course-result:active{transform:scale(.94)}
+.pick-art{display:block;width:100%;border-radius:12px;overflow:hidden;margin-bottom:15px;
+  background:#fffaf0}
+.pick-art img{display:block;width:100%;height:min(20vh,200px);object-fit:cover;
+  mix-blend-mode:multiply}
+.pick b{font-size:23px;font-weight:600;line-height:1.4}
+.pick .pick-what{font-size:13px;color:var(--ink-3);line-height:1.45}
+/* The entrance is the screen a teacher meets before every class, so it must never
+   ask to be scrolled, on any window a teacher uses. Twice a fixed height was
+   predicted for the parts around the pictures, and twice a case nobody had measured
+   broke it: first the resume-this-class bar (nav.resume) (74px) above the cards, and then,
+   found by review, card descriptions that wrap to two lines on a window just wider
+   than a phone (768x800: 7px over). So nothing is predicted now. The sheet is a
+   column with a height limit, every row in it keeps its own height, and the row of
+   cards is the one that gives; inside each card, the picture is the one part that
+   gives, from 200px down. Whatever wraps, or appears, the browser measures. */
+@media (min-width:761px) and (max-height:1000px){
+  .start{gap:12px;padding:30px}
+  .start>h2{font-size:31px}
+  .start>p{margin-bottom:2px}
+}
+@media (min-width:761px){
+  .start>*{flex-shrink:0}
+  .start>.picks{flex:0 1 auto;min-height:0;grid-template-rows:minmax(0,1fr)}
+  .picks>.pick{min-height:0}
+  .pick>b,.pick>.pick-what{flex-shrink:0}
+  .pick-art{flex:0 1 200px;min-height:60px;display:flex}
+  .pick-art img{height:auto}
+}
+/* A picture squeezed under about 70px stops reading as one, so short windows let
+   the pictures go and keep the cards as words; the one-line eyebrow goes first. */
+@media (min-width:761px) and (max-height:700px){.start .eyebrow{display:none}}
+@media (min-width:761px) and (max-height:634px){.start .pick-art{display:none}}
+
+/* Two letters rather than a glyph: a flag names a country and this is a
+   language, and a globe says nothing about which one you are about to get. */
+.tool.lang{font-size:13px;font-weight:700;letter-spacing:.02em}
+
+/* In book mode a thumbnail is a choice. The ones not going in step back rather
+   than disappear, so the teacher can see what she left out. */
+.thumbs .picked{opacity:.42;transition:opacity .2s ease,box-shadow .2s ease}
+.thumbs .picked.on{opacity:1;box-shadow:0 0 0 3px var(--coral),0 8px 18px -10px rgba(60,40,120,.5)}
+
+/* The last page asks rather than tells, so its one line is set like a question
+   and the drawing is absent: the ending is the child's words, not another
+   picture. */
+.page-text.asking{font-size:26px;font-weight:700;text-align:center;padding:26px 0 8px}
+.ending{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.ending input{font:inherit;color:var(--ink);border:0;border-radius:16px;padding:12px 14px;
+  background:rgba(255,255,255,.7);box-shadow:inset 0 0 0 1px rgba(38,34,74,.12)}
+.ending .actions{display:flex;gap:10px;flex-wrap:wrap}
+/* Motion editing stays on the original drawing, with no letterbox coordinates. */
+.media.motion-view{display:block;aspect-ratio:auto;background:var(--paper);color:var(--ink)}
+.motion-stage{position:relative;line-height:0;width:fit-content;max-width:100%;margin:0 auto}
+.media .motion-stage canvas{width:auto;max-width:100%;height:auto;max-height:calc(100dvh - 300px);display:block}
+.motion-stage.editing{touch-action:none;cursor:crosshair}
+.motion-outline{position:absolute;box-sizing:border-box;border:2px solid white;outline:1px solid var(--ink);border-radius:8px;pointer-events:none;background:#ffffff18}
+.motion-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px}
+.motion-hint{margin:0;padding:0 14px 14px;font-size:14px;line-height:1.6}
+
+#menu-actions{flex-direction:column;gap:10px}#menu-actions .btn{justify-content:flex-start;padding:17px 20px}
+#menu-actions .btn.ink{margin-top:10px;background:#fff1e9;color:#984b38;border-color:#edcfc0}
+#menu-actions .btn.quiet{justify-content:center}
+.viewer-head .btn{font-size:13px}.viewer-head #viewer-save{background:#f3eafa;color:#65527d;border-color:#e4d8ee}
+.motion-controls .btn,.relight-controls .btn{border-radius:14px}
+.relight-controls .btn[aria-pressed="true"]{background:#f4e9de;border-color:#c7ab91}
+.relight-slider input{accent-color:var(--magic)}
+.ending input{border:1px solid var(--line);background:#fff;font-size:16px}.ending{margin-bottom:20px}
+@media(max-width:760px){
+  .start{padding:10px 6px 20px}.start>h2{font-size:29px}.start>p{font-size:14px}.pick{padding:18px}
+  .pick-art img{max-height:160px}
+  .book{min-height:0;margin-top:4px}.book .page-art{min-height:200px;padding:16px}.book .page-text{font-size:21px;padding:24px}
+  .book-nav{flex-wrap:wrap;justify-content:center}.book-nav .n{order:-1;flex-basis:100%;text-align:center;margin-bottom:6px}
+  .book-nav .btn{font-size:13px;padding:10px 14px}.page-text.asking{min-height:160px;justify-content:center}
+  .toast{bottom:24px}.sticker{position:fixed;top:140px;font-size:18px;padding:10px 18px}
+}
+@media(min-width:761px) and (max-width:1100px){.buddy-name small{display:none}}
+@media(pointer:coarse){.answer #btn-answered,.heard .btn.primary,.heard #btn-listen{min-height:76px}.book-nav .btn{min-height:76px}}
+
+.classroom-voice { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-3); }
+.classroom-voice audio { width: 100%; height: 34px; }
+.classroom-voice #voice-stop:not([hidden]) { display: inline-flex; }
+#f-voice { width: 100%; }
+
+.sample-library { width: min(900px, 100%); max-height: 86vh; overflow: auto; }
+.samples-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+.sample-card { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 16px; border: 1px solid var(--line); background: white; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.sample-card img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.sample-card:hover, .sample-card:focus-visible { outline: 2px solid var(--action); }
+
+/* The 3D model choice belongs to the sketch action; the workbench moves the same control into
+   the right-hand study panel under Other 3D options, then restores it on exit. */
+#cloud3d-choice{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;flex:none;font-size:12px;line-height:1.5;color:var(--ink-3)}
+#cloud3d-choice>span{font-weight:500}#cloud3d-choice select{width:100%;font-size:14px}
+#cloud3d-choice small{display:block;font-size:12px;color:var(--ink-3)}#cloud3d-choice small:empty{display:none}

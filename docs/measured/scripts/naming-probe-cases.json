@@ -1,0 +1,58 @@
+[
+ {
+  "name": "A: refused kite opening, kite lesson",
+  "file": "Weixin Image_20260903223101_120_645.jpg",
+  "lesson": "今天画在广场上放风筝，用马克笔勾线",
+  "feedback": "I see 画面中间有个大大的红色风筝，它长着画了粉色花朵的黑色翅膀。\n旁边还有紫色花朵形的小风筝和彩色的蜻蜓风筝，这些颜色让画面看起来特别活泼。\n好多细细的风筝线连到了下面的小朋友身上，他们好像都正抬头看着天上的风筝。\n在这里放风筝的小朋友，他们的笑声会被风带到哪里去呀？"
+ },
+ {
+  "name": "A: refused kite opening, no lesson",
+  "file": "Weixin Image_20260903223101_120_645.jpg",
+  "lesson": "",
+  "feedback": "I see 画面中间有个大大的红色风筝，它长着画了粉色花朵的黑色翅膀。\n旁边还有紫色花朵形的小风筝和彩色的蜻蜓风筝，这些颜色让画面看起来特别活泼。\n好多细细的风筝线连到了下面的小朋友身上，他们好像都正抬头看着天上的风筝。\n在这里放风筝的小朋友，他们的笑声会被风带到哪里去呀？"
+ },
+ {
+  "name": "B: kite opening rule 4 passed live, kite lesson",
+  "file": "Weixin Image_20260903223101_120_645.jpg",
+  "lesson": "今天画在广场上放风筝，用马克笔勾线",
+  "feedback": "我看见画里有一只红色的大风筝，还有一只蜻蜓形状的风筝在左上角。红色风筝在中间很大，黑色的翅膀上画着粉色的花，让整个画面都围着它转。长长的线从风筝垂下来，下面有几个小朋友站着。广场上的风从哪边吹来呢？"
+ },
+ {
+  "name": "B: kite opening rule 4 passed live, no lesson",
+  "file": "Weixin Image_20260903223101_120_645.jpg",
+  "lesson": "",
+  "feedback": "我看见画里有一只红色的大风筝，还有一只蜻蜓形状的风筝在左上角。红色风筝在中间很大，黑色的翅膀上画着粉色的花，让整个画面都围着它转。长长的线从风筝垂下来，下面有几个小朋友站着。广场上的风从哪边吹来呢？"
+ },
+ {
+  "name": "C: hot air balloon and octopus, kite lesson",
+  "file": "Weixin Image_20260903223101_120_645.jpg",
+  "lesson": "今天画在广场上放风筝，用马克笔勾线",
+  "feedback": "我看到一只红色的大风筝，右边还有一个热气球和一只章鱼。红色和黑色对比得很明显。那个热气球要飞到哪里去呢？"
+ },
+ {
+  "name": "D: flamingos called kites, kite lesson",
+  "file": "Weixin Image_20260903223101_75_645.jpg",
+  "lesson": "今天画在广场上放风筝，用马克笔勾线",
+  "feedback": "我看到水面上有三只粉红色的大风筝在飞，左边还有一只斑马。粉红色和蓝色来回出现，让画面好像在动。那些风筝要飞到哪里去呢？"
+ },
+ {
+  "name": "D: flamingos called kites, no lesson",
+  "file": "Weixin Image_20260903223101_75_645.jpg",
+  "lesson": "",
+  "feedback": "我看到水面上有三只粉红色的大风筝在飞，左边还有一只斑马。粉红色和蓝色来回出现，让画面好像在动。那些风筝要飞到哪里去呢？"
+ },
+ {
+  "name": "E: child said bird, reply says bird, kite lesson",
+  "file": "Weixin Image_20260903223101_120_645.jpg",
+  "lesson": "今天画在广场上放风筝，用马克笔勾线",
+  "child_said": "这是一只大鸟，它要飞回家",
+  "feedback": "原来这只红色的大鸟要飞回家。它路上会经过哪里呀？"
+ },
+ {
+  "name": "F: child said bird, reply says kite, kite lesson",
+  "file": "Weixin Image_20260903223101_120_645.jpg",
+  "lesson": "今天画在广场上放风筝，用马克笔勾线",
+  "child_said": "这是一只大鸟，它要飞回家",
+  "feedback": "原来这只红色的大风筝要飞回家。它路上会经过哪里呀？"
+ }
+]

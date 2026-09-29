@@ -1,0 +1,434 @@
+<title>Where the Models Sit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ivory:   #F7F4ED;
+    --panel:   #FFFDF7;
+    --slate:   #2B3137;
+    --muted:   #7C7368;
+    --line:    #E2DACC;
+    --clay:    #B0743F;
+    --olive:   #67754E;
+    --rust:    #A6462C;
+    --ground:  var(--ivory);
+    --ink:     var(--slate);
+    --serif:   "Spectral", Georgia, "Songti SC", serif;
+    --sans:    "Archivo", "Helvetica Neue", "PingFang SC", sans-serif;
+    --mono:    "IBM Plex Mono", "SF Mono", Menlo, monospace;
+    --pad:     clamp(1rem, 4vw, 2.5rem);
+  }
+  :root:not([data-theme="light"]) { }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ivory:  #191C1F;
+      --panel:  #212528;
+      --slate:  #E7E1D6;
+      --muted:  #97918A;
+      --line:   #33383D;
+      --clay:   #D19A63;
+      --olive:  #9AAC77;
+      --rust:   #E0785A;
+      --ground: var(--ivory);
+      --ink:    var(--slate);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ivory:  #191C1F;
+    --panel:  #212528;
+    --slate:  #E7E1D6;
+    --muted:  #97918A;
+    --line:   #33383D;
+    --clay:   #D19A63;
+    --olive:  #9AAC77;
+    --rust:   #E0785A;
+    --ground: var(--ivory);
+    --ink:    var(--slate);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: var(--pad) var(--pad) 4rem; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--clay);
+    margin: 0 0 .9rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(2rem, 5.5vw, 3rem);
+    line-height: 1.1;
+    text-wrap: balance;
+    margin: 0 0 .75rem;
+    letter-spacing: -.01em;
+  }
+  .lede {
+    font-family: var(--serif);
+    font-size: 1.12rem;
+    line-height: 1.6;
+    color: var(--ink);
+    max-width: 60ch;
+    margin: 0 0 .6rem;
+  }
+  .lede em { color: var(--muted); font-style: italic; }
+  .sub { color: var(--muted); max-width: 62ch; margin: 0; font-size: .93rem; }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 3.4rem 0 .4rem;
+    letter-spacing: -.005em;
+  }
+  .h2note { color: var(--muted); font-size: .9rem; margin: 0 0 1.4rem; max-width: 62ch; }
+
+  /* ---- two placement panels: StepFun First on each machine ---- */
+  .options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1rem;
+    align-items: start;
+  }
+  .opt {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .opt-head { padding: .95rem 1.1rem .8rem; border-bottom: 1px solid var(--line); }
+  .opt-name { font-family: var(--serif); font-size: 1.16rem; font-weight: 600; display: block; }
+  .opt-id {
+    font-family: var(--mono); font-size: .74rem; color: var(--muted);
+    display: block; margin-top: .15rem;
+  }
+  .opt-note {
+    display: block; margin-top: .55rem; font-size: .82rem;
+    color: var(--clay); line-height: 1.4;
+  }
+
+  .zone { padding: .8rem 1.1rem; border-top: 1px dashed var(--line); }
+  .zone:first-of-type { border-top: none; }
+  .zone-head {
+    display: flex; align-items: baseline; gap: .5rem;
+    margin-bottom: .5rem;
+  }
+  .zone-title {
+    font-family: var(--mono); font-size: .7rem; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; display: inline-block; }
+  .dot.cloud { background: var(--rust); }
+  .dot.gpu   { background: var(--clay); }
+  .dot.mac   { background: var(--olive); }
+
+  ul.models { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .42rem; }
+  ul.models li { display: flex; flex-direction: column; }
+  .m-name { font-family: var(--mono); font-size: .8rem; line-height: 1.35; word-break: break-word; }
+  .m-role { font-size: .78rem; color: var(--muted); line-height: 1.35; }
+  .empty {
+    font-size: .82rem; color: var(--muted); font-style: italic;
+    border-left: 2px solid var(--line); padding-left: .6rem; line-height: 1.45;
+  }
+
+  /* ---- slot grid ---- */
+  .grid { border: 1px solid var(--line); border-radius: 3px; overflow: hidden; background: var(--panel); }
+  .scroller { overflow-x: auto; }
+  .rowset { min-width: 420px; }
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    gap: 0 1rem;
+    padding: .72rem 1.1rem;
+    border-top: 1px solid var(--line);
+    align-items: start;
+  }
+  .row:first-child { border-top: none; }
+  .row.head {
+    background: transparent;
+    border-top: none;
+    padding-top: .9rem; padding-bottom: .55rem;
+  }
+  .row.head span {
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .group {
+    padding: 1.05rem 1.1rem .35rem;
+    border-top: 1px solid var(--line);
+    display: block;
+  }
+  .group:first-child { border-top: none; }
+  .group-name {
+    font-family: var(--serif); font-weight: 600; font-size: 1rem; display: block;
+  }
+  .group-note { color: var(--muted); font-size: .84rem; display: block; margin-top: .1rem; }
+
+  .slot-name { font-family: var(--mono); font-size: .82rem; display: block; word-break: break-word; }
+  .slot-role { color: var(--muted); font-size: .8rem; display: block; margin-top: .12rem; line-height: 1.35; }
+  .cell { display: flex; flex-direction: column; gap: .25rem; }
+  .cell-model { font-family: var(--mono); font-size: .77rem; line-height: 1.35; word-break: break-word; }
+  .tag {
+    align-self: flex-start;
+    font-family: var(--mono); font-size: .64rem; letter-spacing: .07em;
+    text-transform: uppercase;
+    border: 1px solid var(--line); border-radius: 2px;
+    padding: .08rem .34rem; color: var(--muted);
+    white-space: nowrap;
+  }
+  .tag.gpu { border-color: var(--clay); color: var(--clay); }
+  .tag.mac { border-color: var(--olive); color: var(--olive); }
+  .tag.none { border-style: dashed; }
+  .tag.plan { background: var(--ink); border-color: var(--ink); color: var(--panel); }
+  .legend .tag { align-self: center; }
+  .cell-why { font-size: .76rem; color: var(--muted); font-style: italic; line-height: 1.35; }
+
+  /* ---- the paragraphs under the matrix ---- */
+  .plan-after { color: var(--muted); font-size: .89rem; line-height: 1.55; max-width: 64ch; margin: 1.1rem 0 0; }
+  .plan-after strong { color: var(--ink); font-weight: 600; }
+  .plan-after code { font-family: var(--mono); font-size: .85em; color: var(--ink); }
+
+  /* ---- anomalies ---- */
+  .findings { display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 3px; }
+  .finding { background: var(--panel); padding: 1rem 1.15rem; display: grid; grid-template-columns: 9px minmax(0, 1fr); gap: .8rem; align-items: start; }
+  .finding .dot { margin-top: .42rem; }
+  .dot.high { background: var(--rust); }
+  .dot.med  { background: var(--clay); }
+  .dot.low  { background: var(--olive); }
+  .f-title { font-weight: 600; display: block; margin-bottom: .25rem; }
+  .f-body { color: var(--muted); font-size: .89rem; line-height: 1.5; display: block; }
+  .f-body code { font-family: var(--mono); font-size: .82em; color: var(--ink); }
+
+  footer {
+    margin-top: 3.4rem; padding-top: 1.2rem; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: .82rem; line-height: 1.6;
+  }
+  footer code { font-family: var(--mono); font-size: .95em; color: var(--ink); }
+  .legend { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.1rem 0 0; padding: 0; list-style: none; }
+  .legend li { display: flex; align-items: center; gap: .4rem; font-size: .8rem; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">画里画外 · Beyond Canvas</p>
+    <h1>Where the models sit</h1>
+    <p class="sub"><strong>An earlier placement, kept as a record.</strong> Since then Qwen3.6 on the Spark reads every drawing, writes and checks the chat and the teacher review; Step 3.7 Flash reads geometry sketches and designs the 3D toy; FLUX.2 Klein 4B draws only the storybook's picture-book pages; and one recording per drawing is kept for the storybook voice. The current placement is in the <a href="deployment-versions.md">deployment guide</a>.</p>
+    <p class="lede">Twelve jobs the studio needs done under StepFun First — its only deployment — and which machine does each one. Everything the studio owns runs on the hosted DGX Spark, and a class opens at its own address with the class password.</p>
+    <p class="sub">A slot is a job, not a vendor — a skill asks for <span style="font-family:var(--mono);font-size:.9em">tts.studio</span> and the profile decides who answers. API First and Local First were archived; their settings are kept for reference in <span style="font-family:var(--mono);font-size:.9em">studio/profiles/archive/</span>.</p>
+  </header>
+
+  <h2>StepFun First, on the DGX Spark</h2>
+  <p class="h2note">The whole project runs on the hosted Spark and the Mac is for development. How it ran from the Mac with the 4090 is archived in <span style="font-family:var(--mono);font-size:.9em">studio/profiles/archive/stepfun-mac-4090.yaml</span>.</p>
+
+  <div class="options">
+
+    <section class="opt">
+      <div class="opt-head">
+        <span class="opt-name">DGX Spark</span>
+        <span class="opt-id">stepfun</span>
+        <span class="opt-note">Everything the studio owns runs on the Spark — page, classroom and all four making models, the 14B video included. StepFun still thinks, speaks and hears, on the same subscription.</span>
+      </div>
+      <div class="zone">
+        <div class="zone-head"><span class="dot cloud"></span><span class="zone-title">Someone else's computer</span></div>
+        <ul class="models">
+          <li><span class="m-name">step-3.7-flash</span><span class="m-role">StepFun subscription · six reading and judging jobs</span></li>
+          <li><span class="m-name">stepaudio-2.5-tts</span><span class="m-role">StepFun subscription · speaks to the child</span></li>
+          <li><span class="m-name">stepaudio-2.5-asr</span><span class="m-role">StepFun subscription · hears the child</span></li>
+        </ul>
+      </div>
+      <div class="zone">
+        <div class="zone-head"><span class="dot gpu"></span><span class="zone-title">DGX Spark</span></div>
+        <ul class="models">
+          <li><span class="m-name">FLUX.2 Klein 4B</span><span class="m-role">Still pose preview</span></li>
+          <li><span class="m-name">TRELLIS.2</span><span class="m-role">3D from the drawing</span></li>
+          <li><span class="m-name">Pixal3D</span><span class="m-role">Second 3D route</span></li>
+          <li><span class="m-name">Wan 2.2 I2V A14B</span><span class="m-role">Makes the drawing move — the model the 4090 could not hold</span></li>
+        </ul>
+      </div>
+      <div class="zone">
+        <div class="zone-head"><span class="dot mac"></span><span class="zone-title">This Mac</span></div>
+        <p class="empty">No class runs here. A class opens at https://{spark-address}:7100 with the class password; the Mac writes code, runs the tests and records new temple demos in Blender.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <h2>Job by job</h2>
+  <p class="h2note">Every slot named, with what each model measured on the Spark.</p>
+
+  <div class="grid">
+    <div class="scroller">
+      <div class="rowset">
+
+        <div class="row head">
+          <span>Job</span><span>Where it runs</span>
+        </div>
+
+        <div class="group">
+          <span class="group-name">Reading and judging</span>
+          <span class="group-note">Six jobs, one model, bought from StepFun on the subscription.</span>
+        </div>
+
+        <div class="row">
+          <span><span class="slot-name">vlm.studio</span><span class="slot-role">Reads the drawing, writes the feedback</span></span>
+          <span class="cell"><span class="cell-model">step-3.7-flash</span><span class="tag plan">StepFun · plan</span></span>
+        </div>
+        <div class="row">
+          <span><span class="slot-name">safety.image</span><span class="slot-role">Checks the drawing before any other model sees it</span></span>
+          <span class="cell"><span class="cell-model">step-3.7-flash</span><span class="tag plan">StepFun · plan</span></span>
+        </div>
+        <div class="row">
+          <span><span class="slot-name">vlm.sketch</span><span class="slot-role">Reads pencil work at the sketch entrance</span></span>
+          <span class="cell"><span class="cell-model">step-3.7-flash</span><span class="tag plan">StepFun · plan</span></span>
+        </div>
+        <div class="row">
+          <span><span class="slot-name">vlm.creation</span><span class="slot-role">Decides what to make from the drawing</span></span>
+          <span class="cell"><span class="cell-model">step-3.7-flash</span><span class="tag plan">StepFun · plan</span></span>
+        </div>
+        <div class="row">
+          <span><span class="slot-name">vlm.teacher</span><span class="slot-role">Writes the teacher's review</span></span>
+          <span class="cell"><span class="cell-model">step-3.7-flash</span><span class="tag plan">StepFun · plan</span></span>
+        </div>
+        <div class="row">
+          <span><span class="slot-name">vlm.director</span><span class="slot-role">Plans what the studio does next</span></span>
+          <span class="cell"><span class="cell-model">step-3.7-flash</span><span class="tag plan">StepFun · plan</span></span>
+        </div>
+
+        <div class="group">
+          <span class="group-name">Making things</span>
+          <span class="group-note">Pictures, movement and 3D — all made on the Spark.</span>
+        </div>
+
+        <div class="row">
+          <span><span class="slot-name">image.edit</span><span class="slot-role">Turns the drawing into a still pose preview</span></span>
+          <span class="cell"><span class="cell-model">FLUX.2 Klein 4B</span><span class="tag gpu">DGX Spark</span><span class="cell-why">25–35 s a picture</span></span>
+        </div>
+        <div class="row">
+          <span><span class="slot-name">video.animation</span><span class="slot-role">Makes the drawing move</span></span>
+          <span class="cell"><span class="cell-model">Wan 2.2 I2V A14B</span><span class="tag gpu">DGX Spark</span><span class="cell-why">49 frames in 15 steps, ~3 s on screen; 691 s a clip</span></span>
+        </div>
+        <div class="row">
+          <span><span class="slot-name">mesh.portrait</span><span class="slot-role">Builds a 3D model from the drawing</span></span>
+          <span class="cell"><span class="cell-model">trellis2</span><span class="tag gpu">DGX Spark</span><span class="cell-why">~243 s a model; its models stay on the chip since a hang</span></span>
+        </div>
+        <div class="row">
+          <span><span class="slot-name">mesh.alternative</span><span class="slot-role">A second 3D route when the first disappoints</span></span>
+          <span class="cell"><span class="cell-model">pixal</span><span class="tag gpu">DGX Spark</span><span class="cell-why">~439 s a model</span></span>
+        </div>
+
+        <div class="group">
+          <span class="group-name">Speaking and hearing</span>
+          <span class="group-note">Both bought from StepFun, on the subscription.</span>
+        </div>
+
+        <div class="row">
+          <span><span class="slot-name">tts.studio</span><span class="slot-role">Speaks to the child</span></span>
+          <span class="cell"><span class="cell-model">stepaudio-2.5-tts</span><span class="tag plan">StepFun · plan</span></span>
+        </div>
+        <div class="row">
+          <span><span class="slot-name">speech.in</span><span class="slot-role">Hears the child and writes down what was said</span></span>
+          <span class="cell"><span class="cell-model">stepaudio-2.5-asr</span><span class="tag plan">StepFun · plan</span><span class="cell-why">A child's recorded voice goes to StepFun</span></span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <p class="plan-after"><strong>Everything StepFun sells, the studio buys on the subscription.</strong> Its eight StepFun jobs — the six that read and judge, the voice, and hearing — go to the plan's own address, <code>api.stepfun.com/step_plan/v1</code>, instead of the pay-as-you-go <code>api.stepfun.com/v1</code>. The plan sells no 3D and no video, so those stay on the studio's own GPU machine; the picture stays there too by your decision, although the plan includes StepFun's own image editor.</p>
+
+  <p class="plan-after"><strong>Every class sends a child's recorded voice to StepFun.</strong> Local First used to keep recordings on hardware you own, hearing with Whisper on the 4090. It was archived, with this consequence stated before you decided. Before transcription was bought at all, none of the options sent one anywhere: the code said a recording would never go to another computer and called that a selling point. That sentence has been rewritten everywhere it appeared rather than left standing.</p>
+
+  <h2>What doesn't fit</h2>
+  <p class="h2note">Eight things worth knowing that the page's status panel doesn't show.</p>
+
+  <div class="findings">
+
+    <div class="finding">
+      <span class="dot high"></span>
+      <span>
+        <span class="f-title">The child's drawing and voice both reach StepFun</span>
+        <span class="f-body">Every drawing is sent to StepFun to be read, described and safety-checked, and every recording to be transcribed. It is the honest cost of buying a good language model, and the one line in this design that a "runs on your own hardware" claim would not survive — on the Spark too, where everything the studio owns runs locally. One recording per drawing, the child's first spoken answer of at most ten seconds, is kept on the Spark for the storybook voice; no other recording is stored.</span>
+      </span>
+    </div>
+
+    <div class="finding">
+      <span class="dot high"></span>
+      <span>
+        <span class="f-title">A class runs on the Spark or not at all</span>
+        <span class="f-body">API First needed no hardware and was the fallback for a machine without a GPU; it was archived, and then the Mac + 4090 way. A class now opens only at the Spark's address; if one of its models is down the page says which, and nothing falls back to a paid service. A collaborator cloning the repository writes and tests code on their own machine and opens the class on the Spark.</span>
+      </span>
+    </div>
+
+    <div class="finding">
+      <span class="dot med"></span>
+      <span>
+        <span class="f-title">The voice is the slot with no open weights</span>
+        <span class="f-body">The entry's own rule is that every slot resolves to a model with open weights you can run yourself. <code>stepaudio-2.5-tts</code> has no downloadable weights at all. VoxCPM2, the open voice Local First ran on the 4090, went into the archive with it — so the Spark speaks with a bought voice like everywhere else. Of everything in this design, that is the gap.</span>
+      </span>
+    </div>
+
+    <div class="finding">
+      <span class="dot med"></span>
+      <span>
+        <span class="f-title">The showpiece moved onto the subscription with the archive</span>
+        <span class="f-body">The temple showpiece, the Harness page, the photo judge and the teacher-review fallback used API First's settings, billed per use. Since the archive they use StepFun First's: the same <code>step-3.7-flash</code>, on the plan. A long showpiece run that meets a limit of the plan would slow down or stop rather than spend the balance. The evals, the day-zero script and the voice lab still use their own development settings.</span>
+      </span>
+    </div>
+
+    <div class="finding">
+      <span class="dot med"></span>
+      <span>
+        <span class="f-title">Which account pays cannot be seen from here</span>
+        <span class="f-body">Both addresses take the same key and answer normally, and StepFun's responses carry no billing field at all. That a call to the plan's address is charged to the plan is therefore inferred, not measured — strongly, since the two addresses list different models, but a catalogue is not a bill. One class and a look at the plan's usage page settles it. If the inference is wrong, the cost is only that the plan goes unused.</span>
+      </span>
+    </div>
+
+    <div class="finding">
+      <span class="dot low"></span>
+      <span>
+        <span class="f-title">The archive left code that nothing now calls</span>
+        <span class="f-body">Kept so an archived option can come back whole: the hosted 3D router <code>cloudmesh</code> (TRELLIS.2 on Replicate, Pixal3D on fal.ai at about $0.30 a call), the 4090 voice client for VoxCPM2 and the Whisper client for the 4090. None is used by StepFun First. <code>cloudmesh</code> is a router inside this codebase, not a company with an account — the status board has always translated it back to Replicate or fal.ai.</span>
+      </span>
+    </div>
+
+    <div class="finding">
+      <span class="dot low"></span>
+      <span>
+        <span class="f-title">A sixth media route exists but is in neither place</span>
+        <span class="f-body"><code>mesh.fast</code> (InstantMesh) is configured in the <code>cloud</code>, <code>local</code> and <code>spark</code> development profiles and called by nothing. It is config, not a route — read the sketch-to-3D measurements before proposing a replacement, since the field was already surveyed.</span>
+      </span>
+    </div>
+
+    <div class="finding">
+      <span class="dot low"></span>
+      <span>
+        <span class="f-title">The plan sells ten models; pay-as-you-go sells thirty-six</span>
+        <span class="f-body">Read live from each address. The plan's ten are a subset of the other list, and they include all three this studio uses. The twenty-six it leaves out include a whole newer generation of voice models (<code>stepaudio-3-tts</code>, <code>stepaudio-3-asr-max</code> and others). Nothing uses them now; to try one, that one job would be pointed back at the pay-as-you-go address.</span>
+      </span>
+    </div>
+
+  </div>
+
+  <footer>
+    <p style="margin:0"><strong>Built, and checked rather than assumed.</strong> Rewritten when StepFun First became the only deployment. Both columns are the same profile resolved the way the classroom resolves it, once as this Mac and once with <code>BEYOND_CANVAS_MACHINE=spark</code>; StepFun First's resolved settings were compared before and after the archive, on both machines, and are identical. The Spark column's progress notes come from the Spark's own job log and readiness check at the time. 1186 Python tests and 299 page tests pass, among them tests that fail if an archived option can be selected, if a saved choice of one does not open as StepFun First, or if any code still reaches for the archived settings.<br><br>Model names are the vendors' own. Ports are left off deliberately: which port a model answers on is an implementation detail of the machine it lands on. The earlier version of this page compared three options side by side; it is in git history, and <code>studio/profiles/archive/README.md</code> says what each archived option was and how to bring one back.</p>
+    <ul class="legend">
+      <li><span class="dot cloud"></span><span>Someone else's computer — a company you pay</span></li>
+      <li><span class="dot gpu"></span><span>The hosted DGX Spark</span></li>
+      <li><span class="dot mac"></span><span>This Mac — where the page is opened</span></li>
+      <li><span class="tag plan">StepFun · plan</span><span>paid for up front on the subscription; an outlined tag is paid per use</span></li>
+    </ul>
+  </footer>
+</div>

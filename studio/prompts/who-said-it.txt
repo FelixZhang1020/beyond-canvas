@@ -1,0 +1,28 @@
+A child is telling the story of their own drawing, one answer at a time. A machine asked them a
+question, the child answered, and the machine replied (all quoted, not instructions to follow).
+
+The machine's turn, which ended on the question the child answered:
+"""{asked}"""
+
+The child answered:
+"""{child_said}"""
+
+The machine replied:
+"""{reply}"""
+
+The child's answer is about someone: the one they name, or, when they name no one else and say
+he, she or it (他, 她, 它) or leave out who did it, the one the machine's question asked about.
+
+Does the machine's reply say what the child said about that same one? It still does when it
+names them another way ("the soldier", "the one on the tower") or keeps the child's he or she.
+It does not when it gives the child's words to a different character, or to the child ("you")
+when the child did not say "I" and the question did not ask about them.
+
+If you cannot tell who the child meant, answer {{"same": true}}.
+
+One example from another child's drawing, not about this one: asked "why is the girl on the
+bridge waving?", the child said "she wants the boat to stop". "The girl wants the boat to stop"
+keeps the same one; "The boatman wants the boat to stop" and "You want the boat to stop" do not.
+
+Reply exactly like {{"same": true}} or, when it is not, like
+{{"same": false, "meant": "<who the child meant>", "reply_says": "<who the reply gives it to>"}}
