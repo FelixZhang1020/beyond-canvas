@@ -1,0 +1,37 @@
+# Pixal3D on the DGX Spark, over the Spark TRELLIS.2 image.
+#
+# The same steps as ./Dockerfile (the 4090's), changed in three places: the GB10's
+# CUDA architecture instead of the 4090's 8.9; the utils3d wheel from vendor/
+# instead of a GitHub release the hosted Spark cannot reach; and the package index
+# as a build argument. Build context is deploy/trellis2/vendor, laid out by
+# deploy/spark/vendor_sources.py.
+ARG TRELLIS_IMAGE=beyond-canvas/trellis2:dgx-spark
+FROM ${TRELLIS_IMAGE}
+
+ARG PIP_INDEX_URL=https://pypi.org/simple
+ENV CUDA_HOME=/usr/local/cuda \
+    TORCH_CUDA_ARCH_LIST=12.1a \
+    NATTEN_CUDA_ARCH=12.1 \
+    NATTEN_N_WORKERS=8 \
+    MAX_JOBS=8 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_INDEX_URL=${PIP_INDEX_URL} \
+    PYTHONUNBUFFERED=1 \
+    HF_HOME=/models/huggingface \
+    TORCH_HOME=/models/torch
+
+WORKDIR /opt/pixal3d
+COPY Pixal3D/ /opt/pixal3d/
+COPY wheels/utils3d-0.0.2-py3-none-any.whl /tmp/
+
+RUN python -m pip install \
+      transformers==4.57.3 \
+      diffusers==0.37.1 \
+      accelerate==1.13.0 \
+      plyfile==1.1.3 \
+    && python -m pip install natten==0.21.0 --no-build-isolation \
+    && python -m pip install /tmp/utils3d-0.0.2-py3-none-any.whl
+
+RUN python -c "import torch, natten, transformers, pixal3d; print(torch.__version__, natten.__version__, transformers.__version__)"
+
+ENTRYPOINT ["python", "smoke_rgba.py"]

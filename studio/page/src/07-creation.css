@@ -1,0 +1,199 @@
+#app[data-creation="true"] .buddy,#app[data-creation="true"] .piece-meta,#app[data-creation="true"] .workspace-note{display:none!important}
+/* On a phone the planner carries its own drawing and thumbnails in the page's flow. */
+@media(--stacked){#app[data-creation="true"] .room,#app[data-creation="true"] .dock{display:none!important}}
+#creation-planner{position:relative;margin:108px 40px 35px 140px;max-width:1080px;padding:22px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-panel);z-index:3}
+#creation-planner h1{font-size:26px;margin:8px 0 16px;font-weight:600}
+.creation-step{color:var(--ink-3);font-size:13px;margin:18px 0 0}
+.creation-body.with-original{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:28px}
+.creation-original{display:flex;flex-direction:column;gap:10px;text-align:center;color:var(--ink-3)}
+.creation-original img{width:100%;height:220px;object-fit:contain;border-radius:18px;background:var(--surface-soft)}
+#creation-planner textarea{display:block;width:100%;resize:vertical;min-height:120px;border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--paper);font:inherit;color:var(--ink);margin:10px 0 18px}
+.creation-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:12px;padding-top:20px;border-top:1px solid var(--line)}
+.creation-actions .btn:first-child:not(:last-child){margin-right:auto}
+.creation-message{color:var(--ink-2);white-space:pre-wrap}.creation-message:empty{display:none}
+.creation-stream{white-space:pre-wrap;color:var(--ink);line-height:1.8}.creation-stream:empty{display:none}
+
+/* On a laptop or larger the planner is the work card of the one frame (03-layout): the same
+   place and size as the teacher's review and the chat, beside the same picture card and the same
+   row of today's drawings. So its own copies of those are hidden, the step and heading sit where
+   the review's heading sits, the buttons stay at the card's foot, and only the middle changes. A
+   long storybook scrolls inside that middle; the drawings and the buttons never go with it, which
+   was the fault of the planner it replaces (operator: the thumbnails scrolled away
+   when the clip was chosen and came back with the figure). The description box takes the
+   height the card has spare, so the video and the figure choice fill the same card. */
+@media(--side-by-side){
+  #creation-planner{position:absolute;top:var(--frame-top);right:var(--frame-right);bottom:var(--frame-bottom);width:calc(var(--frame-share) * 100%);
+    max-width:none;margin:0;padding:30px 32px;display:flex;flex-direction:column;background:#fffefb;box-shadow:0 24px 55px -42px #795b4466}
+  #creation-planner>*{flex-shrink:0}
+  #creation-planner .creation-thumbs,#creation-planner .creation-original{display:none}
+  #creation-planner>.creation-step{margin:0;color:#9a725b;font-size:11px;font-weight:650;letter-spacing:.12em}
+  #creation-planner>.creation-step:empty{visibility:hidden}
+  #creation-planner>.creation-step:empty::before{content:"\00a0"}
+  #creation-planner>h1{margin:8px 0 0;padding-bottom:22px;border-bottom:1px solid var(--line);font-size:clamp(26px,2vw,32px);line-height:1.35;font-weight:650;letter-spacing:.02em}
+  #creation-planner>.creation-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;margin-top:20px;overflow:auto;scrollbar-width:thin;scrollbar-color:#dcccb9 transparent}
+  #creation-planner>.creation-body>div:last-child{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+  #creation-planner>.creation-body>div:last-child>*{flex-shrink:0}
+  #creation-planner>.creation-body>div:last-child>p:first-child{margin-top:0}
+  #creation-planner #creation-motion{flex:1 1 120px;min-height:60px;margin-bottom:14px;resize:none}
+  #creation-planner>.creation-actions{margin-top:auto}
+  #creation-planner>.creation-message:not(:empty){margin:12px 0 0}
+  /* Choosing a storybook's drawings is choosing pictures, so the picks fill the picture card.
+     The planner is their containing block, so the card's place is worked out from the frame:
+     the planner's left edge is the window less the right gutter and the planner's own width. */
+  #creation-planner .creation-picks{position:absolute;z-index:1;top:-1px;bottom:calc(var(--frame-dock) - 1px);right:calc(100% + var(--frame-gap) + 1px);
+    left:calc(var(--frame-left) + var(--frame-right) - 1px - (1 - var(--frame-share)) * 100vw);
+    grid-template-columns:repeat(auto-fill,minmax(170px,1fr));align-content:start;gap:16px;padding:22px;overflow:auto;
+    border:1px solid var(--line);border-radius:28px;background:#f8f3eb}
+  #creation-planner .creation-pick img,#creation-planner .creation-pick video{height:170px}
+  #creation-planner h3{margin:0 0 4px;font-size:15px}
+  #creation-planner .creation-order{margin:0 0 10px}#creation-planner .creation-order li{padding:2px 8px}
+  #creation-planner .creation-page{margin:0 0 12px}
+  #creation-planner .creation-page textarea{min-height:84px;margin:6px 0 0}
+}
+.creation-review-issues{margin:0 0 18px;padding:12px 14px;border:1px solid var(--line);border-radius:14px}.creation-review-issues p{margin:0 0 6px;color:var(--ink-2);font-size:13px}.creation-review-issues ul{list-style:none;margin:0;padding:0}.creation-review-issues li{padding:6px 0;border-top:1px solid var(--line)}.creation-review-issues li span{display:block}.creation-review-suggestion{color:var(--muted)}
+.creation-picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:14px}
+.creation-pick{background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;padding:10px;color:var(--ink);font:inherit;cursor:pointer}
+.creation-pick img{width:100%;height:110px;object-fit:contain}.creation-pick span{display:block;padding:6px 0}
+.creation-pick[aria-pressed="true"]{border-color:var(--action);box-shadow:inset 0 0 0 1px var(--action)}
+.creation-order{padding-left:25px}.creation-order li{padding:8px;border-bottom:1px solid var(--line)}.creation-order li span{display:inline-block;min-width:100px;margin-right:20px}
+.creation-page{display:block;margin:16px 0}.creation-confirmed{white-space:pre-wrap}
+.creation-fixed-model{display:grid;gap:4px;margin:16px 0}.creation-fixed-model span{color:var(--muted)}
+/* Make it move keeps both outcomes visible while the editor below changes. */
+.creation-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.creation-results.one-result{grid-template-columns:1fr}
+.creation-result{display:flex;flex-direction:column;gap:9px;min-width:0;padding:10px;border:1px solid var(--line);border-radius:18px;background:#fffdfa}
+.creation-result-visual{position:relative;display:grid;place-items:center;height:100px;overflow:hidden;border-radius:12px;background:#f7f1ea}
+.creation-result:nth-child(2) .creation-result-visual{background:#f1edf5}
+.creation-result-visual img{width:100%;height:100%;object-fit:contain;background:#fff}
+.creation-result-figure{background:#f7f4ee!important}
+.creation-result-symbol{font-size:42px;line-height:1;color:#bd9e8c}
+.creation-result:nth-child(2) .creation-result-symbol{color:#8973a3}
+.creation-result-play{position:absolute;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#fffef9e8;color:var(--action);box-shadow:0 2px 10px #4038322a}
+.creation-result-info{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;min-width:0}
+.creation-result-info h2{font-size:15px;line-height:1.3;margin:0}
+.creation-result-info p{margin:3px 0 0;color:var(--ink-2);font-size:12px}
+.creation-result-status{flex:none;padding:4px 7px;border-radius:999px;background:#f2ebe3;color:var(--ink-2);font-size:11px}
+.creation-result.is-ready .creation-result-status{background:#e8f3e9;color:#43724d}
+.creation-result.is-making .creation-result-status{background:#fff0d9;color:#8a5b18}
+.creation-result .btn{align-self:stretch;min-height:44px}
+.creation-results-note{font-size:13px;color:var(--ink-2);line-height:1.5;margin:0}
+.creation-move-editor{border:1px solid var(--line);border-radius:17px;padding:14px;background:#fffdfa}
+.creation-move-editor h3{font-size:17px;margin:0 0 7px}
+.creation-move-editor p{font-size:13px;line-height:1.5;color:var(--ink-2);margin:0 0 10px}
+.creation-move-editor label:not(.creation-clip){font-size:13px;color:var(--ink-2)}
+.creation-editor-switch{display:flex;gap:5px;margin-bottom:12px;padding:4px;background:var(--surface-soft);border-radius:12px}
+.creation-editor-switch button{flex:1;min-height:44px;border:0;border-radius:9px;background:transparent;color:var(--ink-2);font:inherit;font-size:13px;cursor:pointer}
+.creation-editor-switch button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 2px 7px #4038321c;font-weight:650}
+.creation-editor-switch button:focus-visible{outline:2px solid var(--magic);outline-offset:1px}
+#creation-planner[data-layout="results"] #creation-motion{flex:0 0 auto;height:96px;min-height:96px;margin:7px 0 10px}
+#creation-planner[data-layout="results"] .creation-clip{margin-bottom:0}
+#creation-planner[data-layout="results"] .creation-clip-note{margin:5px 0 0}
+.creation-clip{display:grid;gap:8px;margin:0 0 6px;color:var(--ink-2)}.creation-clip select{width:100%;min-height:44px;font-size:15px}
+.creation-clip-note{margin:4px 0 6px;color:var(--ink-2);font-size:13px}
+.creation-thumbs{max-width:100%;margin-bottom:18px}.creation-thumbs img{width:100%;height:100%;object-fit:contain}.creation-thumbs button[aria-pressed="true"]{border-color:var(--action)}
+/* Stacked, the planner is the step and its heading, then the drawing as large as the room's picture, then
+   everything to press: which drawing, the description and choices, the buttons. The body's two halves are
+   lifted into the planner's own column so the drawing picker can sit between them. */
+@media(--stacked){#creation-planner{order:2;margin:0 0 20px;width:100%;padding:20px;display:flex;flex-direction:column}
+  #creation-planner>.creation-body{display:contents}#creation-planner .creation-original{order:1;margin:0 0 14px}
+  #creation-planner>.creation-thumbs{order:2}#creation-planner>.creation-body>div:not(.creation-original){order:3}
+  #creation-planner>.creation-message{order:4}#creation-planner>.creation-actions{order:5}
+  .creation-original img{height:var(--stacked-picture)}#creation-planner textarea{font-size:16px}.creation-actions{justify-content:stretch}.creation-actions .btn{flex:1}.creation-actions .btn:first-child:not(:last-child){margin-right:0}}
+@media(max-width:500px){.creation-actions .btn.primary{flex-basis:100%;min-height:48px}.creation-result-info{display:block}.creation-result-status{display:inline-block;margin-top:6px}.creation-result-visual{height:78px}.creation-result{padding:8px}}
+.task-status{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:4px 0 18px}.task-status strong{font-size:1.2rem}.task-status span,.task-status-note{color:var(--ink-2);font-size:.95rem}#creation-task-status progress{display:block;width:100%;height:10px;accent-color:var(--action)}
+.task-return{position:fixed;z-index:90;right:24px;bottom:24px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;max-width:calc(100vw - 48px);background:var(--paper);border:1px solid var(--action);box-shadow:0 8px 30px #0002}.task-return span{font-size:.85rem;color:var(--ink-2)}.task-return[hidden]{display:none}
+.creation-progress{margin:0 0 6px;font-weight:600;color:var(--ink)}.creation-progress:empty{display:none}
+.creation-page-head{display:flex;align-items:center;gap:8px;font-weight:600}.creation-page-head img{width:40px;height:40px;object-fit:contain;border-radius:6px;background:var(--surface-soft)}
+/* Each card holds its own make button; a finished card keeps "make again" small. */
+.creation-result .creation-make.primary{min-height:54px;font-size:15px;border-radius:14px}
+.creation-result.is-ready .creation-make{min-height:34px;border-color:transparent;background:none;color:var(--ink-2);font-size:13px}
+@media(--side-by-side){.creation-result-visual{height:140px}}
+/* Empty 3D side: one big make button mid-panel. While it runs, Stop is quiet and drops below the line. */
+.sketch-study #sketch-workbench .sketch-empty.sketch-viewer-panel::before,
+.sketch-study #sketch-workbench .sketch-empty.sketch-viewer-panel::after{content:"";flex:1 1 0;order:1}
+.sketch-study #sketch-workbench .sketch-empty.sketch-viewer-panel::after{order:5}
+#sketch-workbench .sketch-empty.sketch-viewer-panel>figcaption{order:0}
+#sketch-workbench .sketch-empty.sketch-viewer-panel .sketch-controls{order:2}
+#sketch-workbench .sketch-empty.sketch-viewer-panel .sketch-empty-copy{order:3;flex:none;min-height:0;padding:14px 24px 0}
+#sketch-workbench .sketch-empty.sketch-viewer-panel>.btn{order:4;align-self:center}
+#sketch-workbench .sketch-empty.sketch-viewer-panel .sketch-controls #buddy-actions{position:static;display:flex;justify-content:center}
+#sketch-workbench .sketch-empty.sketch-viewer-panel .sketch-controls #btn-primary{min-height:60px;padding:14px 34px;font-size:17px;border:0;border-radius:18px;
+  background:var(--action);color:#fff;box-shadow:0 14px 30px -18px #8a3f2a}
+#sketch-workbench .sketch-empty.sketch-viewer-panel .sketch-controls #btn-primary svg{display:block;width:20px;height:20px}
+#sketch-workbench .sketch-empty.sketch-viewer-panel:has(#btn-primary use[href="#i-stop"]) .sketch-controls{order:4;margin-top:12px}
+#sketch-workbench .sketch-empty.sketch-viewer-panel .sketch-controls #btn-primary:has(use[href="#i-stop"]){min-height:40px;padding:8px 18px;font-size:13px;
+  border:1px solid var(--line);background:#fffdfa;color:var(--ink-2);box-shadow:none}
+#sketch-workbench .sketch-empty.sketch-viewer-panel .sketch-controls #btn-primary:disabled{opacity:.5}
+/* No review yet: the button sits mid-panel. */
+#teacher-review-panel[data-state="empty"] .teacher-review-heading{display:contents}
+#teacher-review-panel[data-state="empty"] .teacher-review-copy{order:0;max-width:none;margin:0;padding-bottom:26px;border-bottom:1px solid var(--line)}
+#teacher-review-panel[data-state="empty"]::before,#teacher-review-panel[data-state="empty"]::after{content:"";flex:1 1 0;order:1}
+#teacher-review-panel[data-state="empty"]::after{order:4}
+#teacher-review-panel[data-state="empty"] #teacher-review-generate{order:2;align-self:center;width:auto;min-height:60px;padding:14px 34px;font-size:17px;border-radius:18px}
+#teacher-review-panel[data-state="empty"] #teacher-review-generate svg{width:20px;height:20px}
+#teacher-review-panel[data-state="empty"] #teacher-review-text{order:3;align-self:center;margin:14px auto 0;padding:0;background:none;text-align:center;color:var(--ink-3);font-size:14px}
+@media(--stacked){#teacher-review-panel[data-state="empty"] #teacher-review-generate{width:100%;margin-top:22px}}
+/* Panel title top left, empty or not. */
+#sketch-workbench .sketch-empty.sketch-viewer-panel>figcaption{align-self:stretch;margin-right:0;text-align:left}
+/* Make-again inside the padding, level with the title. */
+#sketch-workbench .sketch-viewer-panel .sketch-controls #buddy-actions{top:15px;right:12px}
+/* Light | view actions | display. */
+.sketch-study #sketch-workbench .sketch-viewer-settings{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+.sketch-study #sketch-workbench .sketch-viewer-center{display:flex;flex-direction:column;justify-content:center;gap:6px;width:136px;min-width:0;
+  padding:8px;border:1px solid var(--line);border-radius:10px;background:#fffbf7}
+.sketch-study #sketch-workbench .sketch-viewer-center>div{display:contents}
+.sketch-study #sketch-workbench .sketch-viewer-foot{text-align:center;font-size:11px}
+@media(--stacked){.sketch-study #sketch-workbench .sketch-viewer-settings{grid-template-columns:1fr}
+ .sketch-study #sketch-workbench .sketch-viewer-center,.sketch-study #sketch-workbench .sketch-viewer-center>div{width:auto;flex-direction:row;flex-wrap:wrap}
+ .sketch-study #sketch-workbench .sketch-viewer-center button{width:auto;flex:1 1 auto}}
+.creation-actions:empty{display:none}
+/* The four view actions: one card, identical buttons, an icon each; on shows as a tint, and a check for the two switches. */
+.sketch-study #sketch-workbench .sketch-viewer-center button{display:flex;align-items:center;justify-content:flex-start;gap:8px;width:100%;height:34px;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:#fffdfa;color:var(--ink-2);font-size:12px;font-weight:600;text-align:left}
+.sketch-study #sketch-workbench .sketch-viewer-center button::before{content:"";flex:none;width:15px;height:15px;background:currentColor;-webkit-mask:var(--icon) center/contain no-repeat;mask:var(--icon) center/contain no-repeat}
+.sketch-study #sketch-workbench .sketch-viewer-center button[data-action=auto]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 12a8 8 0 1 1-2.3-5.6'/%3E%3Cpath d='M20 4v5h-5'/%3E%3C/svg%3E")}
+.sketch-study #sketch-workbench .sketch-viewer-center button[data-action=reset]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12a8 8 0 1 0 2.3-5.6'/%3E%3Cpath d='M4 4v5h5'/%3E%3Ccircle cx='12' cy='12' r='1.5' fill='black'/%3E%3C/svg%3E")}
+.sketch-study #sketch-workbench .sketch-viewer-center button[data-toggle=grayscale]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Cpath d='M12 4a8 8 0 0 1 0 16z' fill='black'/%3E%3C/svg%3E")}
+.sketch-study #sketch-workbench .sketch-viewer-center button[data-toggle=ground]{--icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='9' r='4'/%3E%3Cpath d='M3 19h18'/%3E%3Cellipse cx='12' cy='16' rx='6' ry='1.5' fill='black' stroke='none'/%3E%3C/svg%3E")}
+.sketch-study #sketch-workbench .sketch-viewer-center button[aria-pressed=true]{background:#f3ecf2;border-color:#cdb9ca;color:#6f5470}
+.sketch-study #sketch-workbench .sketch-viewer-center button[data-toggle][aria-pressed=true]::after{content:"\2713";margin-left:auto;font-size:13px;font-weight:700}
+/* First build: live progress under the line, above Stop. */
+#sketch-workbench .sketch-empty .sketch-progress{order:3;align-self:center;width:min(440px,86%);margin-top:16px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:#fffdf9}
+#sketch-workbench .sketch-progress .task-status{margin:0 0 10px}#sketch-workbench .sketch-progress .task-status strong{font-size:15px}
+#sketch-workbench .sketch-progress progress{display:block;width:100%;height:8px;accent-color:var(--action)}
+#sketch-workbench .sketch-progress .task-status-note{margin:8px 0 0;font-size:12px;line-height:1.5}
+/* A narrow 3D panel (a laptop, a half screen): the four actions become one row above light and display. */
+.sketch-study #sketch-workbench .sketch-viewer-panel{container-type:inline-size}
+@container (max-width:760px){
+ .sketch-study #sketch-workbench .sketch-viewer-settings{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .sketch-study #sketch-workbench .sketch-viewer-center{grid-column:1/-1;order:-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;width:auto}
+ .sketch-study #sketch-workbench .sketch-viewer-center>div{display:contents}
+ .sketch-study #sketch-workbench .sketch-materials{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr))}
+}
+/* Step 3 of the storybook: the originals or a picture-book style (29l-book-look.js). The two looks are cards in
+   the work card; the pages, or page 1 in each style, fill the picture card as the picks do. */
+.book-look-choice{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:0 0 16px}
+.book-look-choice button{text-align:left;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--paper);font:inherit;color:var(--ink);cursor:pointer}
+.book-look-choice button strong{display:block;font-size:16px;margin-bottom:4px}
+.book-look-choice button span{display:block;color:var(--ink-2);font-size:13px;line-height:1.5}
+.book-look-choice button[aria-pressed="true"]{border-color:var(--action);box-shadow:inset 0 0 0 1px var(--action)}
+div.creation-pick{cursor:default}
+.creation-pick video{display:block;width:100%;height:110px;object-fit:contain;background:var(--surface-soft)}
+.book-look-list{display:grid;gap:8px;margin:0 0 12px}
+.book-look-list button{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;align-items:baseline;text-align:left;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:var(--paper);font:inherit;color:var(--ink);cursor:pointer}
+.book-look-list button strong{font-size:15px}.book-look-list button span{color:var(--ink-2);font-size:13px}
+.book-look-list button small{grid-column:2;color:var(--ink-3);font-size:12px}.book-look-list button small.is-changed{color:#a0522d}
+.book-look-list button[aria-pressed="true"]{border-color:var(--action);box-shadow:inset 0 0 0 1px var(--action)}
+.book-look-list button:disabled{cursor:default;opacity:.75}
+.creation-pick small{display:block;color:var(--ink-3);font-size:12px;padding:0 0 4px}
+.creation-pick small.is-changed{color:#a0522d}
+.creation-pick.is-missing{display:flex;flex-direction:column;justify-content:center;min-height:120px;text-align:center;opacity:.6}
+.book-look-motion{display:flex;gap:6px}
+.book-look-motion button{flex:1;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit;font-size:13px;cursor:pointer}
+.book-look-motion button[aria-pressed="true"]{background:var(--action);border-color:var(--action);color:#fff}
+/* Page 1 in every style: three across, each picture shrinking to leave its style's name in view (at
+   a laptop's height the names sat below the card and the styles could not be told apart). */
+@media(--side-by-side){
+  #creation-planner .book-look-styles{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));align-content:stretch}
+  #creation-planner .book-look-styles .creation-pick{display:flex;flex-direction:column;min-height:0}
+  #creation-planner .book-look-styles img{flex:1 1 0;min-height:0;height:0}
+}

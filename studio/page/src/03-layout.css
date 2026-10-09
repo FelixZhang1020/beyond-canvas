@@ -1,0 +1,217 @@
+/* The drawing has space to breathe; the map stays tools / art / companion. */
+.studio{position:fixed;inset:0;overflow:auto;background:var(--paper);isolation:isolate;--side:336px;--gutter:32px}
+.room{position:absolute;inset:0;pointer-events:none}
+.room .haze{position:absolute;inset:25% 0 0;background-size:cover;background-position:center;filter:blur(45px);opacity:.065}
+.room .picture{position:absolute;inset:210px calc(var(--side) + 64px) 135px 140px;background-size:contain;background-position:center;background-repeat:no-repeat}
+.room .field{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 25% 75%,#f4e7d455,transparent 60%)}
+.pb{display:none}
+.bar{position:absolute;left:var(--gutter);right:var(--gutter);top:18px;min-height:68px;display:flex;align-items:center;gap:24px;z-index:6}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px;white-space:nowrap;
+  border:0;background:transparent;color:inherit;text-align:left;padding:4px 0;cursor:pointer;border-radius:10px}
+.brand:hover .brand-copy small{color:var(--ink)}
+.wayfinding{position:absolute;left:var(--gutter);top:94px;z-index:6}
+.wayfinding .btn{min-height:44px;padding:8px 10px;font-size:12px;gap:7px}
+.wayfinding svg{width:16px;height:16px}
+.brand-copy{display:flex;flex-direction:column;gap:2px}.brand-copy small{font-size:12px;font-weight:500;letter-spacing:.03em;color:var(--ink-2)}
+.brand-mark{display:block;width:56px;height:44px;flex:none;transform:translateY(-2px);transition:transform .25s ease}
+.brand-eye{position:absolute;top:34%;left:25%;width:18%;height:26%;background:#fffdf8;border-radius:50%;overflow:hidden}
+.brand-eye+.brand-eye{left:auto;right:25%}
+.brand-eye .pupil{position:absolute;left:28%;top:30%;width:44%;height:44%;border-radius:50%;background:var(--ink)}
+.brand:hover>.brand-mark,.brand:focus-visible>.brand-mark{transform:translateY(-5px) rotate(-5deg)}
+@media(prefers-reduced-motion:reduce){.brand-mark{transition:none}
+  .brand:hover>.brand-mark,.brand:focus-visible>.brand-mark{transform:translateY(-2px)}}
+.bar .seg{margin:auto}
+.class-actions{display:flex;align-items:center;flex:none}
+.class-actions>.btn{min-height:48px;padding:10px 14px;font-size:13px;white-space:nowrap;border-radius:999px;color:var(--ink-2)}
+.rail{position:absolute;left:var(--gutter);top:153px;width:78px;display:flex;flex-direction:column;gap:5px;padding:7px;z-index:6;--r:24px}
+.rail .tool{width:100%}.rail .lang{border-top:1px solid var(--line);border-radius:0 0 17px 17px;margin-top:4px;min-height:48px}
+.piece-meta{position:absolute;left:140px;right:calc(var(--side) + 64px);top:130px;pointer-events:none;z-index:2}
+.piece-meta .eyebrow{font-size:12px;color:var(--ink-3);letter-spacing:.06em}
+.piece-meta h1{font-size:30px;line-height:1.45;font-weight:600;margin:9px 0 5px;letter-spacing:.03em}
+.piece-meta p{font-size:13px;color:var(--ink-3);margin:0}
+.buddy{position:absolute;right:var(--gutter);top:154px;width:var(--side);padding:25px;z-index:6;
+  display:flex;flex-direction:column;gap:20px;max-height:calc(100% - 275px);overflow:auto;scrollbar-width:thin;scrollbar-color:#dcccb9 transparent}
+.dock{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);display:flex;align-items:center;gap:18px;
+  padding:9px 10px 9px 18px;--r:24px;z-index:6;max-width:calc(100% - 240px)}
+.dock-label{display:flex;flex-direction:column;gap:3px;color:var(--ink-3);font-size:11px;white-space:nowrap}
+.dock-label strong{font-size:12px;font-weight:500}.dock-label #count-text{font-size:11px}
+.workspace-note{position:absolute;left:var(--gutter);bottom:34px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3);z-index:1}
+.workspace-note::before{content:"";width:18px;height:1px;background:#cbb9a3}
+.workspace-note #chip-mock{font-size:11px;background:#f7f0e7;padding:4px 8px}
+.empty{position:absolute;left:calc((100% - var(--side))/2);top:48%;transform:translate(-50%,-50%);
+  width:min(480px,calc(100% - 48px));padding:30px;text-align:center;z-index:5;display:flex;flex-direction:column;gap:18px;align-items:center}
+/* The safe space around an overlay is stated once, because the panel's height
+   budget is derived from it. `max-height:100%` used to be that budget
+   and never worked: the overlay is a grid whose row is sized to its own content,
+   so the percentage is circular and the browser settles it short — on a 794px
+   window the entrance panel was handed 652px against the 730 it was owed, and
+   the lesson-note button under the two cards fell outside. A dvh calculation
+   asks nobody's content how tall it is. */
+.overlay{--overlay-inset:32px;position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:var(--overlay-inset);background:#f0e6d5b8}
+.sheet,.viewer{width:min(560px,100%);max-height:calc(100dvh - 2*var(--overlay-inset,32px));overflow:auto;padding:32px;display:flex;flex-direction:column;gap:20px;
+  border-radius:28px;background:var(--paper);border:1px solid #fff;box-shadow:0 25px 90px -45px #71533577}
+.viewer{width:min(1080px,100%);padding:24px;gap:18px}
+.sheet-heading{display:flex;align-items:center;gap:12px}.sheet-heading h2{flex:1}.sheet-heading>.btn{flex:none}
+.ledger{position:fixed;inset:0;z-index:30;overflow:auto;padding:40px max(24px,calc((100% - 1180px)/2));background:var(--paper)}
+.studio:has(#sheet-overlay:not([hidden]))>.bar .seg,.studio:has(#sheet-overlay:not([hidden]))>.rail,
+.studio:has(#sheet-overlay:not([hidden]))>.buddy,.studio:has(#sheet-overlay:not([hidden]))>.dock,
+.studio:has(#sheet-overlay:not([hidden]))>.empty,
+.studio:has(#sheet-overlay:not([hidden]))>.wayfinding{visibility:hidden}
+.studio:has(#sheet-overlay:not([hidden]))>.bar{z-index:21;pointer-events:none}
+.studio:has(#sheet-overlay:not([hidden]))>.bar .class-actions{visibility:hidden}
+#sheet-overlay{background:var(--room-wash),var(--paper);padding-top:110px}
+.studio[data-has-drawing="false"] .dock{display:none}
+/* Beside the rail, the dock's own add button is only the phone's (the stacked block shows it). */
+.dock>.btn.dock-add{display:none}
+@media(min-width:1100px){.dock{left:calc((100% - var(--side))/2 + 30px);max-width:calc(100% - var(--side) - 210px)}}
+@media(max-width:1100px) and (--side-by-side){
+  .studio{--side:292px;--gutter:22px}.bar{gap:14px}.bar .seg button{padding-inline:13px;font-size:12px}
+  .bar .seg{min-width:0}.bar .seg button{white-space:normal;line-height:1.35;padding-block:8px}
+  .brand{font-size:18px}.rail{width:70px}
+  .piece-meta{left:118px;right:calc(var(--side) + 48px);top:132px}.piece-meta h1{font-size:26px}
+  .room .picture{left:118px;right:calc(var(--side) + 48px);top:230px}.buddy{padding:22px}
+  .dock{max-width:calc(100% - 200px)}.workspace-note>span:not(#chip-mock){display:none}
+}
+@media(max-height:760px) and (--side-by-side){
+  .wayfinding{top:86px}
+  .piece-meta{top:111px}.piece-meta h1{font-size:25px}.piece-meta p{display:none}
+  .rail,.buddy{top:130px}.buddy{max-height:calc(100% - 225px);padding:21px;gap:16px}
+  .room .picture{top:180px;bottom:120px}.dock{bottom:20px}
+}
+/* Stacked screens (phones) use document flow. Artwork and long speech never fight for the same space.
+   The picture is the first thing under the header and the widest thing on the screen; every control
+   comes after it (operator: "picture are the key elements in the center and all operation functions
+   below", for the iPhone). The conversation follows the picture directly (operator: "the conversation
+   are not linking with image"): the box takes the drawing's own shape (--picture-ratio, set when it
+   loads), no taller than half the visible screen, so no band of empty paper parts them; the caption
+   and the tool rail are hidden ("you can hide this image bar in the iphone view"), and the next
+   drawing comes from the 放一幅画 beside today's drawings, which on a phone offers the camera too. */
+@media(--stacked){
+  .studio{--gutter:18px;--side:0px;--stacked-picture:clamp(260px,min(calc(100vw - 36px),56vh),760px);
+    display:flex;flex-direction:column;min-height:100%;padding:0 18px 20px;overflow:auto}
+  @supports (height:1svh){.studio{--stacked-picture:clamp(260px,min(calc(100vw - 36px),56svh),760px)}}
+  .bar{position:relative;inset:auto;min-height:130px;flex:none;flex-wrap:wrap;gap:10px;order:0;padding:16px 0 10px}
+  .brand{font-size:18px;margin-right:auto}.brand-copy small{font-size:11px}
+  .class-actions>.btn{font-size:12px;padding:10px 12px}
+  .bar .seg{order:3;flex:1 0 100%;margin:0}.bar .seg button{flex:1;padding:10px 6px;font-size:12px}
+  .wayfinding{position:relative;inset:auto;order:1;margin:0 0 10px;flex:none}
+  .rail{display:none}
+  .piece-meta{position:relative;inset:auto;order:2;min-height:0;padding:0 5px 16px;flex:none;pointer-events:auto;text-align:center}
+  .studio:not(.has-sketch-workbench) .piece-meta{display:none}
+  .piece-meta h1{font-size:21px;margin:4px 0}.piece-meta p{font-size:12px}.piece-meta .eyebrow{font-size:11px}
+  .room{position:relative;inset:auto;order:2;width:100%;height:auto;aspect-ratio:var(--picture-ratio,4/3);max-height:var(--stacked-picture);
+    min-height:160px;flex:none;margin:4px 0 14px}
+  .room .picture{inset:0}.room .haze{inset:0;opacity:.045;filter:blur(25px)}
+  .buddy{position:relative;inset:auto;order:3;width:100%;max-height:none;padding:23px;gap:18px;overflow:visible;flex:none}
+  .dock{position:relative;inset:auto;order:4;width:100%;max-width:none;transform:none;margin-top:16px;padding:10px;gap:12px;flex-wrap:wrap;flex:none}
+  .dock-label{display:none}.dock .thumbs{flex:1;max-width:100%}.dock>.btn{flex:1;min-width:160px}
+  .dock>.btn.dock-add{display:inline-flex;flex:0 0 auto;min-width:0;min-height:48px;padding:8px 14px;font-size:12px;gap:6px}
+  .workspace-note{position:relative;inset:auto;order:6;justify-content:center;margin-top:18px;font-size:11px;flex-wrap:wrap}
+  .empty{position:relative;inset:auto;order:2;transform:none;width:100%;padding:36px 14px;flex:none}
+  .studio[data-has-drawing="false"] .room,.studio[data-has-drawing="false"] .piece-meta{display:none}
+  .studio[data-has-drawing="false"] .buddy{margin-top:4px}
+  .overlay{--overlay-inset:16px}.sheet,.viewer{padding:23px;border-radius:24px;gap:18px}
+  .viewer-head{flex-wrap:wrap}.viewer-head h2{flex-basis:calc(100% - 90px)}
+  #viewer-save{order:3;flex:1}.ledger{padding:24px 18px}
+  .studio:has(#sheet-overlay:not([hidden]))>.bar{flex:none}
+  .studio:has(#sheet-overlay:not([hidden]))>.bar .seg{display:none}
+  #sheet-overlay{padding-top:90px}
+}
+@media(max-width:380px){.rail{gap:1px}.rail .tool{width:52px}.rail .lang{width:38px}.brand{font-size:16px}.bar{gap:6px}}
+@media(pointer:coarse) and (--side-by-side){.buddy{max-height:calc(100% - 280px)}.dock{bottom:24px}}
+
+/* Teacher review is one calm desk: framed artwork and a paper report at equal visual weight.
+   The drawing tools stay: a teacher reading one review still reaches for the next drawing,
+   so the rail keeps its own column here and the framed artwork begins to the right of it. */
+.studio[data-mode="teacher"] #buddy,
+.studio[data-mode="teacher"] .piece-meta,
+.studio[data-mode="teacher"] .workspace-note{display:none}
+#teacher-review-panel{position:absolute;top:126px;right:32px;bottom:28px;width:42%;overflow:auto;padding:34px 36px 40px;
+  border:1px solid var(--line);border-radius:28px;background:#fffefb;box-shadow:0 24px 55px -42px #795b4466;
+  scrollbar-width:thin;scrollbar-color:#dcccb9 transparent}
+.teacher-review-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:28px;padding-bottom:26px;border-bottom:1px solid var(--line)}
+.teacher-review-copy{min-width:0;max-width:34em}
+.teacher-review-eyebrow{display:block;margin-bottom:8px;color:#9a725b;font-size:11px;font-weight:650;letter-spacing:.12em}
+#teacher-review-title{font-size:clamp(26px,2vw,32px);line-height:1.35;letter-spacing:.02em;margin:0 0 9px;font-weight:650}
+.teacher-review-copy p{margin:0;color:var(--ink-3);font-size:13px;line-height:1.7;text-wrap:pretty}
+#teacher-review-generate{flex:none;min-height:52px;padding:12px 18px;font-size:14px;border-radius:16px;white-space:nowrap}
+#teacher-review-generate svg{width:18px;height:18px}
+#teacher-review-status{font-size:14px;color:var(--ink-2);line-height:1.7;margin:24px 0 0;padding:13px 15px;border-radius:14px;background:var(--surface-soft)}
+#teacher-review-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:17px;line-height:2.05;max-width:42em;margin-top:28px;color:var(--ink)}
+#teacher-review-panel[data-state="empty"] #teacher-review-text{max-width:30em;margin-top:32px;padding:22px 24px;border-radius:18px;background:var(--surface-soft);color:var(--ink-2);font-size:15px;line-height:1.8}
+#teacher-review-panel[data-state="loading"] #teacher-review-text{opacity:.52}
+#teacher-review-panel[data-state="loading"] #teacher-review-text.streaming{opacity:1}
+/* One frame for every tab and every step (operator: "a consistent experience
+   through all pages rather than diff pages in diff steps"). From a laptop up, the teacher's
+   review, the chat, the clip and storybook planners and the sketch's 3D study are all the same
+   two cards: the picture card on the left with today's drawings under it, and the work card on
+   the right holding the tab's own content. Each tab used to have its own arrangement:
+   a picture in the open with a narrow chat column, a planner laid over the whole screen, a
+   study with its heading above, so every click moved everything. Now only what is inside the
+   cards changes, and Review uses the same frame (05-portfolio). The frame is stated once here;
+   each card places itself from these values.
+   --frame-share is the work card's share of the width, as a number, so a card that cannot
+   use this percentage (the story picks, placed from inside the planner) can still compute it. */
+@media(--side-by-side){
+  #app{--frame-left:140px;--frame-right:var(--gutter);--frame-gap:24px;--frame-top:126px;--frame-bottom:28px;--frame-dock:96px;--frame-share:.42}
+  #creation-workspace{--side:44vw}
+  #creation-workspace .piece-meta,#creation-workspace .workspace-note{display:none}
+  /* The preview-responses tag still shows when the page runs on its stand-in harness. */
+  #creation-workspace .workspace-note:has(#chip-mock:not([hidden])){display:flex}
+  #creation-workspace .workspace-note>span:not(#chip-mock){display:none}
+  /* The tabs are centred on the window, as Review's are. */
+  #app[data-course-view] #creation-workspace .bar .seg{position:absolute;left:50%;transform:translateX(-50%);margin:0}
+  #creation-workspace .room{left:var(--frame-left);right:calc(var(--frame-share) * 100% + var(--frame-right) + var(--frame-gap));
+    top:var(--frame-top);bottom:calc(var(--frame-bottom) + var(--frame-dock));border:1px solid var(--line);border-radius:28px;background:#f8f3eb;overflow:hidden}
+  #creation-workspace .room .field{background:radial-gradient(ellipse at 25% 85%,#efe1cf66,transparent 62%)}
+  #creation-workspace .room .haze{inset:10%;opacity:.045;filter:blur(35px)}
+  #creation-workspace .room .picture{inset:22px;background-color:#fffdf8;border-radius:18px;box-shadow:0 16px 32px -26px #61493688}
+  #creation-workspace .dock{position:absolute;left:calc(var(--frame-left) + 16px);right:calc(var(--frame-share) * 100% + var(--frame-right) + var(--frame-gap) + 16px);
+    bottom:24px;transform:none;max-width:none;width:auto;padding:10px 12px 10px 18px}
+  /* With no drawing yet the invitation sits in the middle of the picture card, and fits inside it. */
+  #creation-workspace .empty{left:calc((var(--frame-left) + (1 - var(--frame-share)) * 100% - var(--frame-right) - var(--frame-gap)) / 2);
+    top:calc((var(--frame-top) + 100% - var(--frame-bottom) - var(--frame-dock)) / 2);padding:16px;gap:12px;
+    width:min(480px,calc((1 - var(--frame-share)) * 100% - var(--frame-left) - var(--frame-right) - var(--frame-gap) - 32px))}
+  #creation-workspace .empty-art{width:84px;height:94px}
+  #teacher-review-panel,#creation-workspace #buddy{top:var(--frame-top);right:var(--frame-right);bottom:var(--frame-bottom);
+    position:absolute;width:calc(var(--frame-share) * 100%);max-height:none;margin:0;padding:30px 32px}
+  #creation-workspace #buddy{border:1px solid var(--line);border-radius:28px;background:#fffefb;box-shadow:0 24px 55px -42px #795b4466;
+    -webkit-backdrop-filter:none;backdrop-filter:none}
+  /* A long review scrolls under its heading; the heading and the review-again button stay where every work card keeps them. */
+  #teacher-review-panel{display:flex;flex-direction:column;overflow:hidden}
+  #teacher-review-panel>*{flex:none}
+  #teacher-review-text{flex:0 1 auto;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#dcccb9 transparent}
+}
+/* On a narrow laptop or a short window the picture card is too small for the invitation's
+   drawing icon as well; the heading and the three ways to add a drawing are what it is for. */
+@media(--side-by-side) and (max-width:1080px),(--side-by-side) and (max-height:740px){
+  #creation-workspace .empty-art{display:none}
+}
+@media(max-width:1080px) and (--side-by-side){
+  #app{--frame-left:118px;--frame-gap:20px;--frame-share:.44}
+  #teacher-review-panel,#creation-workspace #buddy{padding:28px 26px}
+  .teacher-review-heading{display:block}.teacher-review-copy{margin-bottom:20px}#teacher-review-generate{width:100%}
+}
+@media(--stacked){
+  .studio[data-mode="teacher"] .room{height:auto;aspect-ratio:var(--picture-ratio,4/3);max-height:var(--stacked-picture);min-height:200px;margin-bottom:16px;border:1px solid var(--line);border-radius:24px;background:#f8f3eb;overflow:hidden}
+  .studio[data-mode="teacher"] .room .picture{inset:14px;border-radius:14px;background-color:#fffdf8}
+  #teacher-review-panel{position:relative;inset:auto;order:3;width:100%;padding:24px 22px 30px;overflow:visible;flex:none;border-radius:24px}
+  .teacher-review-heading{display:block;padding-bottom:22px}.teacher-review-copy{margin-bottom:18px}
+  #teacher-review-title{font-size:26px}#teacher-review-generate{width:100%;min-height:52px}
+  #teacher-review-text{font-size:16px;line-height:1.95;margin-top:24px}
+  #teacher-review-panel[data-state="empty"] #teacher-review-text{margin-top:22px;padding:18px}
+  .studio[data-mode="teacher"] .dock{order:4;margin:16px 0 0}
+}
+/* An upright phone keeps the picture in view (operator: "make image always stay in the middle when rolling"):
+   it stays pinned under the header while the conversation, the review or today's drawings scroll beneath it,
+   at most 42% of the visible height so the chat keeps the larger share. The way back and Splat's name line
+   are compact ("please compact titles"). A phone on its side is too short to pin anything and scrolls as one.
+   Last in the file, so it outranks the review tab's own picture box above. */
+@media(--stacked) and (orientation:portrait){
+  .studio{--stacked-pinned:min(var(--stacked-picture),42vh)}
+  @supports (height:1svh){.studio{--stacked-pinned:min(var(--stacked-picture),42svh)}}
+  .room,.studio[data-mode="teacher"] .room{position:sticky;top:0;z-index:7;max-height:var(--stacked-pinned)}
+  .room{margin:0 0 12px;background-color:var(--paper);box-shadow:0 16px 18px -18px #5b463966}
+  .wayfinding{margin:0 0 4px}.wayfinding .btn{min-height:36px;padding:4px 6px;font-size:12px}
+  .buddy-name small{display:none}
+}

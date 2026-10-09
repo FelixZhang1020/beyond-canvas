@@ -1,0 +1,6 @@
+[
+ {"entrance": "sketch", "question": "石膏后面住着谁呢？", "why": "a story question on the sketch entrance"},
+ {"entrance": "sketch", "question": "你这幅素描画的是哪个石膏像？", "why": "asks what the object is, not what the student did"},
+ {"entrance": "colour", "question": "你用的是什么颜料和画笔？", "why": "asks about materials, not the world in the picture"},
+ {"entrance": "colour", "question": "这幅画你打算取什么名字？", "why": "asks about the drawing as an object"}
+]

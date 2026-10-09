@@ -1,0 +1,28 @@
+# Ubuntu's own Blender for the Spark, so the temple rebuilds, the showpiece's live runs and the
+# Blender tools run on the node like everything else (operator: "move everything to
+# Spark", the Mac downloads a model only to look at it). Blender publishes no build for ARM Linux,
+# not even a daily one; Ubuntu 26.04 packages 5.0.1 for arm64. The Mac has 5.2.1: a model made here
+# opens there, and the temple saved there reads here piece for piece (model-anatomy on v25:
+# the same 8,170 pieces by role and the same size on both). Ubuntu's build has no CUDA or OptiX, so
+# Cycles would be stuck on the processor; the tools render with EEVEE and Workbench, which draw
+# through OpenGL and do use the chip (deploy/spark/bin/blender). The node allows no
+# system packages, so it lives in this image and deploy/spark/bin/blender runs it.
+# Base: Ubuntu 26.04's minimal root filesystem, imported by build-blender.sh (Docker Hub is blocked
+# on the node and NGC has no 26.04 image). Build: deploy/spark/build-blender.sh.
+ARG BASE_IMAGE=beyond-canvas/ubuntu-base:26.04.1
+FROM ${BASE_IMAGE}
+ARG DEBIAN_FRONTEND=noninteractive
+# Straight from Ubuntu's own archive, which the node reaches (334 packages, 299 MB, about ten
+# minutes); apt checks every package's signature. Beside Blender: NumPy, which the
+# survey tools and the glTF export import, and Mesa's EGL and OpenGL, which a headless render needs
+# to draw at all: without them every render stopped at "Couldn't open libEGL.so.1", then at
+# "libGL.so.1 or libOpenGL.so.0". They also draw it on the processor wherever the chip is missing,
+# at about a twentieth of the speed. With them Workbench and EEVEE both render, after three harmless
+# EGL_BAD_MATCH lines. And ffmpeg, which the
+# tools call from inside Blender to turn their frames into raise.mp4, flow.mp4 and the rest; a tool
+# that finds none skips its video without an error.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends blender python3-numpy ffmpeg \
+        libegl1 libegl-mesa0 libgl1-mesa-dri libopengl0 libgl1 \
+    && rm -rf /var/lib/apt/lists/* \
+    && blender --version | head -1 && ffmpeg -hide_banner -encoders | grep -q libx264

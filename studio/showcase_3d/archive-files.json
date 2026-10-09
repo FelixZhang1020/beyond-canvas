@@ -1,0 +1,110 @@
+{
+  "assets/fruit/hunyuan21.glb": {
+    "bytes": 2401140,
+    "sha256": "46d186985769367021aa5e7c4f3a44a80394a2daf3136f1c37a08b1fc7c448d1"
+  },
+  "assets/fruit/pixal.glb": {
+    "bytes": 3314208,
+    "sha256": "7317422b310c4cc1cefc70de1d9b5e0ab9d406ceaaef11fe2f74c753d98b21e4"
+  },
+  "assets/fruit/trellis2.glb": {
+    "bytes": 6365100,
+    "sha256": "2ac2d2fda166a8f65dc038a56040f2f71f5a38e4afee8ca756407de8556f6e23"
+  },
+  "assets/fruit/triposg.glb": {
+    "bytes": 1797304,
+    "sha256": "183cffe95c2e7055272b3828d00c7e8f24f3fe4b5bb4b0dda59a1f71ca22e01e"
+  },
+  "assets/geometry/hunyuan21.glb": {
+    "bytes": 2401188,
+    "sha256": "9940d6929fbbb6558b2fe7cae9f0b0e4f6897442d4f06d1f10c75a436ff14f36"
+  },
+  "assets/geometry/pixal.glb": {
+    "bytes": 3043624,
+    "sha256": "e152c9b896e0a681138db4ddcf6092f28709eb20ad779377d76df8422d95e7f6"
+  },
+  "assets/geometry/trellis2.glb": {
+    "bytes": 2980080,
+    "sha256": "60ecf43be7eb67aa55d97e6eee6536158bb6ca74e8eb6ba9630bd85e9c118dbb"
+  },
+  "assets/geometry/triposg.glb": {
+    "bytes": 3350396,
+    "sha256": "852b15895d30beca98f21d60d4938286799c9fbda6a360214d3307727411cf16"
+  },
+  "assets/portrait/hunyuan21.glb": {
+    "bytes": 2401200,
+    "sha256": "89509fc986c074aa809fa2f7ebc28112f0ab20507d0e9cb2d48ec3c4979d8d6b"
+  },
+  "assets/portrait/pixal.glb": {
+    "bytes": 3116364,
+    "sha256": "96260bc6e32cc0ce5b2b06a8237735dbaeadeee7fc4fc26ffc0b0275de07c0e2"
+  },
+  "assets/portrait/trellis2.glb": {
+    "bytes": 3134180,
+    "sha256": "a779d20c21714603f3fad9c3ec73c51f9727196da53e01ab95264ca88230213e"
+  },
+  "assets/portrait/triposg.glb": {
+    "bytes": 1832512,
+    "sha256": "3e143cb709a94e16ad74cb079a4886b437d72baa6399ee3bd51ee92e573245ce"
+  },
+  "inputs/fruit.png": {
+    "bytes": 2985263,
+    "sha256": "e2718d403b536155ce5f12b5e61bd7cef4e4cdf745358ff704a130c489845748"
+  },
+  "inputs/geometry.png": {
+    "bytes": 2882741,
+    "sha256": "37bdd5e70d9967cc04ffb1604b5756b81089bb836e66c522315575f09c1ededc"
+  },
+  "inputs/portrait.png": {
+    "bytes": 3023614,
+    "sha256": "be9a3c6e05502966acc23a3858639d929bde97a3b1f8f6e357a35ad39114f1fc"
+  },
+  "originals/fruit/hunyuan21/mesh.glb": {
+    "bytes": 2401140,
+    "sha256": "46d186985769367021aa5e7c4f3a44a80394a2daf3136f1c37a08b1fc7c448d1"
+  },
+  "originals/fruit/pixal/model.glb": {
+    "bytes": 3314208,
+    "sha256": "7317422b310c4cc1cefc70de1d9b5e0ab9d406ceaaef11fe2f74c753d98b21e4"
+  },
+  "originals/fruit/trellis2/model_file.glb": {
+    "bytes": 6365100,
+    "sha256": "2ac2d2fda166a8f65dc038a56040f2f71f5a38e4afee8ca756407de8556f6e23"
+  },
+  "originals/fruit/triposg/model.obj": {
+    "bytes": 242591926,
+    "sha256": "ae0de5632cfb058a2390d3f3f62aa5f09cfdff747aacc513bff0817b6ee42ba8"
+  },
+  "originals/geometry/hunyuan21/mesh.glb": {
+    "bytes": 2401188,
+    "sha256": "9940d6929fbbb6558b2fe7cae9f0b0e4f6897442d4f06d1f10c75a436ff14f36"
+  },
+  "originals/geometry/pixal/model.glb": {
+    "bytes": 3043624,
+    "sha256": "e152c9b896e0a681138db4ddcf6092f28709eb20ad779377d76df8422d95e7f6"
+  },
+  "originals/geometry/trellis2/model_file.glb": {
+    "bytes": 2980080,
+    "sha256": "60ecf43be7eb67aa55d97e6eee6536158bb6ca74e8eb6ba9630bd85e9c118dbb"
+  },
+  "originals/geometry/triposg/model.obj": {
+    "bytes": 53396578,
+    "sha256": "f6b48201499be2c87aa9620541d296b0e00ec4d4191ac82dad6a40f989e2e196"
+  },
+  "originals/portrait/hunyuan21/mesh.glb": {
+    "bytes": 2401200,
+    "sha256": "89509fc986c074aa809fa2f7ebc28112f0ab20507d0e9cb2d48ec3c4979d8d6b"
+  },
+  "originals/portrait/pixal/model.glb": {
+    "bytes": 3116364,
+    "sha256": "96260bc6e32cc0ce5b2b06a8237735dbaeadeee7fc4fc26ffc0b0275de07c0e2"
+  },
+  "originals/portrait/trellis2/model_file.glb": {
+    "bytes": 3134180,
+    "sha256": "a779d20c21714603f3fad9c3ec73c51f9727196da53e01ab95264ca88230213e"
+  },
+  "originals/portrait/triposg/model.obj": {
+    "bytes": 106020451,
+    "sha256": "d183c7c480aea3f665e13b25d7bca9982a65ceac8c8d71ef66b49eb51a2c30e7"
+  }
+}

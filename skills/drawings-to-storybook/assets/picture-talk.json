@@ -1,0 +1,12 @@
+{
+  "_": "Phrases a written story uses to talk about the picture instead of telling the story, by class language: each rule is a pattern and what it becomes, applied where a clause opens, to a passage the model wrote and never to words a teacher wrote or confirmed. The descriptions the story is written from place things on the picture for an animation, and the writer copied them however it was told not to: 46 such phrases across the 18 stories of a test class, none left after these. Before a comma or 的 the phrase goes; before a verb it becomes a place a story would say, 一旁 for a side, so 画面左侧站立着三名士兵 reads 一旁站立着三名士兵 and not 站立着三名士兵. Before 是, 有 or 为 it is kept, because the sentence would lose its subject. Place words are matched whole ((?>...), Python 3.11 and later), so 画面中央 never loses only 画面中.",
+  "zh": {
+    "opens_clause": "(?:^|(?<=[。，！？；：、,.!?;:\\s“\"]))",
+    "rules": [
+      ["(?:在)?(?:画面|画中|图中)(?:的)?(?:最)?(?>左侧|右侧|左边|右边|中央|中间|中心|上方|下方|远处|一角|里|中|上)(?:处|里|中|上)?(?:的|[，,])", ""],
+      ["(?:在)?(?:画面|画中|图中)(?:的)?(?:最)?(?>左侧|右侧|左边|右边|一角)(?:处)?(?=[^是有为，,的])", "一旁"],
+      ["(?:在)?(?:画面|画中|图中)(?:的)?(?:最)?(?>(中央|中间|中心|上方|下方|远处))(?:处)?(?=[^是有为，,的])", "\\1"],
+      ["(?:在)?(?:(?:左侧|右侧|左边|右边|远处)(?:的)?)?背景(?:(?:处|中|里|上)(?:的|[，,])?|的|[，,])", ""]
+    ]
+  }
+}

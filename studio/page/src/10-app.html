@@ -1,0 +1,472 @@
+<svg width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden"><defs>
+  <symbol id="i-photo" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="m4 16 5-5 4 4 3-3 4 4"/><circle cx="16" cy="9" r="1.5"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5ZM20 3v4m-2-2h4"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 10v2a6 6 0 0 0 12 0v-2M12 18v3m-3 0h6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M20 12H4m6-6-6 6 6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5v15M3 4c4-1 6 0 9 1 3-1 5-2 9-1v15c-4-1-6 0-9 1-3-1-5-2-9-1Z"/></symbol>
+  <symbol id="i-voice" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4Zm13-2a8 8 0 0 1 0 10m-1-7a3 3 0 0 1 0 4"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h6m4 0h6M4 17h10m4 0h2M10 4v6m4 4v6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 1-8 8H4l1-5a8 8 0 1 1 15-3Z"/><path d="M8 10h8m-8 4h5"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m-9 0 1 13h10l1-13M10 11v6m4-6v6"/></symbol>
+</defs></svg>
+<div id="app" class="studio glass-scope" data-has-drawing="false">
+  <header id="course-space" class="course-space" hidden>
+    <div class="course-space-heading">
+      <div class="course-space-identity"><button class="btn quiet" id="space-back" type="button"><svg aria-hidden="true"><use href="#i-back"/></svg><span data-t="portfolio.back">All courses</span></button>
+        <strong id="space-title"></strong><span id="space-state" class="course-tag"></span></div>
+      <div class="mode-cluster"><nav class="seg" id="mode" data-t-aria="nav.label" aria-label="Studio activities"><i class="pill" aria-hidden="true"></i>
+        <button type="button" data-mode="teacher" data-t="mode.teacher">Teacher review</button>
+        <button type="button" data-mode="feedback" class="on" data-t="mode.feedback">Feedback</button>
+        <button type="button" data-mode="move" data-t="mode.pose">Pose preview</button>
+        <button type="button" data-mode="book" data-t="mode.book">Storybook</button>
+      </nav><span class="pet-slot"><button class="splat home-mascot" id="splat" type="button" data-t-aria="pet.dragHint" aria-label="拖动小宠物调整位置，双击归位" title="拖动小宠物；双击归位"><i class="mascot-body" aria-hidden="true"><span class="brand-eye"><span class="pupil"></span></span><span class="brand-eye"><span class="pupil"></span></span><span class="mascot-cheek left"></span><span class="mascot-cheek right"></span></i></button></span></div>
+      <nav class="review-tabs" data-t-aria="review.sections" aria-label="Review sections">
+        <button type="button" id="review-teacher" data-t="mode.teacher">Teacher review</button>
+        <button type="button" id="review-stage1" data-t="mode.feedback">Talk about this drawing</button>
+        <button type="button" id="review-stage2" data-t="review.transform">Bring the drawing to life</button>
+        <button type="button" id="review-books" data-t="review.book">Today's storybook</button>
+        <button type="button" id="review-originals" data-t="review.originals">Art collection</button>
+      </nav>
+      <div class="course-space-actions"><button class="btn primary" id="space-complete" type="button" data-t="menu.end">Finish class</button>
+        <button class="btn" id="space-reopen" type="button" data-t="portfolio.reopen" hidden>Reopen course</button></div>
+    </div>
+    <p id="space-status" role="status"></p>
+  </header>
+  <div id="creation-workspace" class="studio">
+  <div class="room" id="room">
+    <div class="field" id="field"><div class="pb a"></div><div class="pb b"></div><div class="pb c"></div>
+      <div class="pb d"></div></div>
+    <div class="haze" id="haze" hidden></div>
+    <div class="picture" id="picture" role="img" data-t-aria="picture.label" aria-label="The selected drawing" hidden></div>
+  </div>
+
+  <header class="bar">
+    <button class="brand" type="button" id="btn-home" data-t-aria="nav.home" aria-label="Course portfolio"><img class="brand-mark" src="assets/brand/splat-header.png" alt="" width="56" height="44"><span class="brand-copy"><span data-t="brand">Beyond Canvas</span><small data-t="nav.home">Course portfolio</small></span></button>
+    <div class="class-actions">
+      <button class="btn" type="button" id="btn-end-course" hidden><span data-t="menu.end">Finish class</span></button>
+    </div>
+  </header>
+
+  <nav class="wayfinding" data-t-aria="nav.return" aria-label="Return navigation">
+    <button class="btn quiet" type="button" id="btn-back"><svg aria-hidden="true"><use href="#i-back"/></svg><span data-t="nav.back">Back one step</span></button>
+  </nav>
+
+  <nav class="rail glass" data-t-aria="tools.label" aria-label="Drawing tools">
+    <button class="tool on" type="button" id="btn-upload" data-t-aria="tool.upload" aria-label="Choose a photo"><svg aria-hidden="true"><use href="#i-photo"/></svg><span data-t="tool.label.upload">Add art</span></button>
+    <button class="tool" type="button" id="btn-camera" data-t-aria="tool.camera" aria-label="Take a photo"><svg aria-hidden="true"><use href="#i-camera"/></svg><span data-t="tool.label.camera">Camera</span></button>
+    <button class="tool" type="button" id="btn-sample" data-t-aria="tool.sample" aria-label="Try a sample drawing"><svg aria-hidden="true"><use href="#i-spark"/></svg><span data-t="tool.sampleShort">Sample drawing</span></button>
+    <button class="tool" type="button" id="btn-lesson" data-t-aria="menu.lesson" aria-label="Lesson settings"><svg aria-hidden="true"><use href="#i-settings"/></svg><span data-t="tool.label.lesson">Lesson</span></button>
+  </nav>
+  <input type="file" id="file" accept="image/*" class="sr" tabindex="-1">
+
+  <section class="piece-meta" aria-labelledby="piece-title"><span class="eyebrow" id="picture-index"></span><h1 id="piece-title"></h1><p id="piece-hint"></p></section>
+
+  <section id="sketch-workbench" hidden aria-label="形体与光影"></section>
+  <section id="creation-planner" hidden data-t-aria="creation.region" aria-label="Creation planning"></section>
+
+  <section id="teacher-review-panel" hidden aria-labelledby="teacher-review-title">
+    <div class="teacher-review-heading">
+      <div class="teacher-review-copy">
+        <span class="teacher-review-eyebrow" data-t="teacher.eyebrow">Artwork review</span>
+        <h2 id="teacher-review-title" data-t="mode.teacher">Teacher review</h2>
+        <p data-t="teacher.note">A full reading of the artwork, with specific strengths and grounded suggestions.</p>
+      </div>
+      <button type="button" class="btn primary" id="teacher-review-generate"><span data-t="teacher.generate">Generate review</span><svg aria-hidden="true"><use href="#i-spark"/></svg></button>
+    </div>
+    <p id="teacher-review-status" role="status" hidden></p>
+    <div id="teacher-review-text" aria-live="polite"></div>
+  </section>
+
+  <aside class="buddy glass" id="buddy" data-t-aria="companion.label" aria-label="Talk with your art companion">
+    <div class="buddy-head">
+      <div class="buddy-name"><b data-t="companion.name">Your art companion</b><small data-t="companion.hint">I see it. I am listening.</small></div>
+      <button class="btn quiet" type="button" id="btn-say" data-t-aria="history.play" aria-label="Play entire conversation" hidden><svg aria-hidden="true"><use href="#i-voice"/></svg><span data-t="history.play">Play entire conversation</span></button>
+    </div>
+    <div class="classroom-voice" id="classroom-voice"><span id="voice-status" role="status"></span><audio id="classroom-audio" controls hidden></audio>
+      <button class="btn quiet" id="voice-stop" type="button" hidden><span data-t="voice.stop">Stop reading</span></button></div>
+    <div class="buddy-dialogue" id="buddy-dialogue">
+    <section class="course-history" id="course-history" hidden>
+      <div class="conversation-caption"><strong data-t="history.title">Conversation</strong><small id="history-count"></small>
+        <span class="chat-edit" id="chat-edit" hidden><button class="btn quiet" type="button" id="btn-chat-undo" hidden><span data-t="chatEdit.undo">Take back last answer</span></button>
+        <button class="btn quiet" type="button" id="btn-chat-clear" hidden><span data-t="chatEdit.clear">Clear conversation</span></button></span></div>
+      <p id="history-sample" data-t="history.sample" hidden>Sample conversation</p>
+      <p id="history-status" role="status"></p>
+      <div id="history-messages" class="history-messages"></div>
+      <button class="btn quiet chat-stop" type="button" id="chat-stop" hidden><svg aria-hidden="true"><use href="#i-stop"/></svg><span data-t="act.stop">Stop</span></button>
+      <button class="btn" id="history-retry" type="button" hidden data-t="history.retry">Retry</button>
+    </section>
+    <div class="bubble" id="bubble" aria-live="polite"></div>
+
+    <p class="mode-intro" id="mode-intro"></p>
+    <div id="motion-editor" hidden>
+      <label for="motion-hint" data-t="edit.motion">Describe the movement</label>
+      <textarea id="motion-hint" rows="3" maxlength="2000" data-t-ph="edit.motionPh" placeholder="What should change?"></textarea>
+      <p data-t="edit.motionNote">Generate a short video preview from the original drawing. Previous creations stay saved.</p>
+    </div>
+    </div>
+    <div class="ask" id="ask" hidden>
+      <div class="answer" id="answer">
+        <button class="btn primary" type="button" id="btn-answered"><span data-t="answered">They answered</span><svg aria-hidden="true"><use href="#i-mic"/></svg></button>
+      </div>
+      <div class="chat-chips"><button class="btn quiet" type="button" id="btn-silent"><span data-t="silent">Nothing yet</span></button></div>
+      <form class="heard" id="heard" hidden>
+        <label for="heard-text" data-t="chat.input">The child’s words</label>
+        <p class="heard-gate" data-t="chat.needOpening">Let the studio look at this drawing and ask first, with the button above. Then type what the child said.</p>
+        <div class="heard-row">
+          <button class="btn" type="button" id="btn-listen"><span data-t="listen">Let them say it</span><svg aria-hidden="true"><use href="#i-mic"/></svg></button>
+          <textarea id="heard-text" rows="1" autocomplete="off" data-t-ph="heardPh" placeholder="Type what the child said"></textarea>
+          <div class="rec-bar" aria-hidden="true"><i></i><span id="rec-time">0:00</span><span data-t="chat.listening">Listening</span></div>
+          <button class="btn" type="button" id="btn-said-file"><span data-t="listen.file">Use a recording</span></button>
+          <input type="file" id="said-file" accept="audio/*,video/*" class="sr" tabindex="-1">
+          <button class="btn primary" type="submit"><span data-t="chat.send">Send</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <button class="btn quiet" type="button" id="btn-heard-back"><span data-t="heard.back">Back to the question</span></button>
+        </div>
+      </form>
+    </div>
+    <label id="cloud3d-choice" hidden><span data-t="cloud3d.model">3D model</span>
+      <select id="cloud3d-model" data-t-aria="cloud3d.model" aria-label="3D model"><option value="auto" data-t="cloud3d.auto">Automatic</option><option value="trellis2" data-t="cloud3d.trellis">TRELLIS.2</option></select>
+      <small id="cloud3d-model-status" role="status"></small>
+      <small data-t="cloud3d.wait">3D generation may take several minutes. Backup is selected manually.</small>
+    </label>
+    <div class="actions" id="buddy-actions">
+    <button class="btn primary" type="button" id="btn-primary"><span id="primary-text" data-t="act.feedback">Give feedback</span><svg aria-hidden="true"><use id="primary-icon" href="#i-chat"/></svg></button>
+      <button class="btn" type="button" id="btn-open" hidden><span id="btn-open-text"></span><svg aria-hidden="true"><use href="#i-spark"/></svg></button>
+      <button class="btn quiet" type="button" id="btn-next" hidden><span data-t="next">Next child</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    </div>
+    <details class="process" id="process"><summary><span data-t="steps">What Splat did</span></summary><div class="steps" id="steps" hidden></div></details>
+  </aside>
+
+  <div class="dock glass" id="dock">
+    <span class="dock-label" id="chip-count"><strong data-t="dock.title">Today's drawings</strong><span id="count-text"></span></span>
+    <div class="thumbs" id="thumbs"><span class="count" id="thumbs-empty" data-t="dock.empty">No drawings yet</span>
+      </div>
+    <button class="btn quiet dock-add" type="button" id="btn-add-drawing" data-t-aria="tool.upload" aria-label="Choose a photo"><svg aria-hidden="true"><use href="#i-photo"/></svg><span data-t="tool.label.upload">Add art</span></button>
+    <button class="btn quiet dock-remove" type="button" id="btn-remove-drawing" hidden><svg aria-hidden="true"><use href="#i-trash"/></svg><span data-t="remove.button">Delete</span></button>
+  </div>
+  <div class="workspace-note"><span data-t="workspace.note">The picture and the story belong to the child.</span><span id="chip-mock" hidden data-t="mock">Preview responses</span></div>
+
+  <div class="empty" id="empty">
+    <span class="empty-art" aria-hidden="true"><svg class="icon"><use href="#i-photo"/></svg></span>
+    <h2 id="empty-title" data-t="empty.title">Show me a drawing</h2>
+    <p id="empty-body" data-t="empty.body">Take a photo of the child's drawing, or choose one from this device.</p>
+    <div class="actions">
+      <button class="btn primary" type="button" id="empty-camera"><span data-t="tool.camera">Take a photo</span><svg aria-hidden="true"><use href="#i-camera"/></svg>
+        </button>
+      <button class="btn" type="button" id="empty-upload"><span data-t="tool.upload">Choose a photo</span><svg aria-hidden="true"><use href="#i-photo"/></svg></button>
+      <button class="btn quiet" type="button" id="empty-sample"><span data-t="tool.sample">Try a sample drawing</span></button>
+    </div>
+  </div>
+  <div class="sticker" id="sticker" aria-hidden="true"></div>
+  </div>
+
+  <section id="portfolio" class="portfolio" aria-labelledby="portfolio-title">
+    <div class="portfolio-shell">
+      <header class="portfolio-header">
+        <div class="portfolio-topline">
+        <div class="portfolio-brand">
+          <button class="brand" id="portfolio-home" type="button" data-t-aria="nav.home" aria-label="Course portfolio"><span class="brand-copy"><small data-t="nav.home">Course portfolio</small></span></button>
+        </div>
+        <div class="portfolio-intro">
+          <img class="portfolio-logo" src="assets/brand/lockup-header.png" alt="Beyond Canvas" data-t-aria="title" width="211" height="56">
+          <h1 id="portfolio-title" data-t="portfolio.title">Every drawing is a world to step into.</h1>
+          <p data-t="portfolio.intro">Each class's drawings and conversations, and the clips, 3D pieces and storybooks they became, are all here. Come back any time and step inside again.</p>
+        </div>
+        <div class="mascot-garden">
+          <button class="home-mascot" id="home-mascot" type="button" data-t-aria="mascot.poke" aria-label="Play with your little jelly buddy">
+            <i class="mascot-body" aria-hidden="true"><span class="brand-eye"><span class="pupil"></span></span><span class="brand-eye"><span class="pupil"></span></span><span class="mascot-cheek left"></span><span class="mascot-cheek right"></span></i>
+            <span class="mascot-sleep" aria-hidden="true">z Z</span>
+            <span class="mascot-spark" aria-hidden="true">✦</span>
+          </button>
+        </div>
+        <div class="portfolio-actions">
+          <a class="btn quiet" id="portfolio-showpiece" href="/showpiece/"><svg aria-hidden="true"><use href="#i-spark"/></svg><span data-t="nav.showpiece">StepFun Agentic Skills showcase</span></a>
+          <button class="btn quiet" id="portfolio-admin" type="button"><svg aria-hidden="true"><use href="#i-settings"/></svg><span data-t="admin.title">System management</span></button>
+          <button class="btn primary" id="portfolio-new" type="button"><span data-t="portfolio.new">Start a new class</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
+        </div>
+      </header>
+      <p class="portfolio-status" id="portfolio-status" role="status" aria-live="polite"></p>
+      <button class="btn" id="portfolio-retry" type="button" hidden data-t="portfolio.retry">Try again</button>
+      <div id="portfolio-list">
+        <div class="portfolio-grid" id="portfolio-grid"></div>
+        <div class="portfolio-empty" id="portfolio-empty" hidden><h2 id="portfolio-empty-title"></h2><p id="portfolio-empty-note"></p><button class="btn primary" type="button" id="portfolio-first" data-t="portfolio.new">Start a new class</button></div>
+        <button class="btn portfolio-more" id="portfolio-more" type="button" hidden data-t="portfolio.more">More courses</button>
+      </div>
+      <section id="course-profile" class="course-profile" aria-labelledby="space-title" hidden>
+        <button class="btn quiet" type="button" id="course-back"><svg aria-hidden="true"><use href="#i-back"/></svg><span data-t="portfolio.back">All courses</span></button>
+        <section id="review-comparison">
+          <div class="review-output-picker glass"><strong data-t="dock.title">Today's drawings</strong><div id="review-output" class="thumbs" role="group" data-t-aria="review.choose" aria-label="Choose artwork"></div></div>
+          <p id="review-empty" class="portfolio-muted" hidden data-t="review.empty">No saved outputs in this stage yet.</p>
+          <div id="review-pair" class="review-pair">
+            <figure><figcaption data-t="review.original">Original file</figcaption><img id="course-original" class="course-original" alt=""></figure>
+            <figure><figcaption id="review-output-caption" data-t="review.output">Saved output</figcaption><p id="review-output-status" role="status"></p><button class="btn" id="review-output-retry" type="button" hidden data-t="portfolio.retry">Retry</button><div id="review-results" class="review-results" role="group" data-t-aria="review.made" aria-label="What this drawing became" hidden></div><div id="review-output-content"></div>
+            <section id="review-child-description" class="review-child-description" hidden aria-labelledby="review-child-description-title">
+              <h3 id="review-child-description-title" data-t="review.words">The child's words</h3>
+              <p id="review-child-description-text"></p>
+            </section>
+            </figure>
+          </div>
+        </section>
+        <section id="review-book-panel" hidden>
+          <p class="portfolio-muted" id="course-no-results" data-t="portfolio.noResults">The course storybook will appear here.</p>
+          <h2 id="review-book-title"></h2>
+          <p id="review-book-status" role="status" aria-live="polite"></p>
+          <button class="btn" id="review-book-retry" type="button" hidden data-t="portfolio.retry">Retry</button>
+          <div id="review-book-reader"></div>
+        </section>
+        <section id="review-original-panel" hidden>
+          <p class="portfolio-muted" id="course-no-art" hidden data-t="portfolio.noArtwork">No drawings yet</p>
+          <div class="review-original-grid" id="course-drawings"></div>
+        </section>
+      </section>
+    </div>
+  </section>
+
+  <div class="overlay" id="sheet-overlay" hidden>
+    <div class="sheet start" role="dialog" aria-modal="true" aria-labelledby="start-title">
+      <button class="btn quiet" type="button" id="start-back"><svg aria-hidden="true"><use href="#i-back"/></svg><span data-t="portfolio.back">All courses</span></button>
+      <span class="eyebrow" data-t="start.eyebrow">A little time for imagination</span>
+      <h2 id="start-title" data-t="start.title">Which kind of class?</h2>
+      <p data-t="start.body">You choose, not the machine. Colour never corrects a child's picture;
+        sketch is meant to.</p>
+      <div class="field"><label for="start-name" data-t="portfolio.newName">Course name (optional)</label><input id="start-name" type="text" maxlength="120" data-t-ph="portfolio.namePh" placeholder="For example: A garden under the stars"></div>
+      <div class="picks">
+        <button class="pick" type="button" id="pick-colour" data-entrance="colour">
+          <span class="pick-art" aria-hidden="true">
+            <img src="assets/entrance/colour-painting.jpg" width="960" height="640" alt="" draggable="false">
+          </span>
+          <b data-t="entrance.colour">Colour painting</b>
+          <span class="pick-what" data-t="entrance.colourWhat">The child tells the story inside the
+            picture. Nothing is corrected.</span>
+        </button>
+        <button class="pick" type="button" id="pick-sketch" data-entrance="sketch">
+          <span class="pick-art" aria-hidden="true">
+            <img src="assets/entrance/sketch-study.jpg" width="960" height="640" alt="" draggable="false">
+          </span>
+          <b data-t="entrance.sketch">Sketch study</b>
+          <span class="pick-what" data-t="entrance.sketchWhat">Light, proportion and structure, with
+            one thing to try.</span>
+        </button>
+      </div>
+      <button class="btn quiet" type="button" id="start-settings">
+        <span data-t="start.settings">Language and lesson note</span></button>
+    </div>
+  </div>
+
+  <div class="overlay" id="end-class-overlay" hidden>
+    <div class="sheet" role="alertdialog" aria-modal="true" aria-labelledby="end-class-title" aria-describedby="end-class-note">
+      <h2 id="end-class-title" data-t="menu.end">Finish class</h2>
+      <p id="end-class-note" data-t="end.confirm">Finish this class? Afterwards, only review will appear. Reopen the class if you want to create again.</p>
+      <p id="end-class-status" role="status" aria-live="polite"></p>
+      <div class="lesson-actions">
+        <button class="btn" type="button" id="end-class-cancel"><span data-t="class.keep">Keep current class</span></button>
+        <button class="btn primary" type="button" id="end-class-confirm"><span data-t="menu.end">Finish class</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="remove-drawing-overlay" hidden>
+    <div class="sheet" role="alertdialog" aria-modal="true" aria-labelledby="remove-drawing-title" aria-describedby="remove-drawing-note">
+      <h2 id="remove-drawing-title" data-t="remove.title">Delete this drawing?</h2>
+      <p id="remove-drawing-note" data-t="remove.confirm">The drawing and everything made from it will be deleted from the studio. Earlier backups still hold it: the Spark keeps its last 7 daily backups, and copies on the administrator's computer are cleared by hand.</p>
+      <div class="lesson-actions">
+        <button class="btn" type="button" id="remove-drawing-cancel"><span data-t="remove.keep">Keep it</span></button>
+        <button class="btn primary" type="button" id="remove-drawing-confirm"><span data-t="remove.button">Delete</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="chat-clear-overlay" hidden>
+    <div class="sheet" role="alertdialog" aria-modal="true" aria-labelledby="chat-clear-title" aria-describedby="chat-clear-note">
+      <h2 id="chat-clear-title" data-t="chatEdit.title">Clear this conversation?</h2>
+      <p id="chat-clear-note" data-t="chatEdit.confirm">Everything the child and the companion said about this drawing will be deleted. Earlier backups still hold it: the Spark keeps its last 7 daily backups, and copies on the administrator's computer are cleared by hand.</p>
+      <div class="lesson-actions">
+        <button class="btn" type="button" id="chat-clear-cancel"><span data-t="chatEdit.keep">Keep it</span></button>
+        <button class="btn primary" type="button" id="chat-clear-confirm"><span data-t="chatEdit.clear">Clear conversation</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="switch-class-overlay" hidden>
+    <div class="sheet" role="alertdialog" aria-modal="true" aria-labelledby="switch-class-title" aria-describedby="switch-class-note">
+      <div class="sheet-heading"><h2 id="switch-class-title"></h2><button class="btn quiet" id="switch-class-close" type="button" data-t-aria="close" aria-label="Close"><svg aria-hidden="true"><use href="#i-close"/></svg></button></div>
+      <p id="switch-class-note" data-t="class.switchConfirm">Start a new course? Discarding only clears unsubmitted content. The saved course stays in All projects.</p>
+      <div class="actions">
+        <button class="btn" type="button" id="switch-class-discard"><span data-t="class.discard">Discard and start new course</span></button>
+        <button class="btn primary" type="button" id="switch-class-confirm"><span data-t="class.switch">Save and start new course</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="lesson-overlay" hidden>
+    <form class="sheet sheet-form" id="sheet" role="dialog" aria-modal="true" aria-labelledby="lesson-title">
+      <div class="sheet-heading"><h2 id="lesson-title" data-t="menu.lesson">Lesson settings</h2><button class="btn quiet" id="lesson-close" type="button" data-t-aria="close" aria-label="Close"><svg aria-hidden="true"><use href="#i-close"/></svg></button></div>
+      <p data-t="lesson.body">The lesson notes are kept with this class. Each drawing keeps only the child's first spoken answer (up to ten seconds) and the story read in that voice, so the storybook can read in the child's voice. No other recording is kept.</p>
+      <div class="field" id="lesson-name-field" hidden><label for="f-name" data-t="portfolio.name">Course name</label>
+        <input id="f-name" type="text" maxlength="120"></div>
+      <div class="field"><label for="f-voice" data-t="voice.label">Companion voice</label>
+        <select id="f-voice"><option value="gentle-female" data-t="voice.female">Gentle female voice</option><option value="gentle-male" data-t="voice.male">Gentle male voice</option></select>
+        <span class="hint" data-t="voice.hint">The classroom uses a local preset voice.</span></div>
+      <div class="field"><label for="f-intent" data-t="sheet.intent">Today's subject, and what the lesson is about (optional)</label>
+        <textarea id="f-intent" rows="2" data-t-ph="sheet.intentPh"
+          placeholder="For example: a barber's shop in modelling clay; mixing warm and cool colours"></textarea>
+        <span class="hint"
+          data-t="sheet.intentHint">One line, subject first. Feedback that cannot tell what the picture shows describes the wrong thing.</span>
+          </div>
+      <div class="actions"><button class="btn quiet" type="button" id="lesson-delete" hidden><span data-t="deleteClass.button">Delete this class</span></button>
+        <button class="btn primary" type="submit"><span data-t="lesson.save">Save</span>
+        </button></div>
+    </form>
+  </div>
+
+  <div class="overlay" id="delete-class-overlay" hidden>
+    <div class="sheet" role="alertdialog" aria-modal="true" aria-labelledby="delete-class-title" aria-describedby="delete-class-note">
+      <h2 id="delete-class-title" data-t="deleteClass.title">Delete this class?</h2>
+      <p id="delete-class-note"></p>
+      <div class="lesson-actions">
+        <button class="btn" type="button" id="delete-class-cancel"><span data-t="deleteClass.keep">Keep it</span></button>
+        <button class="btn primary" type="button" id="delete-class-confirm"><span data-t="deleteClass.confirm">Delete</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="admin-overlay" hidden>
+    <div class="sheet admin-sheet" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+      <div class="sheet-heading"><h2 id="admin-title" data-t="admin.title">System management</h2>
+        <button class="btn quiet" id="admin-close" type="button" data-t="close">Close</button></div>
+      <div class="admin-tools">
+        <a class="admin-tool" href="/showcase/3d/" target="_blank" rel="noopener">
+          <span class="admin-tool-icon" aria-hidden="true"><svg><use href="#i-photo"/></svg></span>
+          <span class="admin-tool-copy"><strong data-t="showcase.open">3D model exhibit</strong><small data-t="admin.compareHint">Four models, one sketch; the class uses TRELLIS.2</small></span>
+          <svg class="admin-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+        <a class="admin-tool" href="/showcase/3d/worlds.html" target="_blank" rel="noopener">
+          <span class="admin-tool-icon" aria-hidden="true"><svg><use href="#i-photo"/></svg></span>
+          <span class="admin-tool-copy"><strong data-t="showcase.worlds">Explore the worlds in the paintings</strong><small data-t="admin.worldsHint">Sample paintings made into worlds you can walk into</small></span>
+          <svg class="admin-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+        <button class="admin-tool" id="admin-board" type="button">
+          <span class="admin-tool-icon" aria-hidden="true"><svg><use href="#i-settings"/></svg></span>
+          <span class="admin-tool-copy"><strong data-t="admin.details">Service details</strong><small data-t="admin.statusHint">View service availability</small></span>
+          <svg class="admin-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </button>
+        <button class="admin-tool" id="admin-prompts" type="button">
+          <span class="admin-tool-icon" aria-hidden="true"><svg><use href="#i-book"/></svg></span>
+          <span class="admin-tool-copy"><strong data-t="admin.prompts">Prompts</strong><small data-t="admin.promptsHint">Read every instruction the AI is given</small></span>
+          <svg class="admin-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="board-overlay" hidden>
+    <div class="viewer" role="dialog" aria-modal="true" aria-labelledby="board-title">
+      <div class="viewer-head"><h2 id="board-title" data-t="admin.status">System status</h2>
+        <button class="btn quiet" type="button" id="board-close"><span data-t="close">Close</span></button></div>
+      <section id="deployment-panel" class="deployment-panel" hidden aria-labelledby="deployment-title">
+        <h3 id="deployment-title" data-t="deployment.title">Deployment & system status</h3>
+        <div class="deployment-controls">
+          <div id="deployment-options" class="deployment-toggle" role="group" aria-labelledby="deployment-title"></div>
+          <button class="btn primary" id="deployment-apply" type="button" data-t="deployment.apply">Apply</button>
+        </div>
+        <p id="deployment-active"></p>
+        <details class="deployment-config-details"><summary data-t="deployment.setupDetails">Setup details</summary><p data-t="deployment.scope">Applies to new or reopened editors. Open classes keep their version.</p>
+        <p id="deployment-detail"></p><p id="deployment-session"></p></details>
+        <div class="deployment-report-head"><h3 data-t="deployment.capabilities">Capability overview</h3><button class="btn" id="deployment-check" type="button" data-t="deployment.check">Check components</button></div>
+        <p id="deployment-status" role="status" aria-live="polite"></p>
+        <div id="deployment-overview" class="deployment-overview" hidden></div>
+        <ul id="deployment-checks" class="deployment-checks" aria-live="polite"></ul>
+        <p data-t="deployment.checkScope">Checks connectivity and model access; generation is not tested.</p>
+      </section>
+    </div>
+  </div>
+
+  <div class="overlay" id="prompts-overlay" hidden>
+    <div class="viewer prompt-book" role="dialog" aria-modal="true" aria-labelledby="prompts-title">
+      <div class="viewer-head"><h2 id="prompts-title" data-t="admin.prompts">Prompts</h2>
+        <button class="btn quiet" type="button" id="prompts-close"><span data-t="close">Close</span></button></div>
+      <p class="prompt-lede" data-t="prompts.lede">Read only.</p>
+      <p id="prompts-status" class="prompt-status" role="status" aria-live="polite"></p>
+      <div id="prompts-list" class="prompt-list"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="samples-overlay" hidden>
+    <div class="sheet sample-library" role="dialog" aria-modal="true" aria-labelledby="samples-title">
+      <div class="sheet-heading"><h2 id="samples-title" data-t="samples.title">Sample library</h2><button class="btn quiet" id="samples-close" type="button" data-t="close">Close</button></div>
+      <p id="samples-note" role="status"></p><div id="samples-grid" class="samples-grid"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="camera-overlay" hidden>
+    <div class="viewer" role="dialog" aria-modal="true" aria-labelledby="camera-title">
+      <div class="viewer-head"><h2 id="camera-title" data-t="camera.title">Hold the drawing flat</h2>
+        <button class="btn quiet" type="button" id="cam-close"><span data-t="close">Close</span></button></div>
+      <div class="media"><video id="cam" autoplay playsinline muted></video></div>
+      <div class="actions"><button class="btn primary" type="button" id="cam-shoot">
+        <span data-t="camera.shoot">Take the photo</span></button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="viewer-overlay" hidden>
+    <div class="viewer" role="dialog" aria-modal="true" aria-labelledby="viewer-title">
+      <div class="viewer-head"><h2 id="viewer-title"></h2>
+        <button class="btn" type="button" id="viewer-save">
+          <span data-t="save.work">Save it to take home</span></button>
+        <button class="btn quiet" type="button" id="viewer-close">
+          <span data-t="close">Close</span></button></div>
+      <div class="media" id="media" hidden></div>
+      <div id="book" hidden>
+        <div class="book-stage" id="book-stage">
+          <div class="book" id="book-sheet">
+            <div class="book-visual" id="book-visual"><div class="page-art" id="page-art" role="img"></div><video id="page-video" playsinline muted hidden></video>
+              <button class="book-video-toggle" id="book-video-toggle" type="button" hidden></button>
+            </div>
+            <div class="book-copy"><span class="book-kicker" id="book-page-label"></span><div class="page-text" id="page-text" tabindex="0"></div><span class="book-page-rule" aria-hidden="true"></span></div>
+          </div>
+          <button class="page-corner previous" id="book-corner-prev" type="button" data-t-aria="book.prev" aria-label="Previous page"><span aria-hidden="true">↶</span></button>
+          <button class="page-corner next" id="book-corner-next" type="button" data-t-aria="book.next" aria-label="Next page"><span aria-hidden="true">↷</span></button>
+        </div>
+        <div class="book-nav"><button class="btn" type="button" id="book-prev">
+          <span aria-hidden="true">←</span><span data-t="book.prev">Previous</span></button>
+          <div class="book-reading-controls"><span class="n" id="book-n" aria-live="polite"></span>
+          </div>
+          <button class="btn" type="button" id="book-edit-ending" hidden data-t="edit.ending">Edit ending</button>
+          <button class="btn" type="button" id="book-next"><span data-t="book.next">Next</span><span aria-hidden="true">→</span></button></div>
+        <!-- Below the page buttons so Record never takes Next's place; the label is the button's firstChild. Record first, as in the chat. -->
+        <form class="ending" id="ending" hidden>
+          <input id="ending-text" type="text" autocomplete="off" data-t-aria="heard.label" aria-label="Read and confirm the child's words" data-t-ph="book.thenPh"
+            placeholder="What the child said">
+          <div class="actions"><button class="btn" type="button" id="ending-listen"><span data-t="listen">Let them say it</span></button>
+            <button class="btn primary" type="submit"><span data-t="book.thenSend">That is the ending</span></button></div>
+        </form>
+        <p class="book-turn-hint" data-t="book.turnHint">Drag a lower corner to turn the page · Take your time</p>
+        <div class="book-audio-bar"><button class="btn" type="button" id="book-read"><span data-t="book.read">Read this page</span></button><div id="book-voice-slot"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ledger" id="ledger" hidden>
+    <div class="top"><button class="btn" type="button" id="ledger-back">
+      <span data-t="ledger.back">Back to the studio</span></button>
+      <button class="btn" type="button" id="ledger-export"><span data-t="ledger.export">Save ledger as JSON</span>
+        </button></div>
+    <h1 data-t="ledger.title">What the studio did</h1>
+    <p class="lead" data-t="ledger.lead">Every stage, its gate, tokens,
+      time and memory. Nothing here leaves this box.</p>
+    <div class="tiles" id="ledger-tiles"></div>
+    <p class="lead" id="ledger-billing" hidden></p>
+    <div class="ledger-scroll"><div class="ledger-grid" id="ledger-grid"></div></div>
+  </div>
+
+  <button type="button" id="task-return" class="btn task-return" hidden><span id="task-return-status"></span><strong data-t="task.return">Return to task</strong></button>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</div>
+<script defer src="/console.js"></script>
+</body>
+</html>

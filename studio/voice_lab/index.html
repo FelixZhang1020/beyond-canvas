@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>声音小实验 · 画里画外</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" type="module"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="声音小实验首页"><span class="brand-mark" aria-hidden="true">声</span><span>画里画外 <small>个人语音测试</small></span></a>
+    <div class="topbar-actions"><button id="settings" class="quiet" disabled aria-haspopup="dialog">设置</button><button id="reset" class="quiet" disabled>结束并清除</button></div>
+  </header>
+  <dialog id="settings-dialog" class="voice-settings" aria-labelledby="settings-title">
+    <h2 id="settings-title">语音设置</h2>
+    <p class="hint" id="settings-model">正在读取语音模型</p>
+    <label for="voice-choice">对话伙伴的声音</label>
+    <select id="voice-choice"></select>
+    <p class="hint">选择会自动记住。聊天中保存后，会用所选声音重听当前问题，后续追问也使用它。</p>
+    <p class="fine">只调整对话伙伴，不改变你的原声样本和文章音色复刻。</p>
+    <div class="actions"><button id="settings-apply" class="primary">保存设置</button><button id="settings-close" class="quiet">取消</button></div>
+  </dialog>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">声音小实验</p>
+      <h1>聊一会儿，<br class="mobile-break">再听听自己的声音。</h1>
+      <p class="lead">不用专门念台词。说说日常，从你的回答里选一段声音，再让它读一篇短文。</p>
+      <ol class="steps"><li id="step-talk" class="current">聊几句</li><li id="step-voice">选原声</li><li id="step-read">听朗读</li></ol>
+    </section>
+
+    <div class="workspace">
+      <section class="panel dialogue" aria-labelledby="chat-title">
+        <div class="panel-heading"><div><p class="eyebrow">先聊聊</p><h2 id="chat-title">今天，想从什么说起？</h2></div><span id="local-status" class="badge">正在检查设备</span></div>
+        <div class="cloud-note"><strong><span id="voice-model">正在读取语音模型</span> · <span id="voice-name">正在读取设置</span></strong><p id="dialogue-note">正在确认声音的生成方式。</p></div>
+        <div id="messages" class="messages" role="log" aria-live="polite"><div class="welcome"><span class="sound-glyph" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><p>我问一句，你说一段。<br>每次自然地说 8–15 秒就好。</p><button id="start" class="primary" disabled>开始和我聊</button></div></div>
+        <div id="question-player" hidden><audio id="question-audio" controls preload="metadata" aria-label="对话伙伴的问题" hidden></audio><button id="stop-voice" class="quiet" hidden>停下声音</button><p id="voice-status" class="hint" role="status"></p></div>
+        <div id="draft" class="draft" hidden>
+          <label for="transcript">我听到的是 <span>有错字可以修改</span></label>
+          <textarea id="transcript" rows="3" maxlength="1500"></textarea>
+          <label for="reference-text">选出的参考片段说了什么 <span>请与下方录音核对</span></label>
+          <textarea id="reference-text" rows="2" maxlength="300"></textarea>
+          <audio id="draft-audio" controls preload="metadata" aria-label="参考片段回放"></audio>
+          <p id="draft-quality" class="hint"></p>
+          <div class="actions"><button id="confirm" class="primary">就是这样，继续聊</button><button id="discard" class="quiet">再录一段</button></div>
+        </div>
+        <div id="recorder" class="recorder" hidden>
+          <div class="record-actions"><button id="record" class="record-button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/></svg><span id="record-label">按一下，开始说</span></button><button id="replay" class="quiet">重听问题</button></div>
+          <div class="record-detail"><span id="record-status" role="status">只录你自己的声音，录音时请让周围的人先安静一下。</span><span id="timer">00:00</span></div>
+          <div class="input-level" aria-hidden="true"><div id="level"></div></div>
+          <label class="file-label">也可以导入自己的一段录音<input id="audio-file" type="file" accept="audio/*"></label>
+        </div>
+      </section>
+
+      <aside class="right-column">
+        <section class="panel" aria-labelledby="samples-title">
+          <div class="panel-heading"><div><p class="eyebrow">你的声线参考</p><h2 id="samples-title">从自然回答中取样</h2></div><span id="sample-count" class="badge">还没有样本</span></div>
+          <p id="sample-empty" class="hint">确认回答后，清晰的片段会出现在这里。选择一段即可开始试听。</p>
+          <div id="samples" class="samples"></div>
+          <p class="fine">采样检查只判断时长、音量和爆音，不判断身份或音色相似度。</p>
+        </section>
+        <section class="panel reading" aria-labelledby="read-title">
+          <div class="panel-heading"><div><p class="eyebrow">换你的声音来读</p><h2 id="read-title">选一篇想听的短文</h2></div></div>
+          <label class="sr-only" for="article">要朗读的短文</label>
+          <textarea id="article" rows="6" placeholder="粘贴一段短文，最多 500 字。"></textarea>
+          <div class="article-meta"><span id="char-count">0 / 500 字</span><button id="example" class="text-button">换回示例短文</button></div>
+          <div class="cloud-note"><strong id="clone-model">正在读取音色复刻模型</strong><p id="clone-note">正在确认声音的生成方式。</p><p id="cloud-cost" hidden>按公开单价估算约 <span id="cost">¥0.00</span>；实际以平台账单为准。</p></div>
+          <button id="generate" class="primary generate" disabled>用我的声音读这篇</button>
+          <p id="generate-status" class="hint" role="status">先在左边聊一句，再确认一段参考声音。</p>
+          <div id="result" class="result" hidden><div class="result-heading"><strong>听听，这像你吗？</strong><a id="download" class="text-button" download="我的声音-朗读测试.wav">下载朗读</a></div><audio id="output-audio" controls preload="metadata" aria-label="用我的音色生成的朗读"></audio><p class="fine">与上面的参考录音对照：像不像本人、有没有漏字、停顿是否自然。短文分段生成，段间语气可能略有变化。</p></div>
+          <p id="cleanup-warning" class="warning" hidden></p>
+        </section>
+      </aside>
+    </div>
+    <div id="notice" class="notice" role="alert" hidden></div>
+    <footer>仅供你测试自己的声音。<span id="privacy-note">正在确认模型运行位置。</span>结束测试会清除本次录音与对话，后台也会在闲置 30 分钟后清理会话。下载的音频由你保管。</footer>
+  </main>
+<script defer src="/console.js"></script>
+</body>
+</html>

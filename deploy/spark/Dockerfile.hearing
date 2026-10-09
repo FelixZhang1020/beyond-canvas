@@ -1,0 +1,15 @@
+# Whisper on the Spark's own chip, so a child's recorded voice can stay on the hardware the operator
+# rents instead of going to StepFun for transcription (operator: look into it again).
+# Base: NVIDIA's PyTorch image from NGC, already on the node and already built for its chip. ffmpeg
+# is here because the page records webm and the model wants plain 16 kHz samples; transformers and
+# accelerate load Whisper. Build: deploy/spark/build-hearing.sh, which also fetches the weights.
+ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:26.08-py3
+FROM ${BASE_IMAGE}
+ARG DEBIAN_FRONTEND=noninteractive
+ARG PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ffmpeg \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir --index-url "$PIP_INDEX_URL" "transformers>=4.57" accelerate \
+    && python -c "import transformers, torch; print('transformers', transformers.__version__, 'torch', torch.__version__)" \
+    && ffmpeg -hide_banner -version | head -1

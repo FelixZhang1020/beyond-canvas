@@ -1,0 +1,11 @@
+diff --git a/triposg/inference_utils.py b/triposg/inference_utils.py
+--- a/triposg/inference_utils.py
++++ b/triposg/inference_utils.py
+@@ -6,3 +6,6 @@
+ from einops import repeat
+-from diso import DiffDMC
++try:
++    from diso import DiffDMC
++except ImportError:
++    DiffDMC = None  # CPU marching cubes does not require the CUDA extension.
+ import torch.nn.functional as F

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>展示馆 · 素描 → 3D · 四模型对比</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body data-mode="exhibit">
+  <canvas id="scene-canvas" aria-hidden="true"></canvas>
+  <main>
+    <header class="masthead"><div><p class="eyebrow">BEYOND CANVAS / MODEL STUDY</p><h1>素描 → 3D <span>材质与光影对比</span></h1></div><span id="progress" class="pill" role="status">正在读取结果</span></header>
+    <section class="source-strip" aria-label="选择测试图片">
+      <div class="source-intro"><span class="index-label">01 / 选择原图</span><p>同一张画，放在一起看。</p></div>
+      <div id="sample-tabs" role="tablist" aria-label="测试原图"></div>
+      <button id="view-original" class="quiet">放大原图 ↗</button>
+    </section>
+    <section class="toolbar" aria-label="对比控制">
+      <div class="toolbar-group"><label><input id="sync" type="checkbox" checked> 同步视角</label><button id="reset">重置视角</button><button id="auto" aria-pressed="false">自动旋转</button></div>
+      <div class="toolbar-group"><label class="select-label" hidden>显示 <select id="material"><option value="matte">哑光形体</option><option value="plaster">石膏</option><option value="marble">大理石</option><option value="wood">木头</option><option value="metal">金属</option><option value="glass">玻璃</option><option value="denim">牛仔布</option><option value="rust">锈铁</option><option value="chocolate">巧克力</option><option value="normal">表面朝向</option><option value="wire">三角网格</option></select></label><button id="lighting-toggle" aria-expanded="false" aria-controls="lighting">调整光源</button><button id="exit-focus" hidden>返回四窗</button></div>
+    </section>
+    <section id="exhibit-materials" class="exhibit-materials" aria-label="材质"><span>材质</span></section>
+    <section class="surface-controls" aria-label="材质观察"><label><input id="sphere-test" type="checkbox"> 标准球体</label><label><input id="grayscale" type="checkbox"> 灰度观察</label><label id="wood-control" hidden>细木纹 <input id="wood-grain" type="range" min="0" max="100" value="60"><output id="wood-value">60%</output></label><span>球体为统一测试形状，不是 AI 生成结果</span></section>
+    <section id="lighting" class="lighting" hidden aria-label="光源控制">
+      <label>光源方向 <input id="light-azimuth" type="range" min="-180" max="180" value="-45"><output id="light-azimuth-value">−45°</output></label>
+      <label>光源高度 <input id="light-elevation" type="range" min="10" max="85" value="50"><output id="light-elevation-value">50°</output></label>
+      <label class="check"><input id="ground" type="checkbox" checked> 显示地面与投影</label>
+    </section>
+    <p id="material-note" class="material-note" role="status">课堂现用 TRELLIS.2（DGX Spark）· Pixal3D 已归档。材质为同一网格上的实时模拟。</p><p class="interaction-hint">拖动模型旋转 · 拖动光点调光 · 滚轮缩放 · 双击放大单窗 <span>统一材质与照明，比较表面效果</span></p>
+    <section id="cards" class="cards" aria-label="四模型三维结果"></section>
+    <aside class="comparison-note"><strong>比较说明</strong><p>三个场景分别测试，共十二份真实输出。已有同图结果沿用原记录；TripoSG 显示的是减面到约 10 万面的版本（三几何体在云端减面，石膏头像与苹果与梨在 DGX Spark 上用 Blender 减面），原始文件可单独下载。模型只做统一比例、位置和初始朝向调整，保留多余底板、碎片和形体缺陷。各模型分别校准观察角度；带大底板的样例按主体取景，底板保留，边缘可能超出画面。</p><p>每次只加载当前图片的四份模型。处理时间来自不同云端硬件，不能直接视作同硬件速度排名或 DGX Spark 性能。</p></aside>
+    <footer><span>样例已归档 · 材质与光影已更新</span><button id="refresh" class="quiet">重新读取结果</button><a href="manifest.json" download>下载比较记录</a></footer>
+  </main>
+  <dialog id="original-dialog"><button id="close-original" aria-label="关闭原图">关闭 ×</button><img id="original-image" alt="当前测试原始素描"></dialog>
+  <template id="model-card">
+    <article class="model-card"><div class="card-heading"><div><p class="model-number"></p><h2></h2></div><span class="case-status" role="status">等待加载</span></div>
+      <div class="viewport" tabindex="0"><div class="loading"><span class="spinner"></span><span class="loading-text">正在读取模型</span></div><button class="focus-button" aria-label="放大此模型">⤢</button><span class="view-caption">拖动旋转</span></div>
+      <div class="card-body"><p class="finding"></p><div class="stats"><div><span>云端处理</span><strong class="time"></strong></div><div><span>显示模型</span><strong class="weight"></strong></div><div><span>三角面</span><strong class="faces"></strong></div></div>
+      <p class="processing"></p><div class="card-actions"><a class="download-display" download>下载显示 GLB</a><a class="download-original" download>原始输出</a><button class="align-button quiet">朝向校准</button></div>
+      <div class="align-panel" hidden><label>左右 <input class="align-yaw" type="range" min="-180" max="180" step="5" value="0"></label><label>俯仰 <input class="align-pitch" type="range" min="-90" max="90" step="5" value="0"></label><button class="align-reset quiet">恢复</button></div></div>
+    </article>
+  </template>
+  <script type="module" src="viewer.js"></script>
+<script defer src="/console.js"></script>
+</body>
+</html>

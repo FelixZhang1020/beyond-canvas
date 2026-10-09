@@ -1,0 +1,27 @@
+[
+  {
+    "id": "raise-whole-hall",
+    "question": "Show the hall being built from the ground up. Model: <model.blend>, anatomy: <out_dir>/anatomy.json, bearing: <out_dir>/bearing.json",
+    "expected_skill": "raise-the-hall",
+    "expected_script": "scripts/raise.py",
+    "ground_truth": "The stages tool merges the 36 bearing stages into at most 24 named scenes; the raise video shows columns first, then tie beams and bracket blocks, beams, purlins and rafters, and the roof covering last; the last still judged pass.",
+    "expected_behavior": [
+      "Runs model-anatomy's inventory and bearing first when their files are missing",
+      "Runs stages, then raise with the scenes it produced",
+      "Narrates the scene labels in order",
+      "Judges the last still and one middle still"
+    ]
+  },
+  {
+    "id": "raise-stack",
+    "question": "In what order does this little building go up? Show it. File: ../model-anatomy/evals/files/stack.blend",
+    "expected_skill": "raise-the-hall",
+    "expected_script": "scripts/stages.py",
+    "ground_truth": "Five scenes: columns, tie beams, beams, rafters, roof covering; a short video and five stills.",
+    "expected_behavior": [
+      "Runs inventory and bearing first",
+      "Reports the five scene labels in order",
+      "Produces raise.mp4"
+    ]
+  }
+]

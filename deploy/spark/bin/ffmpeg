@@ -1,0 +1,9 @@
+#!/bin/sh
+# ffmpeg from beyond-canvas/ffmpeg:1 (deploy/spark/Dockerfile.ffmpeg): the node has no ffmpeg
+# and allows no system packages. start.sh puts this folder first on the studio's PATH. The
+# studio's files are in the system temp folder, mounted at the same place; stdout is passed through.
+# --log-driver none: Docker otherwise also writes everything on stdout into a log file on disk, and
+# stdout can be a child's recording unpacked to plain sound (studio/voice/audio_in.py),
+# which must never be kept.
+exec docker run --rm -i --log-driver none --network none -u "$(id -u):$(id -g)" -v /tmp:/tmp -w /tmp \
+    --entrypoint ffmpeg beyond-canvas/ffmpeg:1 "$@"

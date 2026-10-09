@@ -1,0 +1,16 @@
+# Install into the separate portrait environment, never the classroom .venv.
+# CUDA PyTorch must be selected for the target GPU; see README.md.
+diffusers==0.32.2
+transformers==4.46.3
+peft==0.14.0
+accelerate==1.4.0
+numpy==1.26.4
+einops==0.8.1
+trimesh==4.12.2
+scikit-image==0.26.0
+fast-simplification==0.1.12
+jaxtyping==0.3.2
+typeguard==2.13.3
+omegaconf==2.3.0
+rembg[cpu]==2.0.69
+opencv-python-headless==4.11.0.86

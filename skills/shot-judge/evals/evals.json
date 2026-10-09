@@ -1,0 +1,26 @@
+[
+  {
+    "id": "judge-whole-frame-pass",
+    "question": "Does this picture show the whole small post-and-beam structure standing on its slab, all of it in frame and centred? File: evals/files/stack-front.jpg",
+    "expected_skill": "shot-judge",
+    "expected_script": "scripts/judge.py",
+    "ground_truth": "Pass: the whole structure is in frame, near the middle, large enough to read; change is empty.",
+    "expected_behavior": [
+      "Calls the judge once with the picture and the intention",
+      "Returns verdict pass with visible, centred and readable all true",
+      "Leaves change empty"
+    ]
+  },
+  {
+    "id": "judge-cropped-ridge-fail",
+    "question": "Does this picture show the ridge beam, whole, on its two lintels? File: evals/files/stack-cropped.jpg",
+    "expected_skill": "shot-judge",
+    "expected_script": "scripts/judge.py",
+    "ground_truth": "Fail: the beam runs out of the frame on the right, so centred is false; change tells the next attempt to move the camera back or re-centre.",
+    "expected_behavior": [
+      "Returns verdict fail",
+      "Sets centred false",
+      "Gives one concrete instruction in change"
+    ]
+  }
+]

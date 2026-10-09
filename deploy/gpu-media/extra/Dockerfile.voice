@@ -1,0 +1,5 @@
+FROM beyond-canvas/pixal3d:f7cf384
+COPY voxcpm-source /opt/voxcpm
+RUN SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VOXCPM=2.0.0 python -m pip install --no-cache-dir --no-deps /opt/voxcpm && python -m pip install --no-cache-dir inflect==7.5.0 argbind==0.3.9 simplejson==3.20.2 sortedcontainers==2.4.0 wetext==0.1.2 modelscope==1.35.2 datasets==3.6.0 soundfile==0.13.1 librosa==0.11.0
+ENV PYTHONPATH=/opt/voxcpm/src HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+ENTRYPOINT ["python", "/runner/voice_worker.py"]

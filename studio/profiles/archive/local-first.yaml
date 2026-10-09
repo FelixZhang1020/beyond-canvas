@@ -1,0 +1,49 @@
+# GPU media first; vision and review stay on official StepFun API.
+extends: api
+slots:
+  image.edit:
+    provider: localimage
+    model: flux
+    options:
+      task: edit_image
+      base_url: http://127.0.0.1:7270
+      choice: flux
+      label: FLUX.2 Klein 4B
+      timeout_s: 600
+  video.animation:
+    provider: localvideo
+    model: wan2.2-ti2v-5b
+    options:
+      task: to_video
+      base_url: http://127.0.0.1:7260
+      timeout_s: 600
+  mesh.portrait:
+    provider: localmesh
+    model: trellis2
+    options:
+      task: to_mesh
+      base_url: http://127.0.0.1:7240
+      timeout_s: 600
+  mesh.alternative:
+    provider: localmesh
+    model: pixal
+    options:
+      task: to_mesh
+      base_url: http://127.0.0.1:7250
+      timeout_s: 600
+  tts.studio:
+    provider: remotevoice
+    model: VoxCPM2
+    options:
+      base_url: http://127.0.0.1:7280
+
+  # Own the weights. Everything this deployment can run itself runs on the 4090
+  # — the making, the voice, and the hearing — and only reading is still bought.
+  # "Local" here means our own hardware rather than this particular laptop; the
+  # Mac cannot hold these models and is not meant to. The rule in
+  # studio/voice/transcribe.py still holds: the 4090 is your box, not a supplier.
+  speech.in:
+    provider: whispercpp
+    model: whisper-small-q5_1
+    options:
+      base_url: http://127.0.0.1:7290

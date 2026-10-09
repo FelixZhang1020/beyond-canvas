@@ -1,0 +1,9 @@
+{
+ "about": "The measurable part of brief.md, read by hall-carpenter brief. The facts are Wikipedia's, 'Foguang Temple': seven bays by four, 34 by 17.7 m, an inner and an outer set of columns, bracket sets half as high as the column, a hipped roof. The span is between the centres of the corner columns, as a hall's front is measured.",
+ "hall": "East Main Hall of Foguang Temple",
+ "bays": [7, 4],
+ "span_m": [34.0, 17.7],
+ "span_within": 0.06,
+ "column_rings": 2,
+ "brackets_of_column": [0.3, 0.7]
+}

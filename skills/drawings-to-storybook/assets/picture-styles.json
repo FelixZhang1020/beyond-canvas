@@ -1,0 +1,13 @@
+{
+  "_": "The picture-book looks a teacher can choose for a storybook, and the instruction FLUX.2 Klein 4B gets for each page: {style} is one of the styles below, {keep} is what the class's checking model listed as the page's must-keep contents (prompts/picture-keep.txt). Seven styles were tried on the test class's drawings and the operator kept all seven: watercolour, gouache, cut paper and clay change the look clearly; coloured pencil stays close to a crayon drawing, and storybook painting and ink-and-wash change it a little (docs/measured/storybook-styles.md). The order is the order the teacher sees them in; studio/page/src/29l-book-look.js names the same keys.",
+  "instruction": "Repaint this child's drawing as a finished illustration for a published children's picture book: {style}. The whole picture takes on that style - lines, colours, textures and light - so it clearly looks made that way. Keep what the picture shows, where the child put it:\n{keep}\nKeep each character's own colours. Do not add anything: no new characters, no people, no hands, no text, no letters, no border.",
+  "styles": {
+    "watercolour": "a loose, wet watercolour painting with soft bleeding edges, visible washes and white paper showing through",
+    "gouache": "a bold, flat gouache painting with crisp shapes and rich saturated colours, like a modern printed picture book",
+    "paper": "a cut-paper collage of hand-painted tissue papers, with visible torn and cut paper edges and layered textures",
+    "clay": "a scene of handmade clay and plasticine models, photographed as a miniature set with soft studio light",
+    "pencil": "a rich coloured-pencil and wax-crayon drawing with clean, confident outlines and warm, even colour",
+    "storybook": "a soft painterly storybook illustration with gentle light and shadow, rounded forms and a warm glow",
+    "ink": "a Chinese ink-and-wash painting with expressive black brush lines and light, transparent colour washes on rice paper"
+  }
+}

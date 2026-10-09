@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="{lang}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<style>
+  :root {{ --paper: #FFFDF8; --ink: #26224A; --muted: #5A557A; --critical: #D03B3B; }}
+  body {{ margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--paper);
+         color: var(--ink); font-family: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", "Nunito",
+         "Avenir Next", sans-serif; }}
+  form {{ background: #fff; border-radius: 20px; padding: 32px; width: min(360px, calc(100vw - 32px));
+         box-sizing: border-box; box-shadow: 0 18px 40px -18px rgba(60, 40, 120, .32); display: grid; gap: 16px; }}
+  h1 {{ margin: 0; font-size: 22px; font-weight: 700; }}
+  label {{ font-size: 15px; font-weight: 600; }}
+  input {{ font: inherit; font-size: 17px; padding: 12px 16px; border-radius: 999px; min-height: 48px;
+          border: 1px solid rgba(38, 34, 74, .2); box-sizing: border-box; width: 100%; }}
+  button {{ font: inherit; font-size: 15px; font-weight: 600; min-height: 48px; border: 0; border-radius: 999px;
+           color: #fff; background: linear-gradient(90deg, #FF6F61, #FF9F43); cursor: pointer; }}
+  button:active {{ transform: scale(.94); transition: transform .5s linear(0, .35 12%, .8 24%, 1.06 38%, 1.02 52%, .99 66%, 1); }}
+  .wrong {{ color: var(--critical); font-size: 13px; font-weight: 600; margin: 0; }}
+  .wrong:empty {{ display: none; }}
+  a {{ color: var(--muted); font-size: 12.5px; font-weight: 600; }}
+</style>
+</head>
+<body>
+<form method="post" action="/door">
+  <h1>{title}</h1>
+  <label for="password">{prompt}</label>
+  <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+  <input type="hidden" name="next" value="{next}">
+  <p class="wrong" role="alert">{wrong}</p>
+  <button type="submit">{button}</button>
+  <a href="/door/certificate">{certificate}</a>
+</form>
+</body>
+</html>

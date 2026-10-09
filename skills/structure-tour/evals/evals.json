@@ -1,0 +1,37 @@
+[
+  {
+    "id": "tour-whole-hall",
+    "question": "Take me on a tour of the hall, outside and in. Model: <model.blend>, anatomy: <out_dir>/anatomy.json",
+    "expected_skill": "structure-tour",
+    "expected_script": "scripts/tour.py",
+    "ground_truth": "A sixteen-second video in four moves: around the outside, to the front doors, inside looking up at the ceiling, and overhead with the roof removed; four stills judged.",
+    "expected_behavior": [
+      "Runs model-anatomy first when anatomy.json is missing",
+      "Runs the tour with all four segments",
+      "Judges each segment's still with an intention naming what it should show",
+      "Reports the video path and which stills passed"
+    ]
+  },
+  {
+    "id": "tour-roof-frame-only",
+    "question": "Show me only the roof frame from above, with the tiles gone. Model: <model.blend>, anatomy: <out_dir>/anatomy.json",
+    "expected_skill": "structure-tour",
+    "expected_script": "scripts/tour.py",
+    "ground_truth": "The overhead segment alone: the covering and rafters hidden, the camera above looking down; one still judged.",
+    "expected_behavior": [
+      "Uses --segments overhead and nothing else",
+      "Judges the still with 'the timber frame from above, roof removed'"
+    ]
+  },
+  {
+    "id": "tour-stack",
+    "question": "Fly around this little building. File: ../model-anatomy/evals/files/stack.blend",
+    "expected_skill": "structure-tour",
+    "expected_script": "scripts/tour.py",
+    "ground_truth": "Runs inventory, then the tour's outside segment at least; a video and a still.",
+    "expected_behavior": [
+      "Runs inventory first",
+      "Produces tour.mp4 and tour-outside.png"
+    ]
+  }
+]

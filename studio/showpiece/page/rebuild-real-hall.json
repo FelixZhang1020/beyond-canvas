@@ -1,0 +1,14 @@
+{
+ "source": "hall-carpenter survey of our measured model of the hall, as rebuild-record.json carries it (harness.survey)",
+ "roof_rings": 6,
+ "ridge_m": 17.0,
+ "eaves_m": [
+  3.71,
+  3.73
+ ],
+ "outline_m": [
+  41.39,
+  25.05
+ ],
+ "top_m": 16.02
+}

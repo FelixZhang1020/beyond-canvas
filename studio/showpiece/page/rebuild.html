@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>从零盖殿 · 画里画外 · 大殿篇</title>
+<script>if (window.top !== window.self) document.documentElement.classList.add("embedded");</script>
+<link rel="stylesheet" href="rebuild.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body>
+<main class="page">
+  <div class="screen">
+  <header class="topbar">
+    <a class="back" href="./">← 大殿篇</a>
+    <div class="heading">
+      <p class="kicker" id="kicker">从零到一 · 佛光寺东大殿 · 第 4 次尝试</p>
+      <h1 id="title">一座大殿，怎样被 Agent 盖出来</h1>
+    </div>
+    <nav class="runs" aria-label="两种做法">
+      <span class="runs-label">照测绘重建<small>先量现成模型，再照数字搭</small></span>
+      <a class="run-chip" data-run="1" data-result="no" href="rebuild.html?run=1"><b>1</b><em>未采纳</em><i class="run-meta"></i></a>
+      <a class="run-chip" data-run="2" data-result="wrong" href="rebuild.html?run=2"><b>2</b><em>错误采纳</em><i class="run-meta"></i></a>
+      <a class="run-chip" data-run="3" data-result="yes" href="rebuild.html?run=3"><b>3</b><em>采纳</em><i class="run-meta"></i></a>
+      <a class="run-chip" data-run="4" data-result="yes" href="rebuild.html"><b>4</b><em>采纳</em><i class="run-meta"></i></a>
+      <span class="runs-group" id="design-runs"><span class="runs-label">照描述重建<small>只有一张照片和一段简报</small></span>
+        <a class="run-chip" data-run="design1" data-result="no" href="rebuild.html?design=1"><b>1</b><em>未采纳</em><i class="run-meta"></i></a>
+        <a class="run-chip" data-run="design2" data-result="no" href="rebuild.html?design=2"><b>2</b><em>未采纳</em><i class="run-meta"></i></a>
+        <a class="run-chip" data-run="design3" data-result="no" href="rebuild.html?design=3"><b>3</b><em>未采纳</em><i class="run-meta"></i></a>
+        <a class="run-chip" data-run="design4" data-result="wrong" href="rebuild.html?design=4"><b>4</b><em>错误采纳</em><i class="run-meta"></i></a>
+        <a class="run-chip" data-run="design5" data-result="no" href="rebuild.html?design=5"><b>5</b><em>未采纳</em><i class="run-meta"></i></a>
+        <a class="run-chip" data-run="design6" data-result="wrong" href="rebuild.html?design=6"><b>6</b><em>错误采纳</em><i class="run-meta"></i></a>
+        <a class="run-chip" data-run="design7" data-result="no" href="rebuild.html?design=7"><b>7</b><em>未采纳</em><i class="run-meta"></i></a>
+        <a class="run-chip" data-run="design8" data-result="no" href="rebuild.html?design=8"><b>8</b><em>未采纳</em><i class="run-meta"></i></a>
+        <a class="run-chip" data-run="design9" data-result="yes" href="rebuild.html?design=9"><b>9</b><em>采纳</em><i class="run-meta"></i></a>
+        <a class="run-chip" data-run="design10" data-result="yes" href="rebuild.html?design=10"><b>10</b><em>采纳</em><i class="run-meta"></i></a>
+      </span>
+      <span class="runs-legend"><i data-result="no"></i>未采纳<i data-result="wrong"></i>错误采纳<i data-result="yes"></i>采纳</span>
+      <button id="tour" class="tour" type="button" aria-pressed="false">▶ 自动连播</button>
+    </nav>
+    <script>
+      // Every attempt's chip is written here, so the bar is whole before anything arrives; the page used to add the
+      // designs' once its modules and two files had come, seconds on every attempt the tour opened (operator). The
+      // attempt playing is marked, and a running tour shows as running, as early; rebuild.mjs marks both again.
+      (function () {
+        var query = new URLSearchParams(location.search), design = Number(query.get("design")), run = query.get("run");
+        var chip = document.querySelector('.runs a[data-run="' + (design > 0 ? "design" + design : ["1", "2", "3"].indexOf(run) >= 0 ? run : "4") + '"]');
+        if (chip) { chip.classList.add("current"); chip.setAttribute("aria-current", "page"); }
+        if (query.get("tour") === "1") { document.getElementById("tour").textContent = "■ 停止连播"; document.getElementById("tour").setAttribute("aria-pressed", "true"); }
+      })();
+    </script>
+    <div class="figures" aria-label="原次运行数据">
+      <span><b id="fig-time">–</b>用时</span>
+      <span><b id="fig-actions">–</b>行动</span>
+      <span><b id="fig-tokens">–</b>token</span>
+      <span class="caught"><b id="fig-caught">–</b>拦下</span>
+      <span class="caught"><b id="fig-rounds">–</b>修复</span>
+    </div>
+    <a class="back secondary" href="/">画里画外 ↗</a>
+  </header>
+  <section id="player" class="player" aria-label="建造过程播放器">
+    <div class="story">
+      <div class="story-head"><span class="live-dot"></span><span id="story-head">原次 StepFun × Mac Blender · Spark 三维重建</span></div>
+      <p id="chapter-count" class="chapter-count">第 1 / 145 步</p>
+      <h2 id="chapter-title">测量原殿</h2>
+      <p id="chapter-detail" class="chapter-detail">读取佛光寺东大殿，确定柱网与屋顶尺寸。</p>
+      <div id="bracket-detail" class="bracket-detail" hidden>
+        <div class="bracket-heading"><strong>斗拱内部装配 · 1 次原始工具调用</strong><span id="bracket-count"></span></div>
+        <p id="bracket-stage-title" class="bracket-stage-title">坐斗落位</p>
+        <p id="bracket-stage-detail" class="bracket-stage-detail"></p>
+        <div id="bracket-steps" class="bracket-steps" aria-label="斗拱装配分解"></div>
+        <div class="bracket-actions"><button id="bracket-scope" type="button"></button><span>拖动旋转 · 滚轮缩放</span></div>
+      </div>
+      <div class="checkline"><span>AGENT LOOP</span><b id="loop-phase">观察</b><button id="keys" class="keys" type="button" aria-pressed="false"></button></div>
+      <div id="mini" class="mini" aria-live="polite">
+        <div class="mini-reply"><i id="mini-dot"></i><span><small>Harness 回复</small><b id="mini-text"></b></span></div>
+      </div>
+      <div class="player-controls">
+        <button id="previous" class="small" type="button" aria-label="上一步">‹</button>
+        <button id="play" class="play" type="button" aria-label="播放">▶ 播放</button>
+        <button id="next" class="small" type="button" aria-label="下一步">›</button>
+        <label class="speed-label">速度 <select id="speed"><option value="1">1×</option><option value="1.5">1.5×</option><option value="2">2×</option><option value="4">4×</option></select></label>
+      </div>
+      <p id="keys-hint" class="keys-hint"></p>
+    </div>
+    <div id="picture" class="picture">
+      <div class="visual-stage">
+        <img id="frame" src="rebuild-temple.jpg" alt="佛光寺东大殿原殿渲染" fetchpriority="high">
+        <video id="clip" class="clip" muted playsinline preload="metadata" hidden></video>
+        <div id="hall-view" class="model-view" aria-label="从 Spark Blender 阶段模型导出的可旋转三维大殿" hidden></div>
+        <div id="model-view" class="model-view" aria-label="从 Blender 阶段模型导出的可旋转三维斗拱" hidden></div>
+      </div>
+      <div id="model-status" class="model-status" hidden>正在打开 Blender 模型…</div>
+      <div id="catch" class="catch" role="status" hidden><strong id="catch-title"></strong><b id="catch-gloss"></b><code id="catch-words"></code><small id="catch-note"></small></div>
+      <div id="round" class="round" hidden></div>
+      <div id="load-legend" class="load-legend" hidden>
+        <strong>逐件承载荷载 · 从屋顶传向柱子</strong>
+        <div class="load-ramp" aria-label="对数色标：深蓝 0.5 千牛到红色 1000 千牛"></div>
+        <div class="load-scale"><span>0.5 kN · 深蓝</span><span>1000 kN · 红</span></div>
+        <small id="load-source"></small>
+      </div>
+      <div id="physics-panel" class="physics-panel" hidden>
+        <div class="physics-title"><strong id="physics-title">物理检查</strong><span id="physics-time">0.0 / 0.0 秒</span></div>
+        <svg class="physics-chart" viewBox="0 0 240 76" role="img" aria-label="地面位移与侧拉协议曲线">
+          <path id="physics-ground-curve" class="ground-curve"></path>
+          <path id="physics-pull-curve" class="pull-curve"></path>
+          <line id="physics-cursor" x1="0" x2="0" y1="0" y2="76"></line>
+        </svg>
+        <div class="physics-values"><span id="physics-ground"></span><span id="physics-pull"></span></div>
+        <div id="physics-result" class="physics-result"></div>
+        <div id="physics-spark" class="physics-result spark"></div>
+        <div id="physics-source" class="physics-source"></div>
+      </div>
+      <div class="picture-top"><span id="kind" class="kind">测量</span><span id="picture-caption">DGX Spark 阶段重建画面</span></div>
+      <div class="picture-bottom"><span id="actual-time">原次 00:20 / 36:33</span><span id="step">记录第 2 步</span></div>
+    </div>
+    <div class="side">
+      <section class="hood" aria-labelledby="hood-title">
+        <h2 id="hood-title">引擎盖下 · 这一步怎样走完</h2>
+        <svg id="loop" class="loop" viewBox="0 0 460 362" role="img" aria-label="模型、Harness、技能、运行环境与采纳门之间这一步走过的路径"></svg>
+      </section>
+      <div id="call" class="call" aria-live="polite"></div>
+    </div>
+  </section>
+  <section class="timeline-wrap" aria-labelledby="timeline-title">
+    <div class="timeline-heading">
+      <h2 id="timeline-title">原次时间线</h2>
+      <div class="seekbox">
+        <input id="seek" type="range" min="0" max="144" value="0" aria-label="演示进度">
+        <div id="seek-marks" class="seek-marks" aria-label="关键时刻"></div>
+      </div>
+      <span class="legend"><i class="caught"></i>Harness 拦下<i class="repair"></i>修复<i class="pass"></i>验收通过<i class="end"></i>结束</span>
+    </div>
+    <div id="timeline" class="timeline"></div>
+  </section>
+  </div>
+  <div id="below" class="below">
+  <section class="about">
+    <p class="lede">Agent 自主测量、建造；Harness 拦下异常参数并反馈承重、重力与相似度检查，模型据此修到验收。</p>
+    <p id="hood-lede" class="lede"></p>
+  </section>
+  <section class="attempts" aria-labelledby="attempts-title">
+    <h2 id="attempts-title">照测绘重建 · 先量现成模型，再照数字搭 · 点击任一次重放</h2>
+    <ol>
+      <li data-result="no" data-run="1"><a href="rebuild.html?run=1"><b>第 1 次</b><strong>未采纳</strong><span>屋架横线给成纵线，立在没有柱子的地方，重力测试 26 件坠落；模型想了 1.2 万 token 后没有回答。什么也没交付。</span></a></li>
+      <li data-result="wrong" data-run="2"><a href="rebuild.html?run=2"><b>第 2 次</b><strong>错误采纳</strong><span>6 分钟交付，两根脊柱穿出屋面；模型看图写"没有多余突出物"。此后 Harness 加了"穿出屋面"的检查。</span></a></li>
+      <li data-result="yes" data-run="3"><a href="rebuild.html?run=3"><b>第 3 次</b><strong>采纳</strong><span>新检查点名穿出屋面的脊柱，模型修好，用了 5 / 6 轮修复；当时共 4 项检查。</span></a></li>
+      <li data-result="now" data-run="4"><a href="rebuild.html"><b>第 4 次</b><strong>采纳，最后一轮</strong><span>检查加到 7 项：承重（含雪荷载与细长比）、地震与侧拉、构架要像原殿。上面逐步重放它被拦下、修复、再验收的全过程。</span></a></li>
+    </ol>
+  </section>
+  <section class="attempts" id="designs-section" aria-labelledby="designs-title" hidden>
+    <h2 id="designs-title">照描述重建 · 没有原殿可量，只有一张照片和一段简报 · 这里的采纳＝合简报、立得住，不是像原殿 · 点击任一次重放</h2>
+    <div class="path" id="design-path" aria-labelledby="path-title" hidden>
+      <h3 id="path-title"></h3>
+      <div id="path-stages" class="path-stages"></div>
+    </div>
+    <div class="versus" id="design-versus" aria-labelledby="versus-title" hidden>
+      <h3 id="versus-title"></h3>
+      <p id="versus-lede" class="versus-lede"></p>
+      <div id="versus-halls" class="versus-halls"></div>
+    </div>
+    <ol id="design-cards"></ol>
+  </section>
+  <section class="how" id="how-section" aria-labelledby="how-title">
+    <h2 id="how-title">Harness 怎样拦、怎样校、怎样验收</h2>
+    <div class="how-grid"><article id="how-guard"></article><article id="how-calibrate"></article><article id="how-checks"></article></div>
+  </section>
+  <aside class="provenance" id="provenance">
+    <strong>画面与运行来源</strong>
+    <p id="prov-1">这次成功运行由 StepFun 云端模型决策，Mac 上的 Blender 建造，共 36 分 33 秒；全部 145 条思考、调用、观察和交付按原次顺序播放。画面中的三维大殿是 DGX Spark 依据该次日志的构件参数重建的 17 个阶段 Blender 模型，合成一份后在网页中逐阶段显示；每次工具调用放下的一族构件在画面中同时出现并闪亮，与原次一样；修复时整副屋架先被拆下（红色）再整副重放，因为 frames 工具每次都整体替换屋架。被拒的调用和未通过的检查以 Harness 原文标出，不虚构被拒绝的几何。斗拱内部八阶段是对原次第 18 步单次工具调用的构件拆解，不是额外的 Agent 步骤。颜色取自 Blender 出阶段图时给各族构件的颜色。</p>
+    <p id="prov-2">每一轮承重彩图取自 Spark 在该轮模型上按 load-path 技能重算的逐件承载荷载，颜色不是有限元应力。每一轮重力与地震测试都在 Spark 上用该轮模型、按原参数重跑，并记录每一件构件每两帧的位置（不记转角）；网页按位置播放并放大位移，重力放大 50 倍、地震放大 20 倍，墙体与屋面不参与测试故隐去。原次日志的结果与 Spark 重跑的结果并列显示。这些画面均不是原次录像。</p>
+    <a id="prov-link" href="rebuild-record.json" target="_blank" rel="noopener noreferrer">查看时间线与原始构件参数 ↗</a>
+  </aside>
+  </div>
+</main>
+<script type="module" src="rebuild.mjs"></script>
+</body>
+</html>

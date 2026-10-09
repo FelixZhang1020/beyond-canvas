@@ -1,0 +1,16 @@
+# Ubuntu's own ffmpeg and ffprobe for the Spark's studio, which checks every Wan clip with them
+# (studio/making/animation.py refuses a clip it cannot inspect). The node allows no system packages
+# and no trusted static build is reachable from it, so the tools live in this image and
+# deploy/spark/bin/ffmpeg and ffprobe run them. Base: NVIDIA's Ubuntu 24.04 image from NGC,
+# already on the node (Docker Hub is blocked there). Build: deploy/spark/build-ffmpeg.sh.
+ARG BASE_IMAGE=nvcr.io/nvidia/cuda:13.0.0-base-ubuntu24.04
+FROM ${BASE_IMAGE}
+ARG DEBIAN_FRONTEND=noninteractive
+ARG APT_MIRROR=
+RUN if [ -n "$APT_MIRROR" ]; then \
+        sed -i "s#http://ports.ubuntu.com/ubuntu-ports#$APT_MIRROR#g" /etc/apt/sources.list.d/*.sources /etc/apt/sources.list 2>/dev/null || true; \
+    fi \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends ffmpeg \
+    && rm -rf /var/lib/apt/lists/* \
+    && ffmpeg -hide_banner -encoders | grep -q libx264 && ffprobe -version | head -1

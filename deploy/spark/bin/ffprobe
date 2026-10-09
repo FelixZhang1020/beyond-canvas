@@ -1,0 +1,6 @@
+#!/bin/sh
+# ffprobe from beyond-canvas/ffmpeg:1 (deploy/spark/Dockerfile.ffmpeg): the node has no ffmpeg
+# and allows no system packages. start.sh puts this folder first on the studio's PATH. The
+# studio's files are in the system temp folder, mounted at the same place; stdout is passed through.
+exec docker run --rm -i --network none -u "$(id -u):$(id -g)" -v /tmp:/tmp -w /tmp \
+    --entrypoint ffprobe beyond-canvas/ffmpeg:1 "$@"

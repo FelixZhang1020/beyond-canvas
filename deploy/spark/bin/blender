@@ -1,0 +1,32 @@
+#!/bin/sh
+# Blender from beyond-canvas/blender:1 (deploy/spark/Dockerfile.blender): the node has no Blender
+# and allows no system packages. start.sh puts this folder first on the studio's PATH, where
+# studio/showpiece/blender_bin.py finds it by name. The home folder and the system temp folder are
+# mounted at the same places, so every path a tool passes means the same inside.
+#
+# A caller that gives up on a job (a tool's timeout) kills this script, not the container, which
+# would go on running Blender on a shared node. A watcher outlives the script and stops it; it
+# ignores the hangup and stop signals that reach the whole group when the studio's tmux session is
+# killed or an SSH session drops, which it is there to answer. --init lets a signal Docker passes on
+# actually stop Blender, which as the container's first process would ignore it.
+#
+# Blender shares the node with the class, whose clip service stops a clip when free memory falls
+# under its floor. The whole temple flow run peaked at 4.29 GiB (docker stats every 3 s),
+# so Blender is capped at 8 GiB, swap included — past that Docker ends Blender, not the class — and
+# gets a quarter of the default processor weight, so class work comes first when both want the cores.
+#
+# Renders draw on the NVIDIA chip (operator). The same 48-frame temple render took 79 s
+# there against 1,498 s on the processor, 19 times faster, and the pictures are the same; a render
+# uses about a quarter of the chip and 2.4 GiB, so the class's clips and 3D jobs keep the rest. The
+# driver's own graphics libraries come with --gpus, but the file that points the loader at them does
+# not, so the host's is mounted; where there is no such file, Blender falls back to the processor.
+name=bc-blender-$$-$(date +%s)
+vendors=/usr/share/glvnd/egl_vendor.d/10_nvidia.json
+chip=""
+[ -e "$vendors" ] && chip="--gpus all -e NVIDIA_DRIVER_CAPABILITIES=graphics,compute,utility -v $vendors:$vendors:ro"
+( trap '' HUP INT TERM; while kill -0 $$ 2>/dev/null; do sleep 2; done; docker kill "$name" ) \
+    < /dev/null > /dev/null 2>&1 &
+# $chip is meant to split into words here, and holds no path with a space in it.
+docker run --rm --init --pull never --name "$name" --network none -u "$(id -u):$(id -g)" \
+    --memory 8g --memory-swap 8g --cpu-shares 256 $chip \
+    -e HOME="$HOME" -v "$HOME:$HOME" -v /tmp:/tmp -w "$PWD" --entrypoint blender beyond-canvas/blender:1 "$@"

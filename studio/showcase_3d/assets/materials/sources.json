@@ -1,0 +1,56 @@
+[
+  {
+    "file": "oak_veneer_01_diff_1k.png",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/oak_veneer_01/oak_veneer_01_diff_1k.png",
+    "bytes": 5309654,
+    "sha256": "0f815b3d49d21c4edeea00c8708455ecd904fc747b0c1d3402e52c26fa70cbc9"
+  },
+  {
+    "file": "oak_veneer_01_rough_1k.png",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/oak_veneer_01/oak_veneer_01_rough_1k.png",
+    "bytes": 2590653,
+    "sha256": "35947213050e8e54e9ff6b91cdb5317f5b3560a03e5724d461a73beb89a2aa11"
+  },
+  {
+    "file": "oak_veneer_01_disp_1k.png",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/oak_veneer_01/oak_veneer_01_disp_1k.png",
+    "bytes": 478707,
+    "sha256": "74a3a70f3ce98790182ea8d8a50f74c0eef868c8fcee09264421876122d62c58"
+  },
+  {
+    "file": "denim_fabric_diff_1k.png",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/denim_fabric/denim_fabric_diff_1k.png",
+    "bytes": 2691494,
+    "sha256": "45bb6b6e6cc1aa8b558c49a8408fa4a720871fcd3c4cddc1b9ebe77ec7781309"
+  },
+  {
+    "file": "denim_fabric_rough_1k.png",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/denim_fabric/denim_fabric_rough_1k.png",
+    "bytes": 753042,
+    "sha256": "59522ca847bebb9ecc046738f48cb5abb1a6a2786bc38a41328d6a24586f51dc"
+  },
+  {
+    "file": "denim_fabric_disp_1k.png",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/denim_fabric/denim_fabric_disp_1k.png",
+    "bytes": 1822290,
+    "sha256": "a89ba29633bc9a8f8d1ec38911e5448ee30b003b155fa6e7a68decf01addffe2"
+  },
+  {
+    "file": "rust_coarse_01_diff_1k.png",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/rust_coarse_01/rust_coarse_01_diff_1k.png",
+    "bytes": 5642110,
+    "sha256": "dd5009d5f3bb74ba6f85e811fff06860b67632b3b647acb5e41bac129d227d55"
+  },
+  {
+    "file": "rust_coarse_01_rough_1k.png",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/rust_coarse_01/rust_coarse_01_rough_1k.png",
+    "bytes": 2546314,
+    "sha256": "1c77819365db8afc5c53ca0e2d5c84664d94e6881f9269f0e002e9ac21b705cd"
+  },
+  {
+    "file": "rust_coarse_01_disp_1k.png",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/rust_coarse_01/rust_coarse_01_disp_1k.png",
+    "bytes": 2356296,
+    "sha256": "752094663b9deebec91645acd1db1b7d0beb38d2df0c914d343b952f09954848"
+  }
+]

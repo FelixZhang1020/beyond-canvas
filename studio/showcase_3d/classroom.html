@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>光影实验室</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<style>
+main{max-width:1100px;padding:12px} .source-strip,.comparison-note,footer,.interaction-hint,.model-number,.finding,.metrics,.processing,.download-original,.download-display,.card-heading,.surface-controls>span,.surface-controls>label:first-child{display:none!important}
+#cards{display:block}.model-card{margin-top:12px}.viewport{height:440px;max-height:62vh;min-height:280px}.model-card>div:not(.viewport){display:none}.model-card>p{display:none}.toolbar{flex-wrap:wrap}.masthead h1{font-size:24px}.masthead{margin:0 0 12px}.model-card .focus-button{display:none}.toolbar-group>label:has(#sync){display:none}
+
+body[data-mode="classroom"] main{height:100vh;box-sizing:border-box;display:flex;flex-direction:column;gap:8px}
+main>.masthead{display:none}main>section,main>p{margin:0}#cards{flex:1;min-height:180px}.model-card{height:100%;margin:0}.viewport{height:100%;min-height:180px;max-height:none}.surface-controls{padding:0}.material-note{padding:8px;font-size:12px}.toolbar{padding:0}.lighting{padding:8px}
+body[data-mode="classroom"]{background:#fffdf9}
+body[data-mode="classroom"] main{padding:0;gap:10px}
+.toolbar{order:1;padding:10px 12px!important;background:#fffdf9;border:0;border-radius:0;gap:10px 16px;justify-content:flex-start;flex-shrink:0}
+.toolbar>button:first-child{display:none}.toolbar-group{flex-wrap:wrap;gap:6px}
+button,select{border-radius:999px;min-height:38px;font-size:12px}button[aria-pressed=true]{background:#e9e1f0}
+#cards{order:2;min-height:260px}.model-card{border-radius:20px;border-color:#e5ddd1!important}
+.toolbar-group{gap:6px}.group-label{font-size:11px;color:#968b7e;margin-right:2px;white-space:nowrap}
+.toolbar .control-switch{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#fffdf9;font-size:12px;white-space:nowrap;cursor:pointer;min-height:38px}
+.toolbar .control-switch:has(input:checked){background:#e9e1f0;border-color:#ac98bb}
+.toolbar .control-switch:has(input:disabled){opacity:.5;cursor:default}
+.toolbar .control-switch input{appearance:none;position:relative;width:30px;height:18px;border:1px solid #d7cfc3;border-radius:999px;background:#e7e1d8;margin:0;cursor:pointer;flex:none}
+.toolbar .control-switch input::before{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fffdf9;box-shadow:0 1px 3px #66584426}
+.toolbar .control-switch input:checked{background:#887297;border-color:#887297}.toolbar .control-switch input:checked::before{transform:translateX(12px)}
+.toolbar .control-switch input:focus-visible{outline:3px solid #b7a4c8;outline-offset:3px}
+.toolbar .select-label{font-size:12px}.toolbar select{padding:6px 9px;max-width:130px}
+.material-row{width:100%;padding-top:10px;border-top:1px solid #eee7dd}.material-options{display:flex;flex-wrap:wrap;gap:5px}.material-options button{padding:5px 9px;min-height:32px;font-size:12px}.material-row>.select-label{display:none}
+.toolbar .surface-controls{padding:0!important;margin:0;gap:10px;flex-wrap:wrap}.surface-controls label{white-space:nowrap;font-size:12px}
+.lighting{order:3;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px 24px;background:transparent;border:0;border-radius:0;padding:12px 16px!important;flex-shrink:0}
+.lighting label{display:grid;grid-template-columns:1fr auto;gap:8px;font-size:12px;margin:0;min-width:0;color:#887b6c}
+.lighting input[type=range]{grid-column:1/-1;width:100%;min-width:0;margin:0;accent-color:#8b769c}
+.lighting output{min-width:0;font-size:17px;line-height:1.2;color:#62526f;font-variant-numeric:tabular-nums;text-align:right}
+.lighting label+label{border-left:1px solid #e5ddd2;padding-left:24px}
+.material-note{order:5;background:transparent;margin:0!important;padding:0 10px!important;font-size:11px!important}
+.view-caption{font-size:11px;bottom:14px;left:16px;padding:6px 12px;border-radius:999px;background:#fffdf9dc;color:#75695d}
+/* In the studio, the parent page owns one shared control panel for every sketch result. */
+body.studio-embedded main{gap:0}
+body.studio-embedded .toolbar,body.studio-embedded .lighting,body.studio-embedded .material-note,body.studio-embedded .view-caption{display:none!important}
+body.studio-embedded #cards{min-height:0}
+body.studio-embedded .model-card{margin:0;border:0!important;border-radius:13px}
+body.studio-embedded .viewport{min-height:0}
+@media(max-width:430px){.toolbar-group{gap:4px}.toolbar{gap:8px 12px}.lighting{gap:12px;padding:12px!important}.lighting label+label{padding-left:12px}.surface-controls{gap:10px}}
+/* A short frame. The classroom's sketch view sizes this frame to the room an HD window
+   leaves (as little as 270px on a 795px window), and this page was built for
+   590: controls 155px tall with eleven material chips on two lines, the model at a 260px
+   minimum, then the light sliders — so the model was cut and the sliders sat below the
+   frame, reachable only by scrolling inside it. Here the controls take one line, the
+   material becomes the dropdown the chips already set, and the model takes what is left. */
+@media(max-height:480px){
+  body[data-mode="classroom"] main{gap:6px}
+  /* Two short lines rather than one that scrolls sideways: held to one line in the studio's
+     picture card (about 500px wide) it crushed the reset-view button to a character a line and cut off the material menu. */
+  .toolbar{flex-wrap:wrap!important;gap:6px 14px;padding:6px 10px!important}
+  .toolbar-group{flex-wrap:wrap}.toolbar button,.toolbar label{white-space:nowrap;flex:none}
+  .material-row{width:auto;padding-top:0;border-top:0}
+  .material-row>.select-label{display:inline-flex!important;align-items:center;gap:6px;white-space:nowrap}
+  .material-row>.group-label,.material-options,.surface-controls,.material-note{display:none!important}
+  #cards{min-height:110px}.viewport{min-height:110px}
+  .lighting{padding:2px 12px 6px!important;gap:4px 16px}
+  .lighting output{font-size:13px}
+}
+</style></head>
+<body data-mode="classroom">
+  <canvas id="scene-canvas" aria-hidden="true"></canvas>
+  <main>
+    <header class="masthead"><div><p class="eyebrow">BEYOND CANVAS / LIGHT STUDY</p><h1>光影实验室</h1></div><span id="progress" class="pill" role="status">正在读取结果</span></header>
+    <section class="source-strip" aria-label="选择测试图片">
+      <div class="source-intro"><span class="index-label">01 / 选择原图</span><p>同一张画，放在一起看。</p></div>
+      <div id="sample-tabs" role="tablist" aria-label="测试原图"></div>
+      <button id="view-original" class="quiet">放大原图 ↗</button>
+    </section>
+    <section class="toolbar" aria-label="对比控制"><button class="quiet" onclick="document.getElementById('original-dialog').showModal()">查看原画</button>
+      <div class="toolbar-group"><span class="group-label">视角</span><label><input id="sync" type="checkbox" checked> 同步视角</label><button id="reset">重置视角</button><button id="auto" aria-pressed="false">自动旋转</button><label class="control-switch"><input id="grayscale" type="checkbox" role="switch"><span>灰度</span></label></div>
+      <div class="toolbar-group material-row"><label class="control-switch"><input id="ground" type="checkbox" role="switch"><span>显示地面与投影</span></label><label class="select-label">材质 <select id="material"><option value="matte">哑光形体</option><option value="plaster">石膏</option><option value="marble">大理石</option><option value="wood">木头</option><option value="metal">金属</option><option value="glass">玻璃</option><option value="denim">牛仔布</option><option value="rust">锈铁</option><option value="chocolate">巧克力</option><option value="normal">表面朝向</option><option value="wire">三角网格</option></select></label><span class="group-label">材质</span><div id="material-options" class="material-options" role="group" aria-label="材质"></div><div class="surface-controls" aria-label="材质观察"><label><input id="sphere-test" type="checkbox"> 标准球体</label><label id="wood-control" hidden>细木纹 <input id="wood-grain" type="range" min="0" max="100" value="60"><output id="wood-value">60%</output></label></div><button id="lighting-toggle" hidden aria-expanded="true" aria-controls="lighting">调整光源</button><button id="exit-focus" hidden>返回四窗</button></div>
+    </section>
+    <section id="cards" class="cards" aria-label="立体模型"></section>
+    <section id="lighting" class="lighting" aria-label="光源控制">
+      <label for="light-azimuth"><span>光源方向</span><output id="light-azimuth-value" for="light-azimuth">−45°</output><input id="light-azimuth" type="range" min="-180" max="180" value="-45"></label>
+      <label for="light-elevation"><span>光源高度</span><output id="light-elevation-value" for="light-elevation">50°</output><input id="light-elevation" type="range" min="10" max="85" value="50"></label>
+    </section>
+    <p id="material-note" class="material-note" role="status">课堂现用 TRELLIS.2（DGX Spark）· Pixal3D 已归档。材质为同一网格上的实时模拟。</p><p class="interaction-hint">拖动任意模型旋转 · 滚轮缩放 · 双击放大单窗 <span>统一材质与照明，比较表面效果</span></p>
+    <aside class="comparison-note"><strong>比较说明</strong><p>三个场景分别测试，共十二份真实输出。已有同图结果沿用原记录；TripoSG 显示的是减面到约 10 万面的版本（三几何体在云端减面，石膏头像与苹果与梨在 DGX Spark 上用 Blender 减面），原始文件可单独下载。模型只做统一比例、位置和初始朝向调整，保留多余底板、碎片和形体缺陷。各场景按整体大小缩放，多余底板会使主体显得更小。</p><p>每次只加载当前图片的四份模型。处理时间来自不同云端硬件，不能直接视作同硬件速度排名或 DGX Spark 性能。</p></aside>
+    <footer><span>原始素描不裁切、不重绘</span><button id="refresh" class="quiet">重新读取结果</button><a href="manifest.json" download>下载比较记录</a></footer>
+  </main>
+  <dialog id="original-dialog"><button id="close-original" aria-label="关闭原图">关闭 ×</button><img id="original-image" alt="当前测试原始素描"></dialog>
+  <template id="model-card">
+    <article class="model-card"><div class="card-heading"><div><p class="model-number"></p><h2></h2></div><span class="case-status" role="status">等待加载</span></div>
+      <div class="viewport" tabindex="0"><div class="loading"><span class="spinner"></span><span class="loading-text">正在读取模型</span></div><button class="focus-button" aria-label="放大此模型">⤢</button><span class="view-caption">拖动旋转</span></div>
+      <div class="card-body"><p class="finding"></p><div class="stats"><div><span>云端处理</span><strong class="time"></strong></div><div><span>显示模型</span><strong class="weight"></strong></div><div><span>三角面</span><strong class="faces"></strong></div></div>
+      <p class="processing"></p><div class="card-actions"><a class="download-display" download>下载显示 GLB</a><a class="download-original" download>原始输出</a><button class="align-button quiet">朝向校准</button></div>
+      <div class="align-panel" hidden><label>左右 <input class="align-yaw" type="range" min="-180" max="180" step="5" value="0"></label><label>俯仰 <input class="align-pitch" type="range" min="-90" max="90" step="5" value="0"></label><button class="align-reset quiet">恢复</button></div></div>
+    </article>
+  </template>
+  <script type="module" src="viewer.js"></script>
+<script defer src="/console.js"></script>
+</body>
+</html>

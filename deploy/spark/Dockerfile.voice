@@ -1,0 +1,19 @@
+# A storybook read in a child's own voice on the Spark: VoxCPM2 copies the voice of the first answer the
+# child said out loud about a drawing (operator; voice_book_worker.py). Open weights, Apache 2.0.
+#
+# NVIDIA's PyTorch image from NGC, already on the node and built for its chip, as the other images here.
+# VoxCPM 2.0.3 without its listed dependencies: most serve its training, its web demo and VoxCPM1, and
+# torch/torchaudio from PyPI would replace NVIDIA's torch. What VoxCPM2's reading imports is added by name;
+# torchaudio is a stand-in (voice-shim/). Packages from the Tsinghua PyPI mirror, as every image here.
+#
+#   deploy/spark/build-voice.sh      (builds beyond-canvas/voice:1 under the memory guard)
+ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:26.08-py3
+FROM ${BASE_IMAGE}
+ARG PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install --no-cache-dir --index-url "$PIP_INDEX_URL" --no-deps voxcpm==2.0.3 \
+    && pip install --no-cache-dir --index-url "$PIP_INDEX_URL" \
+       transformers==4.57.3 librosa==0.11.0 soundfile==0.13.1 pydantic tqdm huggingface-hub safetensors
+COPY voice-shim /opt/voice-shim
+ENV PYTHONPATH=/opt/voice-shim HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+RUN python -c "import torch, voxcpm, librosa, soundfile; from voxcpm.model.voxcpm2 import VoxCPM2Model; \
+print('torch', torch.__version__, 'voxcpm', voxcpm.__name__, torch.cuda.get_arch_list())"

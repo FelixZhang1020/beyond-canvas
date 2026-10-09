@@ -1,0 +1,39 @@
+[
+  {
+    "id": "carpenter-rebuild-the-hall",
+    "question": "Rebuild this temple from nothing so that it matches the one that stands and passes the gravity test. Temple: <model.blend>",
+    "expected_skill": "hall-carpenter",
+    "expected_script": "scripts/place.py",
+    "ground_truth": "A hall.blend whose three shadows each share at least 0.90 of the temple's outline with all 36 columns in place, bearing reports 0 floating, and settle reports fell 0 shifted 0 over at least three seconds; likeness.png judged pass.",
+    "expected_behavior": [
+      "Runs survey first and reads survey.json before placing anything",
+      "Places the parts bottom-up, taking each height from what the part before printed",
+      "Runs inventory, bearing, settle, likeness and the judge after the last change to the hall",
+      "Reads faults.json and changes only the part a fault names",
+      "Does not say it is finished while a check is outstanding"
+    ]
+  },
+  {
+    "id": "carpenter-measure-the-temple",
+    "question": "What would a carpenter need to know to build this hall again? Temple: <model.blend>",
+    "expected_skill": "hall-carpenter",
+    "expected_script": "scripts/survey.py",
+    "ground_truth": "survey.json with the column lines and heights, the tie beams, the roof rings from the eave to the ridge and the overall size.",
+    "expected_behavior": [
+      "Runs survey and reads survey.json",
+      "Reports the column grid, the column top, the roof rings and the ridge in words and numbers"
+    ]
+  },
+  {
+    "id": "carpenter-repair-a-hanging-tier",
+    "question": "The checks say pieces of the rebuilt hall hang in mid-air. Fix it. Run folder: <out_dir>",
+    "expected_skill": "hall-carpenter",
+    "expected_script": "scripts/faults.py",
+    "ground_truth": "faults.json names the part and the gap; the part is placed again with its height corrected by that gap, and bearing then reports 0 floating.",
+    "expected_behavior": [
+      "Runs faults and reads faults.json before changing anything",
+      "Places again only the part the fault names",
+      "Runs the checks again after the change"
+    ]
+  }
+]

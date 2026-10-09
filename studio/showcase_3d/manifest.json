@@ -1,0 +1,379 @@
+{
+  "title": "三张素描 · 四模型对比",
+  "samples": [
+    {
+      "id": "portrait",
+      "label": "石膏头像",
+      "image": "inputs/portrait.png",
+      "cases": [
+        {
+          "model": "trellis2",
+          "name": "TRELLIS.2",
+          "status": "ready",
+          "note": "五官与切面保留，侧后方有完整体积。",
+          "processed": false,
+          "processing": "模型原始 GLB · 仅显示时改为哑光",
+          "reused": true,
+          "camera_base": [
+            45,
+            75
+          ],
+          "original_input_sha256": "be9a3c6e05502966acc23a3858639d929bde97a3b1f8f6e357a35ad39114f1fc",
+          "generation_seconds": 44.17471619,
+          "wait_seconds": 49.996,
+          "remesh_seconds": null,
+          "raw_generation_ready": true,
+          "original_file_bytes": 3134180,
+          "original_download": "download/portrait/trellis2",
+          "asset": "assets/portrait/trellis2.glb",
+          "bytes": 3134180,
+          "triangles": 98690,
+          "sha256": "a779d20c21714603f3fad9c3ec73c51f9727196da53e01ab95264ca88230213e",
+          "comparison_camera_base": [
+            45,
+            75
+          ],
+          "comparison_subject_bounds": false
+        },
+        {
+          "model": "pixal",
+          "name": "Pixal3D",
+          "status": "ready",
+          "note": "主要切面保留；侧后方有一块多余悬浮碎片。",
+          "processed": false,
+          "processing": "模型原始 GLB · 仅显示时改为哑光",
+          "reused": true,
+          "camera_base": [
+            180,
+            75
+          ],
+          "original_input_sha256": "be9a3c6e05502966acc23a3858639d929bde97a3b1f8f6e357a35ad39114f1fc",
+          "generation_seconds": 27.44099998474121,
+          "wait_seconds": 35.624,
+          "remesh_seconds": null,
+          "raw_generation_ready": true,
+          "original_file_bytes": 3116364,
+          "original_download": "download/portrait/pixal",
+          "asset": "assets/portrait/pixal.glb",
+          "bytes": 3116364,
+          "triangles": 96700,
+          "sha256": "96260bc6e32cc0ce5b2b06a8237735dbaeadeee7fc4fc26ffc0b0275de07c0e2",
+          "comparison_camera_base": [
+            180,
+            85
+          ],
+          "comparison_subject_bounds": false
+        },
+        {
+          "model": "hunyuan21",
+          "name": "Hunyuan3D 2.1",
+          "status": "ready",
+          "note": "头像完整，大切面保留，部分边缘更圆滑。",
+          "processed": false,
+          "processing": "模型原始 GLB · 仅显示时改为哑光",
+          "reused": true,
+          "camera_base": [
+            45,
+            75
+          ],
+          "original_input_sha256": "be9a3c6e05502966acc23a3858639d929bde97a3b1f8f6e357a35ad39114f1fc",
+          "generation_seconds": 48.694354798,
+          "wait_seconds": 67.623,
+          "remesh_seconds": null,
+          "raw_generation_ready": true,
+          "original_file_bytes": 2401200,
+          "original_download": "download/portrait/hunyuan21",
+          "asset": "assets/portrait/hunyuan21.glb",
+          "bytes": 2401200,
+          "triangles": 100000,
+          "sha256": "89509fc986c074aa809fa2f7ebc28112f0ab20507d0e9cb2d48ec3c4979d8d6b",
+          "comparison_camera_base": [
+            45,
+            75
+          ],
+          "comparison_subject_bounds": false
+        },
+        {
+          "model": "triposg",
+          "name": "TripoSG",
+          "status": "ready",
+          "note": "五官、耳朵与颈部保留；头顶开口，头侧有片状缺损，减面前的原始文件也是如此。",
+          "processed": true,
+          "processing": "DGX Spark 上 Blender 减面 · 目标 10 万面",
+          "reused": true,
+          "camera_base": [
+            45,
+            75
+          ],
+          "original_input_sha256": "be9a3c6e05502966acc23a3858639d929bde97a3b1f8f6e357a35ad39114f1fc",
+          "generation_seconds": 29.403117279,
+          "wait_seconds": 34.077,
+          "remesh_seconds": 23.6,
+          "raw_generation_ready": true,
+          "original_file_bytes": 106020451,
+          "original_download": "download/portrait/triposg",
+          "asset": "assets/portrait/triposg.glb",
+          "bytes": 1832512,
+          "triangles": 97637,
+          "sha256": "3e143cb709a94e16ad74cb079a4886b437d72baa6399ee3bd51ee92e573245ce",
+          "comparison_camera_base": [
+            45,
+            75
+          ],
+          "comparison_subject_bounds": false
+        }
+      ]
+    },
+    {
+      "id": "geometry",
+      "label": "三几何体",
+      "image": "inputs/geometry.png",
+      "cases": [
+        {
+          "model": "trellis2",
+          "name": "TRELLIS.2",
+          "status": "ready",
+          "note": "三物体保留，无多余大底板；球面有轻微起伏。",
+          "processed": false,
+          "processing": "模型原始 GLB · 仅显示时改为哑光",
+          "reused": true,
+          "camera_base": [
+            135,
+            75
+          ],
+          "original_input_sha256": "37bdd5e70d9967cc04ffb1604b5756b81089bb836e66c522315575f09c1ededc",
+          "generation_seconds": 206.940306569,
+          "wait_seconds": 420.406,
+          "remesh_seconds": null,
+          "raw_generation_ready": true,
+          "original_file_bytes": 2980080,
+          "original_download": "download/geometry/trellis2",
+          "asset": "assets/geometry/trellis2.glb",
+          "bytes": 2980080,
+          "triangles": 94600,
+          "sha256": "60ecf43be7eb67aa55d97e6eee6536158bb6ca74e8eb6ba9630bd85e9c118dbb",
+          "comparison_camera_base": [
+            135,
+            55
+          ],
+          "comparison_subject_bounds": false
+        },
+        {
+          "model": "pixal",
+          "name": "Pixal3D",
+          "status": "ready",
+          "note": "三物体保留，方块顶面较平整，球面较平滑。",
+          "processed": false,
+          "processing": "模型原始 GLB · 仅显示时改为哑光",
+          "reused": true,
+          "camera_base": [
+            180,
+            75
+          ],
+          "original_input_sha256": "37bdd5e70d9967cc04ffb1604b5756b81089bb836e66c522315575f09c1ededc",
+          "generation_seconds": 30.532000064849854,
+          "wait_seconds": 310.053,
+          "remesh_seconds": null,
+          "raw_generation_ready": true,
+          "original_file_bytes": 3043624,
+          "original_download": "download/geometry/pixal",
+          "asset": "assets/geometry/pixal.glb",
+          "bytes": 3043624,
+          "triangles": 98316,
+          "sha256": "e152c9b896e0a681138db4ddcf6092f28709eb20ad779377d76df8422d95e7f6",
+          "comparison_camera_base": [
+            180,
+            75
+          ],
+          "comparison_subject_bounds": false
+        },
+        {
+          "model": "hunyuan21",
+          "name": "Hunyuan3D 2.1",
+          "status": "ready",
+          "note": "带多余大底板；方块顶面有隆起。",
+          "processed": false,
+          "processing": "模型原始 GLB · 仅显示时改为哑光",
+          "reused": true,
+          "camera_base": [
+            45,
+            75
+          ],
+          "original_input_sha256": "37bdd5e70d9967cc04ffb1604b5756b81089bb836e66c522315575f09c1ededc",
+          "generation_seconds": 50.609412012,
+          "wait_seconds": 227.902,
+          "remesh_seconds": null,
+          "raw_generation_ready": true,
+          "original_file_bytes": 2401188,
+          "original_download": "download/geometry/hunyuan21",
+          "asset": "assets/geometry/hunyuan21.glb",
+          "bytes": 2401188,
+          "triangles": 100000,
+          "sha256": "9940d6929fbbb6558b2fe7cae9f0b0e4f6897442d4f06d1f10c75a436ff14f36",
+          "comparison_camera_base": [
+            15,
+            55
+          ],
+          "comparison_subject_bounds": true
+        },
+        {
+          "model": "triposg",
+          "name": "TripoSG",
+          "status": "ready",
+          "note": "三个主体保留；带不规则底片，球面与圆柱底缘有起伏。",
+          "processed": true,
+          "processing": "Meshy 云端减面 · 目标 10 万面",
+          "reused": true,
+          "camera_base": [
+            45,
+            75
+          ],
+          "original_input_sha256": "37bdd5e70d9967cc04ffb1604b5756b81089bb836e66c522315575f09c1ededc",
+          "generation_seconds": 20.444678892,
+          "wait_seconds": 163.1,
+          "remesh_seconds": 77.41300010681152,
+          "raw_generation_ready": true,
+          "original_file_bytes": 53396578,
+          "original_download": "download/geometry/triposg",
+          "asset": "assets/geometry/triposg.glb",
+          "bytes": 3350396,
+          "triangles": 98295,
+          "sha256": "852b15895d30beca98f21d60d4938286799c9fbda6a360214d3307727411cf16",
+          "comparison_camera_base": [
+            15,
+            55
+          ],
+          "comparison_subject_bounds": true
+        }
+      ]
+    },
+    {
+      "id": "fruit",
+      "label": "苹果与梨",
+      "image": "inputs/fruit.png",
+      "cases": [
+        {
+          "model": "trellis2",
+          "name": "TRELLIS.2",
+          "status": "ready",
+          "note": "两主体、凹口及果梗完整。",
+          "processed": false,
+          "processing": "模型原始 GLB · 仅显示时改为哑光",
+          "reused": true,
+          "camera_base": [
+            135,
+            75
+          ],
+          "original_input_sha256": "e2718d403b536155ce5f12b5e61bd7cef4e4cdf745358ff704a130c489845748",
+          "generation_seconds": 234.037353037,
+          "wait_seconds": 482.433,
+          "remesh_seconds": null,
+          "raw_generation_ready": true,
+          "original_file_bytes": 6365100,
+          "original_download": "download/fruit/trellis2",
+          "asset": "assets/fruit/trellis2.glb",
+          "bytes": 6365100,
+          "triangles": 98428,
+          "sha256": "2ac2d2fda166a8f65dc038a56040f2f71f5a38e4afee8ca756407de8556f6e23",
+          "comparison_camera_base": [
+            135,
+            75
+          ],
+          "comparison_subject_bounds": false
+        },
+        {
+          "model": "pixal",
+          "name": "Pixal3D",
+          "status": "ready",
+          "note": "苹果、梨及果梗完整；表面可见环带状起伏。",
+          "processed": false,
+          "processing": "模型原始 GLB · 仅显示时改为哑光",
+          "reused": false,
+          "camera_base": [
+            180,
+            75
+          ],
+          "original_input_sha256": "e2718d403b536155ce5f12b5e61bd7cef4e4cdf745358ff704a130c489845748",
+          "generation_seconds": 27.631999969482422,
+          "wait_seconds": 293.295,
+          "remesh_seconds": null,
+          "raw_generation_ready": true,
+          "original_file_bytes": 3314208,
+          "original_download": "download/fruit/pixal",
+          "asset": "assets/fruit/pixal.glb",
+          "bytes": 3314208,
+          "triangles": 99443,
+          "sha256": "7317422b310c4cc1cefc70de1d9b5e0ab9d406ceaaef11fe2f74c753d98b21e4",
+          "comparison_camera_base": [
+            180,
+            85
+          ],
+          "comparison_subject_bounds": false
+        },
+        {
+          "model": "hunyuan21",
+          "name": "Hunyuan3D 2.1",
+          "status": "ready",
+          "note": "水果可辨认，但多余大底板占据场景。",
+          "processed": false,
+          "processing": "模型原始 GLB · 仅显示时改为哑光",
+          "reused": true,
+          "camera_base": [
+            45,
+            75
+          ],
+          "original_input_sha256": "e2718d403b536155ce5f12b5e61bd7cef4e4cdf745358ff704a130c489845748",
+          "generation_seconds": 43.312743432,
+          "wait_seconds": 238.4,
+          "remesh_seconds": null,
+          "raw_generation_ready": true,
+          "original_file_bytes": 2401140,
+          "original_download": "download/fruit/hunyuan21",
+          "asset": "assets/fruit/hunyuan21.glb",
+          "bytes": 2401140,
+          "triangles": 100000,
+          "sha256": "46d186985769367021aa5e7c4f3a44a80394a2daf3136f1c37a08b1fc7c448d1",
+          "comparison_camera_base": [
+            -15,
+            75
+          ],
+          "comparison_subject_bounds": true
+        },
+        {
+          "model": "triposg",
+          "name": "TripoSG",
+          "status": "ready",
+          "note": "没有做出苹果和梨：原图未去背景，整张画纸成了一个封闭方块，减面前的原始文件也是如此。",
+          "processed": true,
+          "processing": "DGX Spark 上 Blender 减面 · 目标 10 万面",
+          "reused": false,
+          "camera_base": [
+            45,
+            75
+          ],
+          "original_input_sha256": "e2718d403b536155ce5f12b5e61bd7cef4e4cdf745358ff704a130c489845748",
+          "generation_seconds": 64.304644138,
+          "wait_seconds": 463.813,
+          "remesh_seconds": 60.5,
+          "raw_generation_ready": true,
+          "original_file_bytes": 242591926,
+          "original_download": "download/fruit/triposg",
+          "asset": "assets/fruit/triposg.glb",
+          "bytes": 1797304,
+          "triangles": 99942,
+          "sha256": "183cffe95c2e7055272b3828d00c7e8f24f3fe4b5bb4b0dda59a1f71ca22e01e",
+          "comparison_camera_base": [
+            45,
+            75
+          ],
+          "comparison_subject_bounds": false
+        }
+      ]
+    }
+  ],
+  "raw_ready": 12,
+  "ready": 12,
+  "total": 12,
+  "local_inference": false,
+  "local_mesh_processing": true
+}

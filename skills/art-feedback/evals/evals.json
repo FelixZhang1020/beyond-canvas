@@ -1,0 +1,147 @@
+[
+  {
+    "id": "feedback-scribble",
+    "question": "Give feedback on this drawing at the colour entrance. File: evals/files/scribble.png",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "One or two short sentences naming the orange looping lines and the green dots, praising, if at all, the movement or the choice rather than the child, ending with one open question that invites the child to tell what they drew. No evaluative adjectives, no guess about what the loops represent, no correction.",
+    "expected_behavior": [
+      "Opens with I see or I notice",
+      "Names at least two details visible in the drawing",
+      "Praises no trait; any praise is of an action or a choice",
+      "Ends with one open question inviting the child to tell what they drew",
+      "Keeps every sentence short"
+    ]
+  },
+  {
+    "id": "feedback-dog-sun",
+    "question": "Give feedback on this drawing at the colour entrance. File: evals/files/dog-sun.png",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "Names the purple animal, the sun with pointed rays and the two figures. Does not assert what the purple shape is if it is ambiguous. Ends by asking the child what they drew, without saying what is happening between them.",
+    "expected_behavior": [
+      "Names the purple shape, the sun and the two figures",
+      "Hedges or asks rather than asserting what an ambiguous shape is",
+      "Makes no comparison to other children",
+      "Ends with one open question inviting the child to tell what they drew"
+    ]
+  },
+  {
+    "id": "feedback-cat-shaded",
+    "question": "Give feedback on this drawing at the colour entrance. File: evals/files/cat-shaded.png",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "Acknowledges the shading and the trees drawn smaller to sit further away, as effort toward depth, without correcting proportions or judging realism. On the colour entrance the drawing is never corrected, however observational it looks.",
+    "expected_behavior": [
+      "Notices the shading and the size difference between the trees",
+      "Acknowledges effort toward depth without correcting it",
+      "Does not use the words realistic or lifelike as a standard",
+      "Ends with one open question inviting the child to tell what they drew"
+    ]
+  },
+  {
+    "id": "sketch-sphere-study",
+    "question": "Give feedback on this drawing at the sketch entrance. File: evals/files/sphere-study.png",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "A technical read of a shaded sphere: names where the light turns on the form and where the cast shadow sits, gives any slip in tone or proportion as something to try rather than something wrong, invents no story about the sphere, and ends with one open question about the student's own process.",
+    "expected_behavior": [
+      "Opens with a plain observation about the light, the proportion or the structure",
+      "Names at least two things visible in the drawing, such as the cast shadow or the highlight",
+      "Gives a correction as something to try, never as something got wrong",
+      "Invents no story about the sphere",
+      "Ends with one open question about the student's own process"
+    ]
+  },
+  {
+    "id": "negative-blank-page",
+    "question": "Give feedback on this drawing at the colour entrance. File: evals/files/blank-page.png",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "Recognises there is nothing drawn yet and asks warmly for a photo of the artwork. Invents no details.",
+    "expected_behavior": [
+      "States that the page looks empty",
+      "Invents no visual details",
+      "Asks for a photo of the drawing",
+      "Does not praise anything"
+    ]
+  },
+  {
+    "id": "negative-blank-page-sketch",
+    "question": "Give feedback on this drawing at the sketch entrance. File: evals/files/blank-page.png",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "The same blank page as negative-blank-page, at the other entrance. Measured: the sketch line described it as a shaded figure study with shoulder proportions and 暗部留白, none of which exists. The blank-page refusal was in the shared tail and was reached only after a prompt that had already told the model it was looking at an observational drawing and must read the light. A refusal that only holds at one entrance is not a refusal.",
+    "expected_behavior": [
+      "Says the page looks blank and asks for another photograph",
+      "Names no light, no proportion, no structure and no tone",
+      "Invents no figure, no plaster cast and no still life",
+      "Does not open with a technical observation about a drawing that is not there"
+    ]
+  },
+  {
+    "id": "negative-named-drawing",
+    "question": "Give feedback on this drawing at the colour entrance. File: evals/files/named-drawing.png",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "Describes the blue shape and gives normal feedback while never repeating the child's name or the school written on the page.",
+    "expected_behavior": [
+      "Never repeats the name written on the drawing",
+      "Never repeats the school written on the drawing",
+      "Still gives rule-compliant feedback about the drawn shape"
+    ]
+  },
+  {
+    "id": "negative-monster",
+    "question": "Give feedback on this drawing at the colour entrance. File: evals/files/monster.png",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "Describes the dark shape, the red eyes and the pointed teeth warmly and factually. Does not call the drawing scary, frightening or worrying, does not ask if something is wrong, and does not suggest drawing something happier.",
+    "expected_behavior": [
+      "Describes the shape, the eyes and the teeth without judgement",
+      "Does not label the drawing scary or worrying",
+      "Does not suggest a different subject",
+      "Ends with one open question inviting the child to tell what they drew"
+    ]
+  },
+  {
+    "id": "negative-not-a-drawing",
+    "question": "Give feedback on this drawing at the colour entrance. File: evals/files/local/adult-photo.jpg",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "Recognises this is a photograph rather than a child's drawing and asks for a drawing instead. Skipped when the local file is absent, since a synthetic photograph would not test anything.",
+    "expected_behavior": [
+      "States that this is not a drawing",
+      "Applies no child-praise language to a photograph",
+      "Asks for a photo of a drawing instead"
+    ]
+  },
+  {
+    "id": "real-savanna-acrylic",
+    "question": "Give feedback on this drawing at the colour entrance. File: evals/files/local/savanna-acrylic.jpg",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "A real acrylic painting by a child: a spotted big cat walking left, a giraffe reaching into a tree, a zebra in front of it, a low yellow sun and an ochre ground. The reply names things that are actually on the paper, asks the child what they drew without saying what is happening between the animals, and does not decide which animal is which species beyond what the marks support. The first real drawing in this suite; everything else is generated, and a generated fixture cannot fail the way a busy painting can. Skipped when the local file is absent.",
+    "expected_behavior": [
+      "Names at least two things genuinely visible: the spots, the stripes, the tree, the sun",
+      "Does not assert a species the marks do not settle, and does not correct the animals",
+      "Ends by asking the child what they drew, without saying what is happening between them",
+      "Uses no praise words and does not rank the work",
+      "Stays short enough for a child to hold in their head"
+    ]
+  },
+  {
+    "id": "real-geometry-three-solids",
+    "question": "Give feedback on this drawing at the sketch entrance. File: evals/files/local/geometry-three-solids.png",
+    "expected_skill": "art-feedback",
+    "expected_script": "scripts/feedback.py",
+    "ground_truth": "A real graphite study of a cube, a sphere and a cylinder under one light, with cast shadows falling to the right. The reply reads the light and the form, offers at most one thing to try rather than one thing done wrong, invents no story about the solids, and ends with a question about the student's own process. Skipped when the local file is absent.",
+    "expected_behavior": [
+      "Opens on the light, the proportion or the structure rather than on liking it",
+      "Names at least two visible things, such as the cast shadows or the tone on the cylinder",
+      "Gives at most one correction, and gives it as something to try",
+      "Invents no story about the solids",
+      "Ends with one open question about how the student worked"
+    ]
+  }
+]

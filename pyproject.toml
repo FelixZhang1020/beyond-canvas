@@ -1,0 +1,34 @@
+[project]
+name = "beyond-canvas"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "httpx>=0.28.1",
+    "pillow>=12.3.0",
+    "pyyaml>=6.0.3",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# studio and evalkit are importable from anywhere once the project is installed,
+# which is what makes the documented `uv run python skills/.../feedback.py`
+# command work outside pytest.
+[tool.hatch.build.targets.wheel]
+packages = ["studio", "evalkit"]
+
+[dependency-groups]
+dev = [
+    "model-signing>=1.1.1",
+    "pytest>=9.1.1",
+    "pytest-mock>=3.15.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "live: hits a real model endpoint, costs money; run with -m live",
+]
+addopts = "-m 'not live' -q"

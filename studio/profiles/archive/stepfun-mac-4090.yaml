@@ -1,0 +1,196 @@
+# ARCHIVED, by operator decision: the whole project runs on the hosted
+# DGX Spark and the Mac is for development only. This is StepFun First as it ran from the
+# Mac — pictures and 3D on the 4090 over deploy/gpu-media/tunnel.sh, the clip bought from
+# Replicate — kept for reference. Nothing loads it; ../stepfun.yaml is the Spark's.
+#
+# StepFun First — the studio's only deployment.
+#
+# StepFun sells language and voice, and this deployment buys both: reading,
+# judging, safety, speech and hearing are `step-3.7-flash`, `stepaudio-2.5-tts`
+# and `stepaudio-2.5-asr`, all on the subscription. What it does not buy is
+# picture and 3D work, which runs on the project's own GPU machine: the 4090
+# over the tunnel in deploy/gpu-media/tunnel.sh, or the hosted DGX Spark.
+#
+# Video is the one making job that differs by machine. `wan-2.2-i2v-a14b` is a
+# 14B model and the 4090 holds the 5B, so on the Mac + 4090 it stays hosted on
+# Replicate; the Spark holds it, and stepfun-spark.yaml moves it there.
+#
+# API First and Local First were archived (operator decision:
+# StepFun First is the only solution). Until then this file was `extends: api`
+# and inherited its six reading slots, its voice and its video slot; they were
+# copied here unchanged so that archiving api.yaml changed nothing this
+# deployment runs. The two archived files are in studio/profiles/archive/.
+#
+# Every step-3.7-flash slot below carries the list price pair, and it is not
+# decoration: StepFun returns no cost field, so a ledger line's `cost` is computed
+# from these. The list is ¥1.35 in / ¥8.1 out per million (platform.stepfun.com,
+# read off its price page); at 7.1 CNY to the USD that is 0.19 / 1.14, the pair cloud.yaml
+# already carried. Under the subscription `included_in_plan` below stops that
+# arithmetic, and the pair stays so a slot pulled back to the pay-per-call
+# endpoint is still priced rather than shown as free.
+
+# Every StepFun call this deployment makes goes through the subscription, not the
+# pay-as-you-go endpoint. Operator decision.
+#
+# READ OFF THE PLAN'S OWN PAGE: the subscription answers on a different base URL,
+# `https://api.stepfun.com/step_plan/v1`, beside the `.../v1` this project used
+# before. NOT MEASURED, and it is the assumption this file rests
+# on: that a call to the old address is billed against the account balance rather
+# than against the plan already paid for. Nothing distinguishes them from the
+# caller's side — both take the same key and answer normally — so if that
+# assumption is wrong the only cost is that the plan goes unused. Checking it
+# takes one class run and a look at the plan's usage page.
+#
+# What IS measured: one key serves both addresses, and they list
+# different catalogues — 10 models on the plan, 36 on the old one, the plan's ten
+# being a subset. All three models this product uses are on the plan.
+# docs/measured/stepfun-plan-catalogue.md
+#
+# Keyed by provider rather than set profile-wide, because this file also owns
+# GPU-machine and Replicate slots and a StepFun address handed to those would be
+# a nonsense they might not refuse. Slot options still win, so any one slot can be
+# pulled back to the old endpoint by naming its own base_url.
+provider_options:
+  stepfun:
+    base_url: https://api.stepfun.com/step_plan/v1
+    # The price pair below every step-3.7-flash slot is a list price in USD, and
+    # under a plan it is a fiction — the call is already paid for, so computing
+    # dollars from tokens would invent a bill nobody receives. This stops that
+    # arithmetic and records the truth: no marginal cost per call.
+    included_in_plan: true
+
+slots:
+  vlm.studio:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      reasoning_effort: low
+      max_tokens: 12000
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+  vlm.director:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      reasoning_effort: high
+      max_tokens: 16000
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+  safety.image:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      reasoning_effort: high
+      max_tokens: 16000
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+  vlm.sketch:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      reasoning_effort: medium
+      max_tokens: 12000
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+  vlm.creation:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      reasoning_effort: medium
+      max_tokens: 12000
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+  vlm.teacher:
+    provider: stepfun
+    model: step-3.7-flash
+    options:
+      # medium, not high: once one report call at high spent all
+      # 16000 completion tokens on hidden reasoning and returned no text
+      # (ledger note, 196 s). Good runs at high used 10-19k tokens across the
+      # three calls, so the budget is not the problem; the thinking is.
+      reasoning_effort: medium
+      max_tokens: 16000
+      price_usd_per_m_in: 0.19
+      price_usd_per_m_out: 1.14
+
+  image.edit:
+    provider: localimage
+    model: flux
+    options:
+      task: edit_image
+      base_url: http://127.0.0.1:7270
+      choice: flux
+      label: FLUX.2 Klein 4B
+      timeout_s: 600
+
+  video.animation:
+    provider: replicate
+    model: wan-video/wan-2.2-i2v-a14b
+    options:
+      official: true
+      task: to_video
+      fields:
+        image: image
+        instruction: prompt
+      extra:
+        seed: 42
+        num_frames: 81
+        resolution: 480p
+        frames_per_second: 24
+        sample_steps: 30
+        go_fast: false
+      # 900, not 600: one clip measured 631 s wall and cleared the old
+      # ceiling by under thirty seconds. The page tells the teacher to expect about
+      # five minutes; it takes ten. A ceiling a normal run brushes against throws a
+      # paid job away on a slow day. The mesh route already allows 900.
+      timeout_s: 900
+
+  mesh.portrait:
+    provider: localmesh
+    model: trellis2
+    options:
+      task: to_mesh
+      base_url: http://127.0.0.1:7240
+      timeout_s: 600
+
+  mesh.alternative:
+    provider: localmesh
+    model: pixal
+    options:
+      task: to_mesh
+      base_url: http://127.0.0.1:7250
+      timeout_s: 600
+
+  tts.studio:
+    provider: stepfun
+    model: stepaudio-2.5-tts
+    options:
+      task: speak
+      endpoint: audio/speech
+      fields:
+        text: input
+        voice: voice
+      extra:
+        voice: wenrounvsheng
+        instruction: 像幼儿园美术老师一样说话：温柔、慢一点、带着笑意，像在跟五岁的小朋友聊天
+        response_format: mp3
+        speed: 0.95
+      price_usd: 0.0025
+      timeout_s: 120
+
+  # Hearing is bought here too, because this deployment means every Step model
+  # first and StepFun sells one. THIS SLOT SENDS A CHILD'S RECORDED VOICE TO A
+  # COMPANY, and it is now the only way the studio hears: Local
+  # First, the one deployment that kept recordings on hardware the operator owns
+  # (Whisper on the 4090), was archived by operator decision, taken with
+  # this consequence stated. An earlier operator decision for this slot itself.
+  # studio/providers/stepfun_asr.py carries the whole note.
+  #
+  # StepFun takes no language field and decides for itself; it does take hotwords,
+  # which is worth using for children's names once someone collects them.
+  speech.in:
+    provider: stepfun
+    model: stepaudio-2.5-asr
+    options:
+      task: transcribe
+      endpoint: audio/transcriptions

@@ -1,0 +1,7 @@
+画里画外 Beyond Canvas
+Copyright 2026 Felix ZHANG
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+No model weights are included. The models the studio calls (among them TRELLIS.2, Wan 2.2, FLUX.2 Klein,
+VoxCPM2, Qwen and NVIDIA Nemotron) are downloaded separately and are governed by their own licences.

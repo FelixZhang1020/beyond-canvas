@@ -1,0 +1,41 @@
+[
+  {
+    "id": "joint-tenon-closeup",
+    "question": "Show me the mortise and tenon where the front-left corner column meets its big bracket block. Model: <model.blend>, anatomy: <out_dir>/anatomy.json",
+    "expected_skill": "joint-reveal",
+    "expected_script": "scripts/joints.py",
+    "ground_truth": "The column named in anatomy.json at that corner gets a tenon and its Ludou foot a mortise on a derived copy; a close-up of the column top, judged pass, shows the tenon rising into the block.",
+    "expected_behavior": [
+      "Runs model-anatomy first and finds the corner column and its Ludou foot by tags and position",
+      "Runs joints with --tenon on those two pieces, then inventory on the derived model",
+      "Renders a closeup with the block lifted and judges it; moves the camera on a fail and judges again",
+      "Keeps only a shot that passed"
+    ]
+  },
+  {
+    "id": "joint-bracket-explode",
+    "question": "Take the bracket set on the front-left corner column apart and show how the arms cross inside the big block. Model: <model.blend>",
+    "expected_skill": "joint-reveal",
+    "expected_script": "scripts/explode.py",
+    "ground_truth": "A six-second video of that assembly's pieces rising tier by tier with the crossing arms sliding apart, with the cross-lap cut so the notches show; the open still judged pass.",
+    "expected_behavior": [
+      "Cuts the crosslap on Hua 1 and the Nidao gong before exploding",
+      "Explodes the assembly tag, not the whole model",
+      "Judges the open still and reports the verdict",
+      "Reports the video path and its length"
+    ]
+  },
+  {
+    "id": "joint-stack-take-apart",
+    "question": "Take this little building apart from the top down. File: ../model-anatomy/evals/files/stack.blend",
+    "expected_skill": "joint-reveal",
+    "expected_script": "scripts/explode.py",
+    "ground_truth": "The eleven pieces rise in five tiers; the tile sheet highest, the columns not at all; three stills and a video.",
+    "expected_behavior": [
+      "Runs inventory first",
+      "Uses --near or --pieces to take every non-ground piece",
+      "Produces explode-open.png and explode.mp4",
+      "Judges explode-open.png, not the closed still, and leaves the camera to the tool"
+    ]
+  }
+]

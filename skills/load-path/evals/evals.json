@@ -1,0 +1,38 @@
+[
+  {
+    "id": "load-where-the-weight-goes",
+    "question": "Show me where the weight goes in the hall. Model: <model.blend>, anatomy: <out_dir>/anatomy.json, bearing: <out_dir>/bearing.json",
+    "expected_skill": "load-path",
+    "expected_script": "scripts/flow.py",
+    "ground_truth": "The weights tool reports the total and the ground total balancing; the flow video shows the frame coloured from blue at the rafters to red at the columns, revealed top down; flow-end.png judged pass.",
+    "expected_behavior": [
+      "Runs weights first and reads the total and the heaviest column from loads.json",
+      "Runs flow with those loads",
+      "Judges flow-end.png with the frame intention",
+      "Says in words that the weight gathers as it comes down"
+    ]
+  },
+  {
+    "id": "load-would-it-stand",
+    "question": "Would the hall stand if every piece were let go? Show me. Model: <model.blend>, anatomy: <out_dir>/anatomy.json",
+    "expected_skill": "load-path",
+    "expected_script": "scripts/settle.py",
+    "ground_truth": "The settle test bakes four seconds and reports how many pieces fell and shifted, naming them; settle-end.png shows the frame with movers painted.",
+    "expected_behavior": [
+      "Runs settle on the model",
+      "Reports the fell and shifted counts and names the movers",
+      "Says that pieces drawn through one another are held as joints in the test"
+    ]
+  },
+  {
+    "id": "load-stack-stands",
+    "question": "Does this little building stand on its own? File: ../model-anatomy/evals/files/stack.blend",
+    "expected_skill": "load-path",
+    "expected_script": "scripts/settle.py",
+    "ground_truth": "Fell 0, shifted 0: nothing moves more than a few millimetres.",
+    "expected_behavior": [
+      "Runs inventory, then settle",
+      "Reports fell 0 shifted 0"
+    ]
+  }
+]

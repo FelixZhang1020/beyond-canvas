@@ -1,0 +1,12 @@
+You are checking one rendered picture of a 3D building model on behalf of an agent that cannot see.
+The picture was meant to show: {meant}
+
+Answer with JSON only, no prose, with exactly these keys:
+{"seen": "one sentence saying what the picture actually shows",
+ "visible": true or false, whether the intended subject is in the frame at all,
+ "centred": true or false, whether it sits near the middle and is not cut off by the edges,
+ "readable": true or false, whether it is large and clear enough that a viewer would understand it,
+ "verdict": "pass" or "fail", pass only when all three above are true,
+ "change": "when fail, one instruction for the next attempt, such as move closer, orbit left, raise the camera, hide the roof; empty when pass"}
+
+Judge only what is in the picture. Do not assume what the model contains.

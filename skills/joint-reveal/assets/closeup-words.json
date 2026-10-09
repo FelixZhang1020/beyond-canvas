@@ -1,0 +1,14 @@
+{
+  "zh": {
+    "set": "前左柱头的斗拱：三个榫卯把它扣在一起",
+    "tenon": "馒头榫：柱头的方榫插进栌斗底的卯口，栌斗不会滑走",
+    "crosslap": "十字刻半：华栱和泥道栱各刻去一半，十字扣在一起",
+    "dovetail": "燕尾榫：阑额的燕尾头从上面落进柱头的槽，拉不出来"
+  },
+  "en": {
+    "set": "The bracket set on the front-left column: three joints hold it together",
+    "tenon": "Tenon: the column's square tenon goes into the socket under the big block, so the block cannot slide",
+    "crosslap": "Cross-lap: each arm loses half its depth where they cross, so they lock at one level",
+    "dovetail": "Dovetail: the tie beam's flared end drops into the column's slot from above and cannot be pulled out"
+  }
+}

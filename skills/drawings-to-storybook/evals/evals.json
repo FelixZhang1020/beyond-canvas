@@ -1,0 +1,57 @@
+[
+  {
+    "id": "two-drawings-confirmed-words-become-a-book",
+    "question": "Make a storybook from these two drawings, in this order, with the words the teacher confirmed. Files: ../art-feedback/evals/files/dog-sun.png, ../art-feedback/evals/files/cat-shaded.png",
+    "expected_skill": "drawings-to-storybook",
+    "ground_truth": "Two pages in the given order, each carrying its drawing and the confirmed passage verbatim, plus the language. No model is called: the only gate is studio-safety on each original. Measured on StepFun First: 0 tokens, 9 of 9 pages passed.",
+    "expected_behavior": [
+      "Every drawing is used exactly once, in the supplied order",
+      "Not one word of the confirmed passage is changed",
+      "No creation, image or video model is contacted",
+      "A drawing with a clip already made carries its video_url"
+    ]
+  },
+  {
+    "id": "missing-scene-is-supplied-before-the-outline",
+    "question": "Write the story outline for these two drawings; only the first has a scene description. Files: ../art-feedback/evals/files/dog-sun.png, ../art-feedback/evals/files/cat-shaded.png",
+    "expected_skill": "drawings-to-storybook",
+    "ground_truth": "A scene description is written for the second drawing from its original and dialogue, marked supplemented, and then one passage per drawing comes back as a JSON array in the same order. Each draft passes an independent review request before the teacher sees it. Measured: 77 s and 13.3k tokens for two drawings.",
+    "expected_behavior": [
+      "Only the missing scene is generated; the supplied one is kept",
+      "The outline has exactly one passage per drawing, in order",
+      "A rejected draft is returned as an editable candidate, never as a result",
+      "The child's ending is not written"
+    ]
+  },
+  {
+    "id": "negative-one-drawing-is-declined",
+    "question": "Make a storybook from this single drawing. File: ../art-feedback/evals/files/dog-sun.png",
+    "expected_skill": "drawings-to-storybook",
+    "ground_truth": "Refused when the request is accepted, before any model runs: 'A book takes 2-8 distinct drawings.' The classroom raises ValueError.",
+    "expected_behavior": [
+      "No model is contacted",
+      "The refusal names the bound, not the drawing"
+    ]
+  },
+  {
+    "id": "negative-passages-out-of-order-are-refused",
+    "question": "Bind these two drawings with the passages supplied for the other order. Files: ../art-feedback/evals/files/dog-sun.png, ../art-feedback/evals/files/cat-shaded.png",
+    "expected_skill": "drawings-to-storybook",
+    "ground_truth": "Refused when the request is accepted: 'Story passages must match the selected drawing order and contain 1-2000 characters.' An empty passage is refused the same way.",
+    "expected_behavior": [
+      "No model is contacted",
+      "Nothing is reordered silently to make it fit"
+    ]
+  },
+  {
+    "id": "negative-photograph-is-declined",
+    "question": "Make a storybook from these two files, one of which is a photograph of a real object. Files: ../art-feedback/evals/files/dog-sun.png, ../sketch-to-3d/evals/files/not-a-drawing.png",
+    "expected_skill": "studio-safety",
+    "ground_truth": "studio-safety screens each original first. The photograph stops the request with a warm message asking for a photo of the drawing, and no page is published for either file.",
+    "expected_behavior": [
+      "studio-safety refuses first",
+      "No partial book is published",
+      "The message to the teacher asks for a drawing"
+    ]
+  }
+]

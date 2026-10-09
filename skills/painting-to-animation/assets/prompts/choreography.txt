@@ -1,0 +1,26 @@
+Look at the drawing and return a gentle LOCAL animation plan, as JSON only.
+The browser bends the original image continuously: no cutting, background fill,
+new pixels, walking skeletons or disappearing characters. Every region's border
+stays fixed and its centre moves most. Select expressive parts (a chest, head,
+tree crown, cloud); do not select the entire scene or a group of overlapping people.
+
+{{"duration_s": 6, "layers": [
+  {{"name": "the round yellow shape on the left", "box": [0.1, 0.2, 0.3, 0.4],
+    "move": "breathe", "start_s": 0, "end_s": 6, "distance": [0, 0]}}
+]}}
+
+Rules:
+1. Choose 1 to {max_layers} regions that are visibly present. Name their appearance
+   and location briefly in {language}. Do not invent identities or events.
+2. box = [left, top, width, height], normalised 0 to 1, entirely inside the image.
+   Enclose the moving part with some surrounding room so the border can stay
+   anchored. Avoid including another character. If unsure, choose fewer regions.
+3. move is one of {moves}: breathe gently expands/contracts; sway rocks sideways;
+   drift moves a short distance and returns; rise lifts and settles; grow expands
+   and settles. All motions return to the original. They cannot leave the image.
+4. distance = [across, down] in image fractions. Use 0.005 to 0.018 for translations;
+   use [0, 0] for breathe/grow. Down is positive. The browser caps displacement.
+5. duration_s is 4 to 8 seconds. Usually start_s = 0 and end_s = duration_s for
+   every region, giving smooth, continuous loops. Use subtle motions for resting
+   figures, not floating or bouncing the whole animal.
+6. Output just this small JSON object; do not narrate the analysis.

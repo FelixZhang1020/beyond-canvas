@@ -1,0 +1,28 @@
+[
+  {
+    "id": "anatomy-stack-inventory",
+    "question": "What is in this model, and what kind of piece is each one? File: evals/files/stack.blend",
+    "expected_skill": "model-anatomy",
+    "expected_script": "scripts/inventory.py",
+    "ground_truth": "Eleven pieces: one ground slab, four columns, two lintel beams, one ridge beam, two rafter sheets and one tile covering. Columns are kind column, lintels and ridge are beams, the slab, rafters and tile sheet are sheets.",
+    "expected_behavior": [
+      "Runs inventory before answering",
+      "Reports eleven pieces with the counts by role ground 1, timber 7, rafter 2, covering 1",
+      "Names the kind of at least one column and one beam",
+      "Does not modify or save the model"
+    ]
+  },
+  {
+    "id": "anatomy-stack-bearing",
+    "question": "In what order was this little building put up, from the ground to the roof? File: evals/files/stack.blend",
+    "expected_skill": "model-anatomy",
+    "expected_script": "scripts/bearing.py",
+    "ground_truth": "Five stages: the four columns on the slab; the two lintels on the columns; the ridge beam on both lintels; the two rafters on the ridge; the tile sheet last.",
+    "expected_behavior": [
+      "Runs inventory, then bearing, in the same output folder",
+      "Answers with the five stages in bottom-up order",
+      "Reports that nothing is floating",
+      "Says the sequence comes from what rests on what, not from a guess"
+    ]
+  }
+]
